@@ -20,6 +20,8 @@ export default function Pessoas() {
   const [adding, setAdding] = useState('');
   const [error, setError] = useState('');
   const inputRef = useRef<TextInput>(null);
+  const meRef = useRef<TextInput>(null);
+  const [meError, setMeError] = useState(false);
 
   useEffect(() => {
     if (ready && !draft.name) router.replace('/criar/nome');
@@ -52,10 +54,17 @@ export default function Pessoas() {
   };
 
   const organizerOk = normalize(draft.organizerName).length >= 2;
-  const canContinue = organizerOk && total >= MIN;
+  const canContinue = total >= MIN;
 
   const next = () => {
     if (!canContinue) return;
+    if (!organizerOk) {
+      // o organizador também participa: pede o nome em vez de só travar o botão
+      setMeError(true);
+      setError('Falta o seu nome. Você também participa do sorteio!');
+      meRef.current?.focus();
+      return;
+    }
     track('participants_set', { quantidade: total });
     router.push('/criar/valor');
   };
@@ -64,11 +73,14 @@ export default function Pessoas() {
     <Screen
       top={<TopBar step={2} total={3} backTo="/criar/nome" />}
       footer={
-        <Button
-          label={total >= MIN ? `Continuar com ${total} pessoas` : `Adicione ${MIN - total} ${MIN - total === 1 ? 'pessoa' : 'pessoas'}`}
-          onPress={next}
-          disabled={!canContinue}
-        />
+        <View style={{ gap: 8 }}>
+          <ErrorText>{error}</ErrorText>
+          <Button
+            label={total >= MIN ? `Continuar com ${total} pessoas` : `Adicione mais ${MIN - total} ${MIN - total === 1 ? 'pessoa' : 'pessoas'}`}
+            onPress={next}
+            disabled={!canContinue}
+          />
+        </View>
       }
     >
       <View style={{ gap: 22, paddingTop: 28 }}>
@@ -95,21 +107,27 @@ export default function Pessoas() {
             <Plus />
           </IconButton>
         </View>
-        <ErrorText>{error}</ErrorText>
 
         <View>
-          <Row>
+          <Row style={meError && !organizerOk ? { borderBottomColor: colors.accent, borderBottomWidth: 2 } : undefined}>
             <TextInput
+              ref={meRef}
               value={draft.organizerName}
-              onChangeText={(t) => update({ organizerName: t })}
+              onChangeText={(t) => {
+                update({ organizerName: t });
+                if (t.trim().length >= 2) {
+                  setMeError(false);
+                  setError('');
+                }
+              }}
               placeholder="Seu nome e sobrenome"
-              placeholderTextColor={colors.textMuted}
+              placeholderTextColor={meError && !organizerOk ? colors.accentDark : colors.textMuted}
               autoCapitalize="words"
               style={{ flexGrow: 1, fontSize: 17, fontFamily: fonts.regular, color: colors.text, paddingVertical: 0, height: 52 }}
               accessibilityLabel="Seu nome"
             />
-            <T size={14} color={colors.textSecondary} style={{ paddingRight: 12 }}>
-              você
+            <T size={14} weight={organizerOk ? 'regular' : 'bold'} color={organizerOk ? colors.textSecondary : colors.accentDark} style={{ paddingRight: 12 }}>
+              {organizerOk ? 'você' : 'você (falta)'}
             </T>
           </Row>
           {draft.participants.map((p, i) => (
