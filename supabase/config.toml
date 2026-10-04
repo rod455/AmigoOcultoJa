@@ -1,0 +1,8 @@
+# Configuração mínima para a CLI do Supabase (desenvolvimento local).
+project_id = "tirei"
+
+[functions.draw_group]
+verify_jwt = true
+
+[functions.repair_group]
+verify_jwt = true

@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Tirei!",
+    "slug": "tirei",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "tirei",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.tirei.mobile",
+      "associatedDomains": ["applinks:tirei.app"]
+    },
+    "android": {
+      "package": "app.tirei.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#111418",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [{ "scheme": "https", "host": "tirei.app", "pathPrefix": "/g" }],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png",
+      "name": "Tirei! — Amigo oculto sem papelzinho",
+      "shortName": "Tirei!",
+      "lang": "pt-BR",
+      "themeColor": "#111418",
+      "backgroundColor": "#FFFFFF"
+    },
+    "plugins": [
+      "expo-router",
+      ["expo-splash-screen", { "backgroundColor": "#FFFFFF", "image": "./assets/splash-icon.png", "imageWidth": 160 }],
+      "expo-font",
+      "expo-web-browser"
+    ],
+    "experiments": { "typedRoutes": true }
+  }
+}
