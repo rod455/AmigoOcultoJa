@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Bell, Check, Close, Eye, EyeOff, Gift, Plus, WhatsApp } from '@/components/icons';
+import { Bell, Check, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { friendlyError, myResult, nudge, type MyResult, type Product, resolveLink, setWishItems, suggestions, type WishItem } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
 import { firstName, formatBRL, groupMeta, storeLabel } from '@/lib/format';
-import { anonymousNudgeMessage, openWhatsApp } from '@/lib/share';
 import { colors, tints } from '@/theme/tokens';
 import { openExternal } from '@/lib/open';
 
@@ -27,12 +26,15 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   const [savedFlash, setSavedFlash] = useState(false);
   const [updatedNotice, setUpdatedNotice] = useState(false);
   const [installPrompt, setInstallPrompt] = useState(false);
+  const [nudging, setNudging] = useState(false);
+  const [nudgedAt, setNudgedAt] = useState<string | null>(null);
   const claimedAt = useRef(Date.now());
 
   const load = useCallback(async () => {
     try {
       const r = await myResult(code, participantId);
       setData(r);
+      setNudgedAt(r.nudged_friend_at);
       setError('');
       const seen = await getSeenVersion(code, participantId);
       if (seen && r.version > seen) setUpdatedNotice(true);
@@ -121,12 +123,24 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
     }
   };
 
+  // Lembrete anônimo: fica só no servidor e aparece para o amigo quando ele
+  // abrir o próprio link. Nada sai do aparelho de quem pediu (nem WhatsApp),
+  // então ninguém descobre quem tirou quem.
   const remindFriend = async () => {
-    if (!data) return;
-    track('nudge_sent', { tipo: 'anonimo' }, { code, participantId });
-    void nudge(code, 'anonimo', participantId, friend?.id).catch(() => undefined);
-    await openWhatsApp(anonymousNudgeMessage({ groupName: data.group.name, code }));
+    if (!data || !friend) return;
+    setNudging(true);
+    setError('');
+    try {
+      const r = await nudge(code, 'anonimo', participantId, friend.id);
+      setNudgedAt(r.last_at);
+      if (!r.already) track('nudge_sent', { tipo: 'anonimo' }, { code, participantId });
+    } catch (e) {
+      setError(friendlyError(e));
+    } finally {
+      setNudging(false);
+    }
   };
+  const nudgedRecently = !!nudgedAt && Date.now() - new Date(nudgedAt).getTime() < 12 * 3600 * 1000;
 
   if (!data) {
     return (
@@ -155,7 +169,26 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   ) : !friendHasList ? (
     <View style={{ gap: 8 }}>
       <ErrorText>{error}</ErrorText>
-      <Button label={`Lembrar ${friendFirst}, sem revelar você`} variant="whatsapp" icon={<WhatsApp />} onPress={remindFriend} />
+      {nudgedRecently ? (
+        <View style={{ gap: 4, alignItems: 'center', paddingVertical: 6 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Check size={16} color={colors.successText} />
+            <T size={16} weight="bold" color={colors.successText}>
+              Lembrete enviado para {friendFirst}
+            </T>
+          </View>
+          <T size={13} color={colors.textSecondary} align="center" lineHeight={18}>
+            {friendFirst} vê o aviso ao abrir o Tirei!, sem saber que foi você. Dá para lembrar de novo em 12 horas.
+          </T>
+        </View>
+      ) : (
+        <>
+          <Button label={`Lembrar ${friendFirst}, sem revelar você`} icon={<Bell size={20} color="#FFFFFF" />} onPress={remindFriend} loading={nudging} />
+          <T size={12} color={colors.textSecondary} align="center">
+            O aviso aparece para {friendFirst} dentro do Tirei!. Nada é enviado pelo seu WhatsApp.
+          </T>
+        </>
+      )}
     </View>
   ) : error ? (
     <ErrorText>{error}</ErrorText>
@@ -174,6 +207,21 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           </T>
         </Pressable>
       </View>
+
+      {/* aviso: alguém que me tirou pediu minha lista */}
+      {data.nudges_for_me > 0 && data.my_items.length === 0 ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, paddingHorizontal: 16, borderRadius: 16, backgroundColor: colors.successBg }}>
+          <Bell color={colors.successText} />
+          <View style={{ flex: 1, gap: 2 }}>
+            <T size={16} weight="bold" color={colors.successText}>
+              Alguém está esperando sua lista
+            </T>
+            <T size={14} color={colors.successText} lineHeight={20}>
+              Quem te tirou pediu para você escolher o presente. Leva 1 minuto, logo abaixo.
+            </T>
+          </View>
+        </View>
+      ) : null}
 
       {/* 1. você tirou */}
       <View style={{ gap: 6 }}>

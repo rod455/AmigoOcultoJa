@@ -42,6 +42,10 @@ export type MyResult = {
   friend: { id: string; display_name: string; items: WishItem[] };
   version: number;
   my_items: WishItem[];
+  /** lembretes anônimos recebidos e ainda não atendidos (minha lista vazia) */
+  nudges_for_me: number;
+  /** último lembrete que mandei para quem eu tirei */
+  nudged_friend_at: string | null;
 };
 
 export type ParticipantStatus = 'not_opened' | 'entered' | 'viewed' | 'list_ready';
@@ -188,9 +192,11 @@ export async function myGroups(): Promise<MyGroup[]> {
   return rpc<MyGroup[]>('rpc_my_groups', { p_key: key });
 }
 
-export async function nudge(code: string, kind: 'organizador' | 'anonimo', participantId?: string, toParticipantId?: string): Promise<void> {
+export type NudgeResult = { ok: true; already: boolean; last_at: string };
+
+export async function nudge(code: string, kind: 'organizador' | 'anonimo', participantId?: string, toParticipantId?: string): Promise<NudgeResult> {
   const key = await getDeviceKey();
-  await rpc('rpc_nudge', {
+  return rpc<NudgeResult>('rpc_nudge', {
     p_code: code,
     p_participant_id: participantId ?? null,
     p_key: key,

@@ -37,15 +37,6 @@ export function reminderMessage(opts: { groupName: string; code: string; names: 
   ].join('\n');
 }
 
-/** Lembrete anônimo (tela 9): vai para o grupo, sem citar quem pediu nem para quem */
-export function anonymousNudgeMessage(opts: { groupName: string; code: string }): string {
-  return [
-    `Gente, no amigo oculto do *${opts.groupName}* tem gente que ainda não montou a lista de presentes 👀`,
-    'Quem ainda não escolheu, entra no link e toca em "Escolha seu presente". Leva 1 minuto:',
-    inviteUrl(opts.code),
-  ].join('\n');
-}
-
 export function whatsappUrl(text: string): string {
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }

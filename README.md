@@ -68,7 +68,8 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 | `rpc_suggestions` | participante | 6 produtos dentro do valor, vitrine varia por pessoa |
 | `rpc_resolve_link` | qualquer um | registra `outbound_clicks` e devolve a URL de afiliado |
 | `rpc_panel` / `rpc_release` / `rpc_my_groups` | organizador | painel, liberar nome, meus grupos |
-| `rpc_nudge` / `rpc_track` | ambos | lembretes e eventos de analytics (`events`) |
+| `rpc_nudge` | ambos | lembrete anônimo **in-app** (quem tirou → quem foi tirado; aparece no link da pessoa; 1 a cada 12 h) e registro do lembrete do organizador |
+| `rpc_track` | ambos | eventos de analytics (`events`) |
 
 Afiliados: a tag e os templates de busca ficam em `app_settings` (`affiliate_tag_amazon`, `search_url_amazon`, `default_store`). O catálogo inicial tem 24 produtos placeholder em `products`; substitua pelos links reais.
 

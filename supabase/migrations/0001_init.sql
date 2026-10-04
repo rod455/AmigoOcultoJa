@@ -328,7 +328,371 @@ begin
     ),
     'version', a.version,
     'my_items', coalesce((select jsonb_agg(public.item_json(w) order by w.position)
-                          from public.wish_items w where w.participant_id = me.id), '[]'::jsonb)
+                          from public.wish_items w where w.participant_id = me.id), '[]'::jsonb),
+    -- lembretes anônimos que recebi e ainda não atendi (só contam enquanto minha lista está vazia)
+    'nudges_for_me', (select count(*) from public.nudges n
+                      where n.to_participant_id = me.id and n.kind = 'anonimo'
+                        and not exists (select 1 from public.wish_items w where w.participant_id = me.id)),
+    -- quando foi meu último lembrete para quem eu tirei (para não repetir)
+    'nudged_friend_at', (select max(n.created_at) from public.nudges n
+                         where n.from_participant_id = me.id and n.to_participant_id = friend.id and n.kind = 'anonimo')
+  );
+end $$;
+
+-- Tela 8: salvar minha lista (até 3). p_items: [{title, product_id?}]
+create or replace function public.rpc_set_wish_items(p_code text, p_participant_id uuid, p_key text, p_items jsonb)
+returns jsonb language plpgsql security definer set search_path = public as $fn$
+declare
+  v_group public.groups%rowtype;
+  v_me public.participants%rowtype;
+  v_item jsonb;
+  v_pos int := 0;
+  v_pid uuid;
+  v_prod_name text;
+  v_prod_url text;
+  v_prod_price int;
+  v_prod_store text;
+  v_title text;
+begin
+  perform public.assert_key(p_key);
+  select * into v_group from public.groups where code = public.normalize_code(p_code);
+  if not found then raise exception 'GROUP_NOT_FOUND'; end if;
+  select * into v_me from public.participants where id = p_participant_id and group_id = v_group.id and removed_at is null;
+  if not found then raise exception 'PARTICIPANT_NOT_FOUND'; end if;
+  if v_me.claim_key_hash is null or v_me.claim_key_hash <> public.key_hash(p_key) then
+    raise exception 'NOT_YOURS';
+  end if;
+  if p_items is null or jsonb_typeof(p_items) <> 'array' or jsonb_array_length(p_items) > 3 then
+    raise exception 'TOO_MANY_ITEMS';
+  end if;
+
+  -- substitui a lista inteira
+  delete from public.wish_items where participant_id = v_me.id;
+
+  for v_item in select value from jsonb_array_elements(p_items) loop
+    v_pid := null; v_prod_name := null; v_prod_url := null; v_prod_price := null; v_prod_store := null;
+    if (v_item->>'product_id') is not null then
+      select pr.id, pr.name, pr.affiliate_url, pr.price_cents, pr.store
+        into v_pid, v_prod_name, v_prod_url, v_prod_price, v_prod_store
+        from public.products pr where pr.id = (v_item->>'product_id')::uuid and pr.active;
+    end if;
+    v_title := left(btrim(coalesce(v_item->>'title', v_prod_name, '')), 120);
+    if v_title = '' then continue; end if;
+    v_pos := v_pos + 1;
+    if v_pid is not null then
+      insert into public.wish_items (participant_id, title, product_id, affiliate_url, price_cents, store, position)
+      values (v_me.id, v_prod_name, v_pid, v_prod_url, v_prod_price, v_prod_store, v_pos);
+    else
+      insert into public.wish_items (participant_id, title, product_id, affiliate_url, price_cents, store, position)
+      values (v_me.id, v_title, null, public.build_search_url(v_title), null, coalesce(public.setting('default_store'), 'amazon'), v_pos);
+    end if;
+  end loop;
+
+  return jsonb_build_object(
+    'ok', true,
+    'items', coalesce((select jsonb_agg(public.item_json(w) order by w.position) from public.wish_items w where w.participant_id = v_me.id), '[]'::jsonb)
+  );
+end
+$fn$;
+
+-- Tela 8/9: sugestões dentro do valor, vitrine varia por participante
+create or replace function public.rpc_suggestions(p_code text, p_participant_id uuid default null, p_limit int default 6)
+returns jsonb language plpgsql stable security definer set search_path = public as $$
+declare
+  g public.groups;
+  seed text := coalesce(p_participant_id::text, '');
+begin
+  select * into g from public.groups where code = public.normalize_code(p_code);
+  if not found then raise exception 'GROUP_NOT_FOUND'; end if;
+  return coalesce((
+    select jsonb_agg(jsonb_build_object(
+      'id', pr.id, 'name', pr.name, 'price_cents', pr.price_cents,
+      'store', pr.store, 'image_url', pr.image_url, 'tags', pr.tags
+    ) order by md5(pr.id::text || seed))
+    from (
+      select * from public.products pr
+      where pr.active and (g.budget_cents is null or pr.price_cents <= g.budget_cents)
+      order by md5(pr.id::text || seed)
+      limit greatest(1, least(coalesce(p_limit, 6), 12))
+    ) pr
+  ), '[]'::jsonb);
+end $$;
+
+-- Redirecionador /r: registra o clique e devolve a URL de destino
+create or replace function public.rpc_resolve_link(
+  p_wish_item_id uuid default null,
+  p_product_id uuid default null,
+  p_query text default null,
+  p_code text default null,
+  p_participant_id uuid default null,
+  p_origin text default null
+) returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  url text;
+  store text;
+  gid uuid;
+  pid uuid;
+begin
+  if p_code is not null then
+    select id into gid from public.groups where code = public.normalize_code(p_code);
+  end if;
+  if p_wish_item_id is not null then
+    select w.affiliate_url, w.store, w.product_id into url, store, pid from public.wish_items w where w.id = p_wish_item_id;
+  elsif p_product_id is not null then
+    select pr.affiliate_url, pr.store into url, store from public.products pr where pr.id = p_product_id;
+    pid := p_product_id;
+  elsif p_query is not null then
+    url := public.build_search_url(p_query);
+    store := coalesce(public.setting('default_store'), 'amazon');
+  end if;
+  if url is null then raise exception 'LINK_NOT_FOUND'; end if;
+  insert into public.outbound_clicks (group_id, participant_id, wish_item_id, product_id, store, origin)
+  values (gid, p_participant_id, p_wish_item_id, pid, store, left(p_origin, 40));
+  return jsonb_build_object('url', url, 'store', store);
+end $$;
+
+-- Lembrete anônimo (in-app) / do organizador (registro).
+-- O lembrete anônimo nunca sai do servidor: aparece para quem foi lembrado
+-- quando essa pessoa abre o próprio link. Assim ninguém descobre quem tirou quem.
+create or replace function public.rpc_nudge(p_code text, p_participant_id uuid, p_key text, p_kind text, p_to_participant_id uuid default null)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  g public.groups;
+  me public.participants;
+  last_at timestamptz;
+begin
+  perform public.assert_key(p_key);
+  select * into g from public.groups where code = public.normalize_code(p_code);
+  if not found then raise exception 'GROUP_NOT_FOUND'; end if;
+  if p_kind = 'organizador' then
+    if g.owner_key_hash <> public.key_hash(p_key) then raise exception 'NOT_OWNER'; end if;
+    insert into public.nudges (group_id, from_participant_id, to_participant_id, kind)
+    values (g.id, null, p_to_participant_id, 'organizador');
+  else
+    select * into me from public.participants where id = p_participant_id and group_id = g.id and removed_at is null;
+    if not found or me.claim_key_hash <> public.key_hash(p_key) then raise exception 'NOT_YOURS'; end if;
+    -- só pode lembrar quem eu tirei
+    if not exists (select 1 from public.assignments a where a.group_id = g.id and a.giver_id = me.id and a.receiver_id = p_to_participant_id) then
+      raise exception 'NOT_YOUR_FRIEND';
+    end if;
+    -- no máximo um lembrete a cada 12 horas
+    select max(created_at) into last_at from public.nudges
+      where from_participant_id = me.id and to_participant_id = p_to_participant_id and kind = 'anonimo';
+    if last_at is not null and last_at > now() - interval '12 hours' then
+      return jsonb_build_object('ok', true, 'already', true, 'last_at', last_at);
+    end if;
+    insert into public.nudges (group_id, from_participant_id, to_participant_id, kind)
+    values (g.id, me.id, p_to_participant_id, 'anonimo');
+  end if;
+  return jsonb_build_object('ok', true, 'already', false, 'last_at', now());
+end $$;
+
+-- Analytics mínimo (spec §10). PostHog/Firebase entram depois, mesmo nome de evento.
+create table if not exists public.events (
+  id bigint generated always as identity primary key,
+  name text not null,
+  props jsonb,
+  group_id uuid,
+  participant_id uuid,
+  platform text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.app_settings (
+  key text primary key,
+  value text not null
+);
+
+insert into public.app_settings (key, value) values
+  ('affiliate_tag_amazon', 'tirei-20'),
+  ('search_url_amazon', 'https://www.amazon.com.br/s?k={q}&tag={tag}'),
+  ('search_url_mercadolivre', 'https://lista.mercadolivre.com.br/{q}'),
+  ('default_store', 'amazon'),
+  ('public_base_url', 'https://tirei.app')
+on conflict (key) do nothing;
+
+-- ---------------------------------------------------------------
+-- RLS: tudo ligado, nada acessível direto (exceto products ativos)
+-- ---------------------------------------------------------------
+alter table public.organizations enable row level security;
+alter table public.organization_members enable row level security;
+alter table public.groups enable row level security;
+alter table public.participants enable row level security;
+alter table public.exclusions enable row level security;
+alter table public.assignments enable row level security;
+alter table public.products enable row level security;
+alter table public.wish_items enable row level security;
+alter table public.outbound_clicks enable row level security;
+alter table public.nudges enable row level security;
+alter table public.events enable row level security;
+alter table public.app_settings enable row level security;
+
+revoke all on all tables in schema public from anon, authenticated;
+grant select on public.products to anon, authenticated;
+
+drop policy if exists products_public_read on public.products;
+create policy products_public_read on public.products
+  for select to anon, authenticated using (active);
+
+-- ---------------------------------------------------------------
+-- Funções auxiliares
+-- ---------------------------------------------------------------
+create or replace function public.key_hash(p_key text)
+returns text language sql immutable set search_path = public, extensions as $$
+  select encode(extensions.digest(p_key, 'sha256'), 'hex')
+$$;
+
+create or replace function public.assert_key(p_key text)
+returns void language plpgsql immutable as $$
+begin
+  if p_key is null or length(p_key) < 32 then
+    raise exception 'INVALID_KEY';
+  end if;
+end $$;
+
+create or replace function public.normalize_code(p_code text)
+returns text language sql immutable as $$
+  select upper(regexp_replace(coalesce(p_code, ''), '[^A-Za-z0-9]', '', 'g'))
+$$;
+
+create or replace function public.setting(p_key text)
+returns text language sql stable security definer set search_path = public as $$
+  select value from public.app_settings where key = p_key
+$$;
+
+create or replace function public.build_search_url(p_query text)
+returns text language plpgsql stable security definer set search_path = public as $$
+declare
+  store text := coalesce(public.setting('default_store'), 'amazon');
+  tpl text;
+begin
+  tpl := public.setting('search_url_' || store);
+  if tpl is null then
+    tpl := 'https://www.amazon.com.br/s?k={q}&tag={tag}';
+  end if;
+  return replace(replace(tpl, '{q}', replace(coalesce(p_query, ''), ' ', '+')),
+                 '{tag}', coalesce(public.setting('affiliate_tag_amazon'), ''));
+end $$;
+
+create or replace function public.item_json(w public.wish_items)
+returns jsonb language sql stable as $$
+  select jsonb_build_object(
+    'id', w.id,
+    'title', w.title,
+    'product_id', w.product_id,
+    'price_cents', w.price_cents,
+    'store', w.store,
+    'position', w.position,
+    'is_search', w.product_id is null
+  )
+$$;
+
+-- ---------------------------------------------------------------
+-- RPCs públicas (quem tem o link)
+-- ---------------------------------------------------------------
+
+-- Tela 7: dados do grupo + nomes (quem já entrou aparece desabilitado)
+create or replace function public.rpc_get_group(p_code text)
+returns jsonb language plpgsql stable security definer set search_path = public as $$
+declare
+  g public.groups;
+  org_name text;
+begin
+  select * into g from public.groups where code = public.normalize_code(p_code);
+  if not found then
+    raise exception 'GROUP_NOT_FOUND';
+  end if;
+  select display_name into org_name from public.participants
+    where group_id = g.id and is_organizer and removed_at is null limit 1;
+  return jsonb_build_object(
+    'id', g.id,
+    'code', g.code,
+    'name', g.name,
+    'budget_cents', g.budget_cents,
+    'exchange_at', g.exchange_at,
+    'status', g.status,
+    'organizer_name', org_name,
+    'participants', coalesce((
+      select jsonb_agg(jsonb_build_object(
+        'id', p.id,
+        'display_name', p.display_name,
+        'claimed', p.claim_key_hash is not null
+      ) order by lower(p.display_name))
+      from public.participants p
+      where p.group_id = g.id and p.removed_at is null
+    ), '[]'::jsonb)
+  );
+end $$;
+
+-- Tela 7 → 8: vincular o nome ao aparelho (P0-07)
+create or replace function public.rpc_claim(p_code text, p_participant_id uuid, p_key text)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  g public.groups;
+  p public.participants;
+  h text;
+begin
+  perform public.assert_key(p_key);
+  h := public.key_hash(p_key);
+  select * into g from public.groups where code = public.normalize_code(p_code);
+  if not found then raise exception 'GROUP_NOT_FOUND'; end if;
+  select * into p from public.participants where id = p_participant_id and group_id = g.id and removed_at is null for update;
+  if not found then raise exception 'PARTICIPANT_NOT_FOUND'; end if;
+  if p.claim_key_hash is not null and p.claim_key_hash <> h then
+    raise exception 'ALREADY_CLAIMED';
+  end if;
+  if p.claim_key_hash is null then
+    update public.participants set claim_key_hash = h, claimed_at = now() where id = p.id;
+  end if;
+  return jsonb_build_object('ok', true, 'participant_id', p.id, 'display_name', p.display_name);
+end $$;
+
+-- Tela 8: meu resultado + lista do amigo + minha lista. Marca revealed_at.
+create or replace function public.rpc_my_result(p_code text, p_participant_id uuid, p_key text)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare
+  g public.groups;
+  me public.participants;
+  a public.assignments;
+  friend public.participants;
+begin
+  perform public.assert_key(p_key);
+  select * into g from public.groups where code = public.normalize_code(p_code);
+  if not found then raise exception 'GROUP_NOT_FOUND'; end if;
+  select * into me from public.participants
+    where id = p_participant_id and group_id = g.id and removed_at is null;
+  if not found then raise exception 'PARTICIPANT_NOT_FOUND'; end if;
+  if me.claim_key_hash is null or me.claim_key_hash <> public.key_hash(p_key) then
+    raise exception 'NOT_YOURS';
+  end if;
+  select * into a from public.assignments where group_id = g.id and giver_id = me.id;
+  if not found then raise exception 'NOT_DRAWN'; end if;
+  select * into friend from public.participants where id = a.receiver_id;
+  if me.revealed_at is null then
+    update public.participants set revealed_at = now() where id = me.id;
+  end if;
+  return jsonb_build_object(
+    'group', jsonb_build_object(
+      'id', g.id, 'code', g.code, 'name', g.name,
+      'budget_cents', g.budget_cents, 'exchange_at', g.exchange_at
+    ),
+    'me', jsonb_build_object('id', me.id, 'display_name', me.display_name),
+    'friend', jsonb_build_object(
+      'id', friend.id,
+      'display_name', friend.display_name,
+      'items', coalesce((select jsonb_agg(public.item_json(w) order by w.position)
+                         from public.wish_items w where w.participant_id = friend.id), '[]'::jsonb)
+    ),
+    'version', a.version,
+    'my_items', coalesce((select jsonb_agg(public.item_json(w) order by w.position)
+                          from public.wish_items w where w.participant_id = me.id), '[]'::jsonb),
+    -- lembretes anônimos que recebi e ainda não atendi (só contam enquanto minha lista está vazia)
+    'nudges_for_me', (select count(*) from public.nudges n
+                      where n.to_participant_id = me.id and n.kind = 'anonimo'
+                        and not exists (select 1 from public.wish_items w where w.participant_id = me.id)),
+    -- quando foi meu último lembrete para quem eu tirei (para não repetir)
+    'nudged_friend_at', (select max(n.created_at) from public.nudges n
+                         where n.from_participant_id = me.id and n.to_participant_id = friend.id and n.kind = 'anonimo')
   );
 end $$;
 
