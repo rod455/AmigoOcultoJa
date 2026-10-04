@@ -7,10 +7,10 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/g/:codigo", "destination": "/g/index.html" },
-    { "source": "/painel/:codigo", "destination": "/painel/index.html" },
-    { "source": "/pronto/:codigo", "destination": "/pronto/index.html" },
-    { "source": "/r/:id", "destination": "/r/index.html" }
+    { "source": "/g/:codigo", "destination": "/g" },
+    { "source": "/painel/:codigo", "destination": "/painel" },
+    { "source": "/pronto/:codigo", "destination": "/pronto" },
+    { "source": "/r/:id", "destination": "/r" }
   ],
   "headers": [
     {
