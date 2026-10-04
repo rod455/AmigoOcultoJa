@@ -3,12 +3,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronRight, Close } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
-import { Button, ErrorText, IconButton, Row, Screen, T, Title, TopBar, UnderlineInput } from '@/components/ui';
+import { Calendar } from '@/components/Calendar';
+import { Button, ErrorText, IconButton, Row, Screen, T, Title, TopBar } from '@/components/ui';
 import { useDraft } from '@/features/create/useDraft';
 import { track } from '@/lib/analytics';
 import { ApiError, createAndDraw, friendlyError } from '@/lib/api';
 import { clearDraft, setClaim } from '@/lib/device';
-import { formatDateBR, formatDay } from '@/lib/format';
+import { formatDay } from '@/lib/format';
 import { colors, fonts } from '@/theme/tokens';
 
 const BUDGETS: Array<{ label: string; cents: number | null }> = [
@@ -28,25 +29,11 @@ function quickDates(): Array<{ label: string; iso: string }> {
   ];
 }
 
-function parseBR(s: string): string | null {
-  const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
-  if (!m) return null;
-  const d = Number(m[1]);
-  const mo = Number(m[2]);
-  let y = m[3] ? Number(m[3]) : new Date().getFullYear();
-  if (y < 100) y += 2000;
-  if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
-  const dt = new Date(Date.UTC(y, mo - 1, d));
-  if (dt.getUTCMonth() !== mo - 1) return null;
-  return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-}
-
 /** Tela 4 — Valor e sortear (SPresente) */
 export default function Valor() {
   const { draft, update, ready } = useDraft();
   const [dateSheet, setDateSheet] = useState(false);
   const [exSheet, setExSheet] = useState(false);
-  const [dateText, setDateText] = useState('');
   const [picking, setPicking] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -170,23 +157,15 @@ export default function Valor() {
         </View>
       </View>
 
-      {/* Folha: data */}
+      {/* Folha: data (calendário) */}
       <Sheet
         visible={dateSheet}
         onClose={() => setDateSheet(false)}
         title="Dia da troca"
         footer={
           <View style={{ gap: 6 }}>
-            <Button
-              label="Pronto"
-              onPress={() => {
-                const iso = parseBR(dateText);
-                if (dateText.trim() && !iso) return;
-                if (iso) update({ exchangeAt: iso });
-                setDateSheet(false);
-              }}
-            />
-            <Button label="Sem data" variant="ghost" onPress={() => { update({ exchangeAt: null }); setDateText(''); setDateSheet(false); }} />
+            <Button label={draft.exchangeAt ? `Pronto · ${formatDay(draft.exchangeAt)}` : 'Pronto'} onPress={() => setDateSheet(false)} />
+            <Button label="Sem data" variant="ghost" onPress={() => { update({ exchangeAt: null }); setDateSheet(false); }} />
           </View>
         }
       >
@@ -198,7 +177,8 @@ export default function Valor() {
                 <Pressable
                   key={q.iso}
                   accessibilityRole="button"
-                  onPress={() => { update({ exchangeAt: q.iso }); setDateText(''); }}
+                  accessibilityState={{ selected: on }}
+                  onPress={() => update({ exchangeAt: q.iso })}
                   style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? colors.text : colors.surfaceAlt }}
                 >
                   <T size={15} weight="semibold" color={on ? '#FFFFFF' : colors.text}>
@@ -208,19 +188,7 @@ export default function Valor() {
               );
             })}
           </View>
-          <View style={{ gap: 6 }}>
-            <T size={14} weight="semibold" color={colors.textSecondary}>
-              Ou digite a data
-            </T>
-            <UnderlineInput
-              value={dateText}
-              onChangeText={setDateText}
-              placeholder={draft.exchangeAt ? formatDateBR(draft.exchangeAt) : 'dd/mm/aaaa'}
-              keyboardType="numbers-and-punctuation"
-              autoCorrect={false}
-            />
-            {dateText.trim() && !parseBR(dateText) ? <ErrorText>Use o formato dd/mm/aaaa.</ErrorText> : null}
-          </View>
+          <Calendar key={dateSheet ? 'open' : 'closed'} value={draft.exchangeAt} onChange={(iso) => update({ exchangeAt: iso })} />
         </View>
       </Sheet>
 
