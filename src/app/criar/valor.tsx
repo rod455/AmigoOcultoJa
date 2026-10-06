@@ -1,5 +1,5 @@
-import { router } from 'expo-router';
-import React, { useEffect, useMemo, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronRight, Close } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
@@ -8,6 +8,7 @@ import { Button, ErrorText, IconButton, Row, Screen, T, Title, TopBar } from '@/
 import { useDraft } from '@/features/create/useDraft';
 import { track } from '@/lib/analytics';
 import { ApiError, createAndDraw, friendlyError } from '@/lib/api';
+import { getSession } from '@/lib/auth';
 import { clearDraft, setClaim } from '@/lib/device';
 import { formatDay } from '@/lib/format';
 import { colors, fonts } from '@/theme/tokens';
@@ -32,6 +33,8 @@ function quickDates(): Array<{ label: string; iso: string }> {
 /** Tela 4 — Valor e sortear (SPresente) */
 export default function Valor() {
   const { draft, update, ready } = useDraft();
+  const params = useLocalSearchParams<{ auto?: string }>();
+  const autoRan = useRef(false);
   const [dateSheet, setDateSheet] = useState(false);
   const [exSheet, setExSheet] = useState(false);
   const [picking, setPicking] = useState<number | null>(null);
@@ -41,6 +44,15 @@ export default function Valor() {
   useEffect(() => {
     if (ready && (!draft.name || !draft.organizerName)) router.replace('/criar/nome');
   }, [ready, draft.name, draft.organizerName]);
+
+  // voltou do login com ?auto=1 → sorteia sozinho, uma vez
+  useEffect(() => {
+    if (!ready || params.auto !== '1' || autoRan.current || !draft.name || !draft.organizerName) return;
+    autoRan.current = true;
+    router.setParams({ auto: '' });
+    void sortear();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, params.auto]);
 
   // índice 0 = organizador, depois os demais (mesma ordem enviada ao servidor)
   const names = useMemo(() => [draft.organizerName, ...draft.participants], [draft.organizerName, draft.participants]);
@@ -59,6 +71,14 @@ export default function Valor() {
   const sortear = async () => {
     setLoading(true);
     setError('');
+    // Login acontece aqui, só na hora de criar (spec §6.1). O rascunho já está salvo.
+    const session = await getSession();
+    if (!session) {
+      setLoading(false);
+      track('auth_required', { origem: 'sortear' });
+      router.push({ pathname: '/conta', params: { next: '/criar/valor?auto=1' } });
+      return;
+    }
     track('budget_set', { valor: draft.budgetCents, tem_data: !!draft.exchangeAt, qtd_exclusoes: draft.exclusions.length });
     try {
       const r = await createAndDraw({

@@ -53,7 +53,17 @@ npx eas-cli@latest build -p ios --profile preview   # quando for para as lojas
 
 Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funções RPC `security definer`** ou pelas **Edge Functions**; nenhuma tabela é legível diretamente (RLS ligado sem policies, exceto `products`).
 
-**Identidade no MVP web.** Cada aparelho gera uma chave secreta aleatória (`device key`, 64 hex) guardada localmente; o banco só conhece o hash SHA-256. O organizador é quem tem a chave que criou o grupo; o participante é quem assumiu o nome com a sua chave. Isso dispensa cadastro e qualquer configuração de Auth. Quando o app tiver login (Apple/Google/WhatsApp OTP), a chave é vinculada à conta (`owner_user_id` / `user_id` já existem nas tabelas).
+**Identidade.** Dois mecanismos convivem (migração `0002_auth.sql`):
+
+- **Participante**: sem conta. Cada aparelho gera uma chave secreta (`device key`, 64 hex) guardada localmente; o banco só conhece o hash SHA-256. Assumir um nome vincula o nome à chave.
+- **Organizador**: conta Supabase Auth (Google, Apple ou e-mail+senha; só nome e e-mail). O login acontece na hora de tocar em "Sortear" (tela `/conta`); todo o preenchimento anterior fica no rascunho local. O grupo guarda `owner_user_id` e `owner_key_hash`; `is_owner()` aceita qualquer um dos dois, então o organizador vê o painel e "Seus grupos" em qualquer aparelho logado. As Edge Functions leem o JWT do usuário no `Authorization`.
+
+**Para ativar os logins no painel do Supabase** (Authentication → Providers / URL Configuration):
+
+1. **Google**: criar OAuth Client ID (Web) no Google Cloud, colar client ID/secret no provider Google e adicionar `https://qqzlqnvreftablfyonux.supabase.co/auth/v1/callback` como redirect no Google.
+2. **Apple**: Services ID + chave `.p8` no provider Apple (exige Apple Developer Program).
+3. **URL Configuration**: Site URL `https://tirei.vercel.app` (depois `https://tirei.app`) e Redirect URLs `https://tirei.vercel.app/**`, `tirei://auth`. Sem isso o retorno do Google/Apple é recusado.
+4. **E-mail**: funciona sem configuração. "Confirm email" vem ligado: o usuário recebe um link e, ao clicar, volta direto para o sorteio. Para testes rápidos, desligue "Confirm email" em Authentication → Providers → Email (ou configure um SMTP próprio: o remetente padrão tem limite baixo de envios por hora).
 
 **Segredo do sorteio (P0-04).** `assignments` só é lida por `rpc_my_result`, que exige a chave do próprio participante. O organizador não tem nenhum privilégio extra: `rpc_panel` devolve apenas status (não abriu / entrou / viu / lista pronta). O teste em SQL (seção abaixo) tenta ler como `anon` e como organizador e precisa falhar.
 

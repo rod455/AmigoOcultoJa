@@ -11,6 +11,20 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 import { addParticipant, removeParticipant, type Pair } from '../_shared/draw.ts';
 
+/** Id do usuário logado, se o Authorization trouxer o JWT de um usuário (e não a chave anon). */
+async function userIdFromRequest(req: Request): Promise<string | null> {
+  const auth = req.headers.get('Authorization') ?? '';
+  const token = auth.replace(/^Bearer\s+/i, '').trim();
+  if (!token || token === Deno.env.get('SUPABASE_ANON_KEY')) return null;
+  try {
+    const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, { auth: { persistSession: false } });
+    const { data } = await sb.auth.getUser(token);
+    return data.user?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
 const cors = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -49,11 +63,13 @@ Deno.serve(async (req) => {
 
   const { data: group } = await supabase
     .from('groups')
-    .select('id, code, owner_key_hash, single_cycle')
+    .select('id, code, owner_key_hash, owner_user_id, single_cycle')
     .eq('code', code)
     .maybeSingle();
   if (!group) return json({ code: 'GROUP_NOT_FOUND', message: 'Grupo não encontrado' }, 404);
-  if (group.owner_key_hash !== (await sha256Hex(key))) return json({ code: 'NOT_OWNER', message: 'Só o organizador pode fazer isso.' }, 403);
+  const userId = await userIdFromRequest(req);
+  const isOwner = group.owner_key_hash === (await sha256Hex(key)) || (!!userId && group.owner_user_id === userId);
+  if (!isOwner) return json({ code: 'NOT_OWNER', message: 'Só o organizador pode fazer isso.' }, 403);
 
   const [{ data: parts }, { data: assigns }, { data: excl }] = await Promise.all([
     supabase.from('participants').select('id, display_name, removed_at').eq('group_id', group.id),

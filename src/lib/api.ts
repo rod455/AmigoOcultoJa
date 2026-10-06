@@ -111,12 +111,20 @@ async function rpc<T>(fn: string, args: Record<string, unknown>): Promise<T> {
 }
 
 async function callFunction<T>(name: string, body: Record<string, unknown>): Promise<T> {
+  // com sessão, manda o JWT do usuário: a função vincula o grupo à conta
+  let token = anonKeyValue;
+  try {
+    const { data } = await supabase().auth.getSession();
+    if (data.session?.access_token) token = data.session.access_token;
+  } catch {
+    // sem sessão: segue com a chave do aparelho
+  }
   const res = await fetch(`${functionsUrl}/${name}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       apikey: anonKeyValue,
-      Authorization: `Bearer ${anonKeyValue}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(body),
   });

@@ -5,6 +5,7 @@ import { ChevronRight } from '@/components/icons';
 import { Button, Logo, Mark, Row, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { myGroups, type MyGroup } from '@/lib/api';
+import { getProfile, type Profile, signOut } from '@/lib/auth';
 import { isConfigured } from '@/lib/supabase';
 import { groupMeta } from '@/lib/format';
 import { colors } from '@/theme/tokens';
@@ -12,6 +13,7 @@ import { colors } from '@/theme/tokens';
 /** Tela 1 — Início (SInicio) */
 export function StartScreen() {
   const [groups, setGroups] = useState<MyGroup[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -20,6 +22,7 @@ export function StartScreen() {
         myGroups()
           .then((g) => alive && setGroups(g))
           .catch(() => undefined);
+        getProfile().then((p) => alive && setProfile(p));
       }
       return () => {
         alive = false;
@@ -41,7 +44,25 @@ export function StartScreen() {
         </View>
       }
     >
-      <Logo />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Logo />
+        {profile ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Sair da conta de ${profile.name}`}
+            onPress={async () => {
+              await signOut();
+              setProfile(null);
+              setGroups([]);
+            }}
+            hitSlop={8}
+          >
+            <T size={13} color={colors.textSecondary}>
+              {profile.name} · <T size={13} weight="semibold">sair</T>
+            </T>
+          </Pressable>
+        ) : null}
+      </View>
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 20, paddingVertical: 32 }}>
         <Mark />
         <Title size={38}>Amigo oculto sem papelzinho.</Title>

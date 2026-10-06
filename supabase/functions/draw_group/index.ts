@@ -2,6 +2,7 @@
 // sorteia e grava as atribuições. Roda com service role; o resultado nunca
 // é devolvido nem registrado em log.
 //
+// Authorization: JWT do usuário logado (vincula o grupo à conta) ou chave anon.
 // POST { key, name, budget_cents, exchange_at, single_cycle, participants: [{name, is_organizer}], exclusions: [[i, j]] }
 // → 200 { code, group_id, organizer_participant_id }
 // → 422 { code: 'DRAW_IMPOSSIBLE' | 'TOO_FEW' | ..., message, participants: [nome, ...] }
@@ -22,6 +23,20 @@ function makeCode(): string {
 async function sha256Hex(s: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/** Id do usuário logado, se o Authorization trouxer o JWT de um usuário (e não a chave anon). */
+async function userIdFromRequest(req: Request): Promise<string | null> {
+  const auth = req.headers.get('Authorization') ?? '';
+  const token = auth.replace(/^Bearer\s+/i, '').trim();
+  if (!token || token === Deno.env.get('SUPABASE_ANON_KEY')) return null;
+  try {
+    const sb = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, { auth: { persistSession: false } });
+    const { data } = await sb.auth.getUser(token);
+    return data.user?.id ?? null;
+  } catch {
+    return null;
+  }
 }
 
 const cors = {
@@ -111,6 +126,7 @@ Deno.serve(async (req) => {
   });
 
   const keyHash = await sha256Hex(key);
+  const userId = await userIdFromRequest(req); // conta do organizador (Google/Apple/e-mail), quando logado
 
   // Código único (tenta algumas vezes em caso de colisão)
   let group: { id: string; code: string } | null = null;
@@ -122,6 +138,7 @@ Deno.serve(async (req) => {
         code,
         name,
         owner_key_hash: keyHash,
+        owner_user_id: userId,
         budget_cents: budget,
         exchange_at: exchangeAt,
         single_cycle: singleCycle,
@@ -142,6 +159,7 @@ Deno.serve(async (req) => {
     is_organizer: i === organizerIndex,
     // o organizador já fica vinculado ao próprio aparelho
     claim_key_hash: i === organizerIndex ? keyHash : null,
+    user_id: i === organizerIndex ? userId : null,
     claimed_at: i === organizerIndex ? new Date().toISOString() : null,
   }));
   const { data: parts, error: pErr } = await supabase.from('participants').insert(rows).select('id, display_name');
