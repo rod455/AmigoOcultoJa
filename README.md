@@ -63,7 +63,15 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 1. **Google**: criar OAuth Client ID (Web) no Google Cloud, colar client ID/secret no provider Google e adicionar `https://qqzlqnvreftablfyonux.supabase.co/auth/v1/callback` como redirect no Google.
 2. **Apple**: Services ID + chave `.p8` no provider Apple (exige Apple Developer Program).
 3. **URL Configuration**: Site URL `https://tirei.vercel.app` (depois `https://tirei.app`) e Redirect URLs `https://tirei.vercel.app/**`, `tirei://auth`. Sem isso o retorno do Google/Apple é recusado.
-4. **E-mail**: funciona sem configuração. "Confirm email" vem ligado: o usuário recebe um link e, ao clicar, volta direto para o sorteio. Para testes rápidos, desligue "Confirm email" em Authentication → Providers → Email (ou configure um SMTP próprio: o remetente padrão tem limite baixo de envios por hora).
+4. **E-mails com a marca**: os templates (confirmação, redefinir senha, link mágico, troca de e-mail, convite) estão em `supabase/templates/` e são gerados por `scripts/email-templates.mjs`. Para publicar no projeto com um comando (precisa de um token pessoal em supabase.com/dashboard/account/tokens):
+
+   ```bash
+   SUPABASE_ACCESS_TOKEN=sbp_... node scripts/email-templates.mjs --push --site-url=https://tirei.vercel.app
+   # acrescente --autoconfirm para desligar a confirmação de e-mail nos testes
+   ```
+
+   Ou cole cada `.html` e o assunto (`.subject.txt`) em Authentication → Email Templates. As imagens da marca ficam em `public/email/` e são servidas pelo site (`/email/logo-dark.png`).
+5. **E-mail**: funciona sem configuração. "Confirm email" vem ligado: o usuário recebe um link e, ao clicar, volta direto para o sorteio. Para testes rápidos, desligue "Confirm email" em Authentication → Providers → Email (ou configure um SMTP próprio: o remetente padrão tem limite baixo de envios por hora).
 
 **Segredo do sorteio (P0-04).** `assignments` só é lida por `rpc_my_result`, que exige a chave do próprio participante. O organizador não tem nenhum privilégio extra: `rpc_panel` devolve apenas status (não abriu / entrou / viu / lista pronta). O teste em SQL (seção abaixo) tenta ler como `anon` e como organizador e precisa falhar.
 

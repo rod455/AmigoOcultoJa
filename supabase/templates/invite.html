@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<title>Você foi convidado</title>
+</head>
+<body style="margin:0;padding:0;background:#F4F5F6;-webkit-font-smoothing:antialiased">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">Crie sua senha e entre.</div>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#F4F5F6">
+<tr><td align="center" style="padding:32px 16px">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;background:#FFFFFF;border-radius:20px;overflow:hidden;font-family:Figtree,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+
+  <!-- cabeçalho -->
+  <tr><td align="center" style="background:#111418;padding:32px 32px 28px 32px">
+    <img src="https://tirei.vercel.app/email/logo-dark.png" width="88" height="80" alt="Tirei!" style="display:block;border:0;margin:0 auto 14px auto">
+    <div style="color:#FFFFFF;font-size:22px;font-weight:800;letter-spacing:-0.3px;line-height:26px;margin-bottom:18px">Tirei!</div>
+    <div style="color:#FFFFFF;font-size:26px;font-weight:800;letter-spacing:-0.5px;line-height:32px">Você foi convidado</div>
+  </td></tr>
+
+  <!-- corpo -->
+  <tr><td style="padding:32px 32px 8px 32px">
+    <p style="margin:0 0 16px 0;color:#111418;font-size:18px;font-weight:700;line-height:26px">Oi!</p>
+    <p style="margin:0 0 20px 0;color:#111418;font-size:16px;line-height:25px">Alguém criou uma conta para você no Tirei!, o amigo oculto sem papelzinho. Toque no botão para escolher uma senha e entrar.</p>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tr><td style="background:#FBF7F2;border-left:4px solid #C63D24;border-radius:0 14px 14px 0;padding:18px 20px">
+        <div style="color:#5F6670;font-size:12px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:10px">O que dá para fazer</div>
+        <ul style="margin:0;padding:0 0 0 18px"><li style="margin:0 0 8px 0;padding:0 0 0 2px;color:#111418;font-size:16px;line-height:24px">Criar grupos e sortear em 1 minuto.</li><li style="margin:0 0 8px 0;padding:0 0 0 2px;color:#111418;font-size:16px;line-height:24px">Mandar o link no WhatsApp e acompanhar quem já viu.</li></ul>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- botão -->
+  <tr><td align="center" style="padding:24px 32px 8px 32px">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+      <tr><td align="center" style="background:#C63D24;border-radius:29px">
+        <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:18px 32px;color:#FFFFFF;font-size:17px;font-weight:700;text-decoration:none;border-radius:29px">Aceitar convite</a>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- link alternativo + rodapé -->
+  <tr><td style="padding:16px 32px 32px 32px">
+    <p style="margin:0 0 20px 0;color:#5F6670;font-size:13px;line-height:20px">Se você não esperava este convite, pode ignorar o e-mail.</p>
+    <p style="margin:0 0 6px 0;color:#5F6670;font-size:12px;line-height:18px">Se o botão não abrir, copie e cole este endereço no navegador:</p>
+    <p style="margin:0 0 24px 0;font-size:12px;line-height:18px;word-break:break-all"><a href="{{ .ConfirmationURL }}" style="color:#C63D24;text-decoration:underline">{{ .ConfirmationURL }}</a></p>
+    <hr style="border:0;border-top:1px solid #EAECEF;margin:0 0 16px 0">
+    <p style="margin:0;color:#5F6670;font-size:12px;line-height:18px">Usamos seu nome e e-mail só para guardar seus grupos.</p>
+  </td></tr>
+
+</table>
+<p style="margin:16px 0 0 0;color:#5F6670;font-size:12px;line-height:18px;font-family:Figtree,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">Tirei! · amigo oculto sem papelzinho · <a href="https://tirei.vercel.app" style="color:#5F6670">tirei.vercel.app</a></p>
+</td></tr>
+</table>
+</body>
+</html>
