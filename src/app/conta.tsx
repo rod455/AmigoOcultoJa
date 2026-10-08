@@ -67,7 +67,9 @@ export default function Conta() {
       } else if (mode === 'signup') {
         const r = await signUpWithEmail(name, email, password);
         if (r.needsConfirmation) {
-          setNotice(`Enviamos um link para ${email.trim()}. Abra o e-mail, confirme e você volta direto para o sorteio.`);
+          // já deixa a aba de login pronta, com e-mail e senha preenchidos
+          setMode('login');
+          setNotice(`Enviamos um link para ${email.trim()}. Confirme pelo e-mail e você volta direto para o sorteio. Se preferir, confirme e depois toque em "Entrar e sortear" aqui.`);
         } else {
           goNext();
         }
