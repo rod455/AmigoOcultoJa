@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthUrlHandler } from '@/features/auth/AuthUrlHandler';
 import { colors } from '@/theme/tokens';
 
 if (Platform.OS !== 'web') {
@@ -37,6 +38,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
+      <AuthUrlHandler />
       <Stack
         screenOptions={{
           headerShown: false,
