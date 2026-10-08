@@ -8,6 +8,11 @@
 // e, opcionalmente, SUPABASE_PROJECT_REF (padrão: qqzlqnvreftablfyonux).
 // Flags extras no --push: --site-url=https://tirei.vercel.app  --autoconfirm (desliga "Confirm email")
 //
+// SMTP próprio (obrigatório para o Supabase aceitar templates personalizados). Defina as variáveis
+// e o --push também configura o remetente:
+//   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=xxxx SMTP_FROM=voce@gmail.com SMTP_NAME="Tirei!"
+//   (Gmail: senha de app em myaccount.google.com/apppasswords · Resend: host smtp.resend.com, user "resend", pass = API key)
+//
 // Variáveis do Supabase usadas: {{ .ConfirmationURL }}, {{ .Email }}, {{ .NewEmail }}, {{ .SiteURL }}, {{ .Data.full_name }}
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -193,6 +198,22 @@ if (process.argv.includes('--push')) {
   }
   if (process.argv.includes('--autoconfirm')) body.mailer_autoconfirm = true;
 
+  if (process.env.SMTP_HOST) {
+    const missing = ['SMTP_USER', 'SMTP_PASS', 'SMTP_FROM'].filter((k) => !process.env[k]);
+    if (missing.length) {
+      console.error(`Faltam variáveis de SMTP: ${missing.join(', ')}`);
+      process.exit(1);
+    }
+    body.smtp_host = process.env.SMTP_HOST;
+    body.smtp_port = String(process.env.SMTP_PORT ?? '587');
+    body.smtp_user = process.env.SMTP_USER;
+    body.smtp_pass = process.env.SMTP_PASS;
+    body.smtp_admin_email = process.env.SMTP_FROM;
+    body.smtp_sender_name = process.env.SMTP_NAME ?? 'Tirei!';
+    body.smtp_max_frequency = 1; // segundos entre envios para o mesmo destinatário
+    body.rate_limit_email_sent = Number(process.env.SMTP_RATE_PER_HOUR ?? 100);
+  }
+
   const res = await fetch(`https://api.supabase.com/v1/projects/${ref}/config/auth`, {
     method: 'PATCH',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -202,5 +223,10 @@ if (process.argv.includes('--push')) {
     console.error(`Falhou (${res.status}):`, await res.text());
     process.exit(1);
   }
-  console.log('Templates publicados no Supabase.' + (siteUrl ? ` Site URL: ${siteUrl}` : '') + (body.mailer_autoconfirm ? ' Confirm email: desligado.' : ''));
+  console.log(
+    'Templates publicados no Supabase.' +
+      (siteUrl ? ` Site URL: ${siteUrl}.` : '') +
+      (body.smtp_host ? ` SMTP: ${body.smtp_host} como ${body.smtp_sender_name} <${body.smtp_admin_email}>.` : '') +
+      (body.mailer_autoconfirm ? ' Confirm email: desligado.' : ''),
+  );
 }

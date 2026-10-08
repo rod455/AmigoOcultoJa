@@ -65,10 +65,16 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 3. **URL Configuration**: Site URL `https://tirei.vercel.app` (depois `https://tirei.app`) e Redirect URLs `https://tirei.vercel.app/**`, `tirei://auth`. Sem isso o retorno do Google/Apple é recusado.
 4. **E-mails com a marca**: os templates (confirmação, redefinir senha, link mágico, troca de e-mail, convite) estão em `supabase/templates/` e são gerados por `scripts/email-templates.mjs`. Para publicar no projeto com um comando (precisa de um token pessoal em supabase.com/dashboard/account/tokens):
 
+   O Supabase só aceita templates personalizados com **SMTP próprio**. O mesmo comando configura o remetente:
+
    ```bash
-   SUPABASE_ACCESS_TOKEN=sbp_... node scripts/email-templates.mjs --push --site-url=https://tirei.vercel.app
+   SUPABASE_ACCESS_TOKEN=sbp_... \
+   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=voce@gmail.com SMTP_NAME="Tirei!" \
+   node scripts/email-templates.mjs --push --site-url=https://tirei.vercel.app
    # acrescente --autoconfirm para desligar a confirmação de e-mail nos testes
    ```
+
+   Para testes, Gmail com senha de app (myaccount.google.com/apppasswords, exige verificação em 2 etapas) funciona na hora. Para o lançamento com `tirei.app`, use Resend (`smtp.resend.com`, porta 465, usuário `resend`, senha = API key) ou Brevo, com o domínio verificado, e o remetente `oi@tirei.app`.
 
    Ou cole cada `.html` e o assunto (`.subject.txt`) em Authentication → Email Templates. As imagens da marca ficam em `public/email/` e são servidas pelo site (`/email/logo-dark.png`).
 5. **E-mail**: funciona sem configuração. "Confirm email" vem ligado: o usuário recebe um link e, ao clicar, volta direto para o sorteio. Para testes rápidos, desligue "Confirm email" em Authentication → Providers → Email (ou configure um SMTP próprio: o remetente padrão tem limite baixo de envios por hora).
