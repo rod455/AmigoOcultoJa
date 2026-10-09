@@ -109,9 +109,9 @@ O conector do Supabase trata as palavras `delete`/`revoke` como comandos destrut
 
 ## Deploy web (Vercel)
 
-`vercel.json` já define build (`npm run build`), saída (`dist/`) e as rewrites das rotas dinâmicas (`/g/:codigo` etc.). Variáveis necessárias no projeto: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` (as duas estão no `.env` versionado, são públicas por design) e, opcionalmente, `EXPO_PUBLIC_BASE_URL` (sem ela o link de convite usa o domínio em que a página está aberta).
+`vercel.json` já define build (`npm run build`), saída (`dist/`) e as rewrites das rotas dinâmicas (`/g/:codigo` etc.). As variáveis `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` e `EXPO_PUBLIC_BASE_URL` estão no `.env` versionado (são públicas por design), então a Vercel não precisa de nenhuma variável configurada no painel. `EXPO_PUBLIC_BASE_URL` fixa o domínio dos links de convite em `https://amigoocultoja.com.br`, mesmo quando o site é aberto em `tirei.vercel.app` ou numa preview.
 
-Para o domínio definitivo (`amigoocultoja.com.br`): aponte o domínio na Vercel, configure `EXPO_PUBLIC_BASE_URL=https://amigoocultoja.com.br` e, nos apps, os Universal Links / App Links já estão declarados em `app.json` (falta publicar `apple-app-site-association` e `assetlinks.json`).
+Domínio `amigoocultoja.com.br`: DNS no Registro.br (modo avançado) com `A` na raiz para `216.198.79.1` e `CNAME www` para `cname.vercel-dns.com`. Nos apps, os Universal Links / App Links já estão declarados em `app.json` (falta publicar `apple-app-site-association` e `assetlinks.json`).
 
 ## O que ficou para depois (conforme a spec)
 
