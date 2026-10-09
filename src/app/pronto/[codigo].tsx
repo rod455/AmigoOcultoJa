@@ -2,8 +2,8 @@ import * as Clipboard from 'expo-clipboard';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Check, WhatsApp } from '@/components/icons';
-import { Button, Screen, Sub, T, Title } from '@/components/ui';
+import { WhatsApp } from '@/components/icons';
+import { BrandSymbol, Button, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { getPanel, type Panel } from '@/lib/api';
 import { inviteMessage, inviteUrl, openWhatsApp } from '@/lib/share';
@@ -44,7 +44,7 @@ export default function Pronto() {
       padTop={28}
       footer={
         <View style={{ gap: 6 }}>
-          <Button label="Enviar no WhatsApp" variant="whatsapp" icon={<WhatsApp />} onPress={share} disabled={!panel} />
+          <Button label="Enviar convite no WhatsApp" variant="whatsapp" icon={<WhatsApp />} onPress={share} disabled={!panel} />
           <Button label={copied ? 'Link copiado!' : 'Copiar link'} variant="ghost" onPress={copy} />
           {shared ? (
             <Link href={{ pathname: '/painel/[codigo]', params: { codigo: code } }} asChild>
@@ -55,11 +55,11 @@ export default function Pronto() {
       }
     >
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 20, paddingVertical: 24 }}>
-        <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.text, alignItems: 'center', justifyContent: 'center' }}>
-          <Check size={34} strokeWidth={2.4} />
+        <View style={{ width: 112, height: 112, borderRadius: 28, backgroundColor: colors.peach, alignItems: 'center', justifyContent: 'center' }}>
+          <BrandSymbol size={78} />
         </View>
         <Title size={38}>Pronto, sorteado!</Title>
-        <Sub>Agora mande o link no grupo. Cada um toca no próprio nome e descobre quem tirou.</Sub>
+        <Sub>Seu grupo está pronto. Agora é só convidar a turma: cada um toca no próprio nome e descobre quem tirou.</Sub>
         <View style={{ paddingTop: 8, gap: 2 }}>
           <T size={14} weight="semibold" color={colors.textSecondary}>
             Link do grupo

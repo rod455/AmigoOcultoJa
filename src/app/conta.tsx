@@ -2,7 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Platform, Pressable, type TextStyle, TextInput, View, type ViewStyle } from 'react-native';
 import { AppleLogo, Eye, EyeOff, GoogleLogo } from '@/components/icons';
-import { Button, ErrorText, Mark, Screen, T, TopBar } from '@/components/ui';
+import { BrandSymbol, Button, ErrorText, Screen, T, TopBar } from '@/components/ui';
 import { authErrorMessage, getSession, resetPassword, signInWithEmail, signInWithProvider, signUpWithEmail, updatePassword } from '@/lib/auth';
 import { loadDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
@@ -109,7 +109,9 @@ export default function Conta() {
     <Screen top={<TopBar backTo="/criar/valor" />} padTop={12}>
       <View style={{ gap: 18, paddingTop: 8, paddingBottom: 24 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
-          <Mark scale={0.5} />
+          <View style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: colors.peach, alignItems: 'center', justifyContent: 'center' }}>
+            <BrandSymbol size={44} />
+          </View>
           <View style={{ flex: 1, gap: 2 }}>
             <T size={24} weight="extrabold" lineHeight={28} style={{ letterSpacing: -0.5 }} accessibilityRole="header">
               {title}

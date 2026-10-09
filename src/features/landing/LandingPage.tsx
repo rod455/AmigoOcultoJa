@@ -4,16 +4,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useViewportWidth } from '@/lib/useViewportWidth';
 import { type DimensionValue, type NativeSyntheticEvent, type NativeScrollEvent, Platform, Pressable, ScrollView, type TextInput, View, type ViewStyle } from 'react-native';
 import { Check, Close, EyeOff, WhatsApp } from '@/components/icons';
-import { Button, Logo, Mark, T, UnderlineInput } from '@/components/ui';
+import { BrandSymbol, Button, Logo, T, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { loadDraft, saveDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
 
 const MAX_W = 1040;
 
-const META_TITLE = 'Amigo Oculto Já — Sorteio de amigo oculto pelo WhatsApp, sem cadastro';
+const META_TITLE = 'Amigo Oculto Já! · Sorteio de amigo oculto pelo WhatsApp';
 const META_DESC =
-  'Sorteie o amigo oculto e mande um link no grupo do WhatsApp em 1 minuto. Cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Grátis, sem cadastro e sem baixar app.';
+  'A surpresa fica. A complicação sai. Monte o grupo, sorteie e mande um link no WhatsApp: cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Grátis, e quem participa não precisa de cadastro nem de app.';
+const CTA = 'Criar meu grupo';
+const MICROCOPY = 'Grátis · 3 passos · quem participa não se cadastra';
 
 /**
  * Landing page (web).
@@ -49,6 +51,8 @@ export function LandingPage() {
         <meta name="description" content={META_DESC} />
         <meta property="og:title" content={META_TITLE} />
         <meta property="og:description" content={META_DESC} />
+        <meta property="og:image" content="https://amigoocultoja.com.br/brand/og.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }} onScroll={onScroll} scrollEventThrottle={100}>
@@ -58,23 +62,28 @@ export function LandingPage() {
           {/* HERO */}
           <View style={{ flexDirection: wide ? 'row' : 'column', alignItems: wide ? 'center' : 'stretch', gap: wide ? 56 : 32, paddingTop: wide ? 48 : 20, paddingBottom: wide ? 72 : 40 }}>
             <View style={{ flex: 1, gap: 20 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <Mark scale={0.5} />
-                <T size={14} weight="bold" color={colors.accentDark} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
-                  Amigo oculto {new Date().getFullYear()} · grátis
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', height: 36, paddingLeft: 6, paddingRight: 14, borderRadius: 18, backgroundColor: colors.peach }}>
+                <BrandSymbol size={26} />
+                <T size={14} weight="bold" color={colors.text}>
+                  A surpresa fica. A complicação sai.
                 </T>
               </View>
               <T size={wide ? 56 : 38} weight="extrabold" lineHeight={wide ? 60 : 42} style={{ letterSpacing: wide ? -1.8 : -1 }} accessibilityRole="header">
-                Sorteie o amigo oculto e mande o link no WhatsApp em 1 minuto.
+                Sorteie o amigo oculto e mande o link no WhatsApp.
               </T>
               <T size={wide ? 20 : 17} color={colors.textSecondary} lineHeight={wide ? 30 : 26}>
-                Cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Sem cadastro, sem baixar app. Nem você vê quem tirou quem.
+                Cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Quem participa não precisa de cadastro nem de app. Nem quem organiza vê quem tirou quem.
               </T>
               <HeroForm origin="lp_hero" />
               <TrustRow />
             </View>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: wide ? 28 : 20, paddingLeft: wide ? 96 : 12, paddingRight: wide ? 36 : 12, borderRadius: 32, backgroundColor: colors.peach, overflow: 'hidden' }}>
               <PhoneMock scale={wide ? 1 : 0.85} />
+              {wide ? (
+                <View style={{ position: 'absolute', left: 14, bottom: 28 }}>
+                  <BrandSymbol size={92} />
+                </View>
+              ) : null}
             </View>
           </View>
 
@@ -92,7 +101,7 @@ export function LandingPage() {
               </View>
               <View style={{ flex: 1, gap: 12 }}>
                 <FactRow n="3" label="passos para criar: nome do grupo, pessoas, valor." />
-                <FactRow n="0" label="cadastros. Nem para você, nem para quem participa." />
+                <FactRow n="0" label="cadastros para quem participa. Quem organiza entra com Google, Apple ou e-mail." />
                 <FactRow n="1" label="link no grupo. Quem não abriu recebe um lembrete seu." />
                 <FactRow n="50" label="pessoas por grupo, com casais que não podem se tirar." />
               </View>
@@ -104,15 +113,15 @@ export function LandingPage() {
             <Steps wide={wide} />
             <View style={{ alignItems: wide ? 'flex-start' : 'stretch', gap: 8, paddingTop: 8 }}>
               <Link href="/criar/nome" asChild>
-                <Button label="Criar meu amigo oculto" onPress={() => track('create_started', { origem: 'lp_steps' })} style={{ width: wide ? 300 : '100%' }} />
+                <Button label={CTA} onPress={() => track('create_started', { origem: 'lp_steps' })} style={{ width: wide ? 300 : '100%' }} />
               </Link>
               <T size={13} color={colors.textSecondary}>
-                Grátis · sem cadastro · leva 1 minuto
+                {MICROCOPY}
               </T>
             </View>
           </Section>
 
-          {/* PAPELZINHO VS TIREI */}
+          {/* PAPELZINHO VS AMIGO OCULTO JÁ! */}
           <Section eyebrow="Por que trocar o papelzinho" title="Tudo que dá errado no papelzinho, resolvido.">
             <Compare wide={wide} />
           </Section>
@@ -121,7 +130,7 @@ export function LandingPage() {
           <Section eyebrow="Feito para o grupo inteiro usar" title="Sem download, sem spoiler, sem presente errado.">
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: wide ? 24 : 0 }}>
               <Feature wide={wide} icon={<EyeOff size={22} />} title="Sorteio secreto de verdade" text="O resultado é gerado no servidor e cada pessoa só consegue ler o próprio. Nem quem organiza vê quem tirou quem. Testado, não prometido." />
-              <Feature wide={wide} icon={<WhatsApp size={22} color={colors.text} />} title="Ninguém se cadastra" text="O link abre no navegador do celular. A pessoa toca no nome dela e pronto. No painel você vê quem ainda não abriu e lembra só essas pessoas." />
+              <Feature wide={wide} icon={<WhatsApp size={22} color={colors.text} />} title="Quem participa não se cadastra" text="O link abre no navegador do celular. A pessoa toca no nome dela e pronto. No painel você vê quem ainda não abriu e lembra só essas pessoas." />
               <Feature wide={wide} icon={<Check size={22} color={colors.text} strokeWidth={2.4} />} title="O presente já vem junto" text="Na mesma tela em que descobre quem tirou, a pessoa escolhe até 3 presentes dentro do valor. Quem a tirou vê a lista na hora, com link para comprar." />
             </View>
           </Section>
@@ -130,7 +139,7 @@ export function LandingPage() {
           <Section eyebrow="Para quem" title="Família, amigos, trabalho.">
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }}>
               <Audience title="Família" text="Quem organiza todo ano manda um link só. Quem mora longe participa igual. A tia que não entende de app só toca no nome dela." />
-              <Audience title="Turma de amigos" text="Casais que não podem se tirar, valor combinado, data marcada. Se alguém furar, você tira a pessoa e só um resultado muda." />
+              <Audience title="Turma de amigos" text="Casais que não podem se tirar, valor combinado, data marcada. Se alguém furar, você tira a pessoa e o sorteio se ajusta com a menor troca possível." />
               <Audience title="Trabalho" text="Até 50 pessoas por grupo. O painel mostra quem já viu e quem ainda falta, sem revelar nada a ninguém." />
             </View>
           </Section>
@@ -139,31 +148,23 @@ export function LandingPage() {
           <Section eyebrow="Dúvidas" title="Perguntas frequentes">
             <Faq
               items={[
-                ['É grátis mesmo?', 'Sim. Criar o grupo, sortear, mandar o link, montar a lista de presentes: tudo grátis, sem limite de grupos. O Amigo Oculto Já ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.'],
-                ['Precisa baixar alguma coisa ou criar conta?', 'Não. Você cria o grupo aqui no navegador e quem participa só abre o link. Nenhuma senha, nenhum e-mail. O app para iPhone e Android chega em novembro, só para quem quiser receber avisos.'],
-                ['O organizador consegue ver quem tirou quem?', 'Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista.'],
+                ['É grátis mesmo?', 'Sim. Criar o grupo, sortear, mandar o link, montar a lista de presentes: tudo grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.'],
+                ['Precisa baixar alguma coisa ou criar conta?', 'Quem participa não: só abre o link, sem senha e sem e-mail. Quem organiza monta tudo aqui no navegador e, na hora de sortear, entra com Google, Apple ou e-mail (pedimos só nome e e-mail) para acompanhar o grupo de qualquer aparelho. O app para iPhone e Android está a caminho.'],
+                ['Quem organiza consegue ver quem tirou quem?', 'Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista.'],
                 ['E se alguém sair ou entrar depois do sorteio?', 'Você remove ou adiciona a pessoa no painel. O sorteio é reparado com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link. Ninguém mais precisa fazer nada.'],
                 ['Dá para impedir que casais se tirem?', 'Sim. Na hora de sortear, marque quem não pode se tirar. Se as restrições tornarem o sorteio impossível, o app avisa qual delas trava.'],
-                ['Alguém escolheu o meu nome por engano. E agora?', 'Peça para quem organizou: no painel dá para liberar o nome em um toque, e você escolhe de novo no seu celular.'],
+                ['Alguém escolheu o meu nome por engano. E agora?', 'Peça para quem organiza: no painel dá para liberar o nome em um toque, e você escolhe de novo no seu celular.'],
                 ['Funciona para quem não tem WhatsApp?', 'Funciona. O link é um endereço normal: pode ir por SMS, e-mail ou qualquer mensageiro. O botão do WhatsApp só deixa a mensagem pronta.'],
               ]}
             />
           </Section>
 
-          {/* CTA FINAL */}
-          <View style={{ alignItems: 'center', gap: 18, paddingVertical: wide ? 72 : 48, borderTopWidth: 1, borderTopColor: colors.line }}>
-            <T size={wide ? 40 : 30} weight="extrabold" lineHeight={wide ? 46 : 36} align="center" style={{ letterSpacing: -0.8 }}>
-              {daysToXmas ? `Faltam ${daysToXmas} dias para o Natal.` : 'Monte o seu em 1 minuto.'}
-            </T>
-            <T size={17} color={colors.textSecondary} align="center" lineHeight={25} style={{ maxWidth: 520 }}>
-              {daysToXmas ? 'Dá tempo de sobra: digite o nome do grupo e o link está no WhatsApp em 1 minuto.' : 'Digite o nome do grupo e o link está no WhatsApp antes de acabar o café.'}
-            </T>
-            <View style={{ width: '100%', maxWidth: 520 }}>
-              <HeroForm origin="lp_footer" />
-            </View>
-            <TrustRow center />
-          </View>
+        </View>
 
+        {/* CAMPANHA "QUEM SERÁ?" (faixa vermelha, largura total) */}
+        <Campaign wide={wide} pad={pad} daysToXmas={daysToXmas} />
+
+        <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad }}>
           <Footer />
         </View>
       </ScrollView>
@@ -172,7 +173,7 @@ export function LandingPage() {
       {!wide && showSticky ? (
         <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 12, paddingBottom: 16, backgroundColor: 'rgba(255,255,255,0.96)', borderTopWidth: 1, borderTopColor: colors.line }}>
           <Link href="/criar/nome" asChild>
-            <Button label="Criar meu amigo oculto" onPress={() => track('create_started', { origem: 'lp_sticky' })} />
+            <Button label={CTA} onPress={() => track('create_started', { origem: 'lp_sticky' })} />
           </Link>
         </View>
       ) : null}
@@ -182,22 +183,67 @@ export function LandingPage() {
 
 /* ------------------------------------------------------------------ */
 
-function Nav() {
+/** Peça principal da campanha (guia §9): fundo vermelho, texto branco, botão pêssego, símbolo ampliado e cortado. */
+function Campaign({ wide, pad, daysToXmas }: { wide: boolean; pad: number; daysToXmas: number | null }) {
+  const sym = wide ? 460 : 280;
   return (
-    <View style={{ height: 68, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Logo size={22} />
+    <View style={{ width: '100%', backgroundColor: colors.accent, overflow: 'hidden', alignItems: 'center' }}>
+      <View style={{ position: 'absolute', right: wide ? -40 : -48, bottom: wide ? -150 : -110 }}>
+        <BrandSymbol size={sym} big />
+      </View>
+      <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad, paddingTop: wide ? 96 : 56, paddingBottom: wide ? 104 : 200, gap: 18 }}>
+        {daysToXmas ? (
+          <T size={14} weight="bold" color="#FFFFFF" style={{ opacity: 0.9, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+            Faltam {daysToXmas} dias para o Natal
+          </T>
+        ) : null}
+        <T size={wide ? 76 : 52} weight="extrabold" color="#FFFFFF" lineHeight={wide ? 80 : 56} style={{ letterSpacing: wide ? -2.4 : -1.6 }} accessibilityRole="header">
+          Quem será?
+        </T>
+        <T size={wide ? 28 : 22} weight="medium" color="#FFFFFF" lineHeight={wide ? 36 : 29} style={{ maxWidth: 440 }}>
+          Seu amigo oculto começa aqui.
+        </T>
+        <View style={{ paddingTop: 10, alignItems: 'flex-start' }}>
+          <Link href="/criar/nome" asChild>
+            <Pressable
+              accessibilityRole="link"
+              onPress={() => track('create_started', { origem: 'lp_campanha' })}
+              style={{ height: 58, paddingHorizontal: 34, borderRadius: 29, backgroundColor: colors.peach, justifyContent: 'center' }}
+            >
+              <T size={18} weight="bold" color={colors.text}>
+                {CTA}
+              </T>
+            </Pressable>
+          </Link>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function Nav() {
+  const wide = useViewportWidth() >= 860;
+  return (
+    <View style={{ height: wide ? 100 : 76, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Link href="/" asChild>
+        <Pressable accessibilityRole="link" accessibilityLabel="Amigo Oculto Já!, início">
+          <Logo height={wide ? 68 : 46} />
+        </Pressable>
+      </Link>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        <Link href="/entrar" asChild>
-          <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
-            <T size={15} weight="semibold">
-              Tenho um convite
-            </T>
-          </Pressable>
-        </Link>
+        {wide ? (
+          <Link href="/entrar" asChild>
+            <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
+              <T size={15} weight="semibold">
+                Tenho um convite
+              </T>
+            </Pressable>
+          </Link>
+        ) : null}
         <Link href="/criar/nome" asChild>
-          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: 'lp_nav' })} style={{ height: 40, paddingHorizontal: 16, borderRadius: 20, backgroundColor: colors.text, justifyContent: 'center' }}>
-            <T size={14} weight="bold" color="#FFFFFF">
-              Criar grupo
+          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: 'lp_nav' })} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: colors.accent, justifyContent: 'center' }}>
+            <T size={15} weight="bold" color="#FFFFFF">
+              {CTA}
             </T>
           </Pressable>
         </Link>
@@ -251,17 +297,17 @@ function HeroForm({ origin }: { origin: string }) {
             style={{ fontSize: 20, fontFamily: fonts.semibold, height: 48 }}
           />
         </View>
-        <Button label="Criar meu amigo oculto" onPress={go} loading={busy} style={{ width: row ? 280 : '100%' }} />
+        <Button label={CTA} onPress={go} loading={busy} style={{ width: row ? 260 : '100%' }} />
       </View>
       <T size={13} color={colors.textSecondary}>
-        Grátis · sem cadastro · leva 1 minuto
+        {MICROCOPY}
       </T>
     </View>
   );
 }
 
 function TrustRow({ center }: { center?: boolean }) {
-  const items = ['Sem baixar app', 'Nem o organizador vê o resultado', 'Até 50 pessoas', 'Lista de presentes com link'];
+  const items = ['Quem participa não baixa app', 'Nem quem organiza vê o resultado', 'Até 50 pessoas', 'Lista de presentes com link'];
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: center ? 'center' : 'flex-start' }}>
       {items.map((t) => (
@@ -336,8 +382,8 @@ function Section({ title, eyebrow, children }: { title: string; eyebrow: string;
 
 function Steps({ wide }: { wide: boolean }) {
   const steps: Array<[string, string, string]> = [
-    ['Cadastre os nomes', 'Nome do grupo, quem participa, valor do presente e, se quiser, quem não pode se tirar.', '40 segundos'],
-    ['Sorteie e mande o link', 'Um toque em "Sortear" e a mensagem vai pronta para o grupo do WhatsApp.', '2 toques'],
+    ['Monte o grupo', 'Nome do grupo, quem participa, valor do presente e, se quiser, quem não pode se tirar.', '3 passos'],
+    ['Sorteie e envie o convite', 'Toque em "Sortear", entre com Google, Apple ou e-mail e a mensagem vai pronta para o grupo do WhatsApp.', '1 mensagem'],
     ['Cada um descobre e escolhe', 'A pessoa toca no próprio nome, vê quem tirou e escolhe até 3 presentes. Quem a tirou vê a lista na hora.', 'sem cadastro'],
   ];
   return (
@@ -370,9 +416,9 @@ function Compare({ wide }: { wide: boolean }) {
   const rows: Array<[string, string, string]> = [
     ['Alguém tira o próprio nome', 'Refaz tudo', 'Impossível'],
     ['Casal tira um ao outro', 'Refaz tudo', 'Você marca quem não pode'],
-    ['Quem organiza vê os papéis', 'Dá para espiar', 'Nem o organizador vê'],
+    ['Quem organiza vê os papéis', 'Dá para espiar', 'Nem quem organiza vê'],
     ['Alguém mora longe', 'Fica de fora', 'Abre o link de onde estiver'],
-    ['Alguém desiste depois', 'Refaz tudo', 'Remove e só um resultado muda'],
+    ['Alguém desiste depois', 'Refaz tudo', 'Remove e só quem foi afetado vê aviso'],
     ['"O que você quer ganhar?"', 'Pergunta e entrega a si mesmo', 'Lista com link, quem tirou vê na hora'],
   ];
   const col = (w: DimensionValue): ViewStyle => ({ width: w });
@@ -386,7 +432,7 @@ function Compare({ wide }: { wide: boolean }) {
           Papelzinho
         </T>
         <T size={13} weight="bold" color={colors.accentDark} style={[{ flex: 1 }, { textTransform: 'uppercase', letterSpacing: 0.3 }]}>
-          Amigo Oculto Já
+          Amigo Oculto Já!
         </T>
       </View>
       {rows.map(([s, p, t], i) => (
@@ -428,7 +474,7 @@ function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: st
 
 function Audience({ title, text }: { title: string; text: string }) {
   return (
-    <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: colors.surfaceAlt, gap: 8 }}>
+    <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: colors.peach, gap: 8 }}>
       <T size={20} weight="bold">
         {title}
       </T>
@@ -469,12 +515,18 @@ function Faq({ items }: { items: Array<[string, string]> }) {
 
 function Footer() {
   return (
-    <View style={{ paddingVertical: 32, gap: 10, borderTopWidth: 1, borderTopColor: colors.line }}>
+    <View style={{ paddingVertical: 32, gap: 10 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16, flexWrap: 'wrap', paddingBottom: 10 }}>
+        <Logo height={52} />
+        <T size={15} weight="semibold" color={colors.textSecondary}>
+          A surpresa fica. A complicação sai.
+        </T>
+      </View>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
-        As lojas pagam comissão ao Amigo Oculto Já pelos links de presente. O preço para você é o mesmo.
+        As lojas pagam comissão ao Amigo Oculto Já! pelos links de presente. O preço para você é o mesmo.
       </T>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
-        Os nomes cadastrados pelo organizador são usados só para o sorteio e ficam visíveis apenas para quem tem o link do grupo.
+        Os nomes cadastrados por quem organiza são usados só para o sorteio e ficam visíveis apenas para quem tem o link do grupo.
       </T>
       <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', paddingTop: 6, alignItems: 'center' }}>
         <Link href="/app" asChild>
@@ -492,7 +544,7 @@ function Footer() {
           </Pressable>
         </Link>
         <T size={13} color={colors.textMuted}>
-          © {new Date().getFullYear()} Amigo Oculto Já
+          © {new Date().getFullYear()} Amigo Oculto Já! · amigoocultoja.com.br
         </T>
       </View>
     </View>
@@ -561,7 +613,7 @@ function PhoneMock({ scale = 1 }: { scale?: number }) {
               </View>
             ))}
           </View>
-          <View style={{ height: 48 * scale, borderRadius: 24 * scale, backgroundColor: colors.text, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ height: 48 * scale, borderRadius: 24 * scale, backgroundColor: colors.accent, alignItems: 'center', justifyContent: 'center' }}>
             <T size={15 * scale} weight="bold" color="#FFFFFF">
               Pronto, salvar (1 de 3)
             </T>

@@ -289,7 +289,7 @@ export default function Painel() {
               )
             ) : (
               <T size={14} color={colors.textSecondary}>
-                Você é o organizador deste grupo.
+                Você organiza este grupo.
               </T>
             )}
             {parts.length <= 3 && !selected.is_organizer ? (

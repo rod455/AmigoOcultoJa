@@ -1,0 +1,167 @@
+{
+  "marca": "Amigo Oculto Já!",
+  "direcao": "Segredo simpático",
+  "versao": "1.0",
+  "data": "2026-10-09",
+  "arquivos": [
+    {
+      "arquivo": "LEIA-ME.md",
+      "bytes": 1066,
+      "sha256": "a60fb11d60d72d46a52f27bb2c90ca9fc0b438cdfaf60cfb5fbc594dc4c70197"
+    },
+    {
+      "arquivo": "amigo-oculto-ja-marca.md",
+      "bytes": 15109,
+      "sha256": "24da9a35707c8b47a2d657ce5e10de7cd6f3133f9176c4c124770fae35c3fb00"
+    },
+    {
+      "arquivo": "campanhas/campanha-quem-sera-story.png",
+      "bytes": 1293525,
+      "sha256": "3215ffa62e68bdbcda07f6f96a4e2f0acfa1c007d5d02bcef0aa80d0a8ab1c28",
+      "largura_px": 941,
+      "altura_px": 1672,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/apple-touch-icon-180.png",
+      "bytes": 24290,
+      "sha256": "420e3add708c481be1e4c1e8f6b93353800a92dabd7b74169cd5fcdd22655c74",
+      "largura_px": 180,
+      "altura_px": 180,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/favicon-16.png",
+      "bytes": 703,
+      "sha256": "617e78f4d15201e6bb7911d583336db4e4ef3099d111629d41cdfb05b4df4ddb",
+      "largura_px": 16,
+      "altura_px": 16,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/favicon-32.png",
+      "bytes": 1656,
+      "sha256": "21e949150e06ea5f0b8a1f3ce02de1c3d83f462a19255b2a098cbf4843386b5e",
+      "largura_px": 32,
+      "altura_px": 32,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/favicon-48.png",
+      "bytes": 2835,
+      "sha256": "40e374d46557376784de28c0bb02b47b99a82235f9694727cceee5d5925c8656",
+      "largura_px": 48,
+      "altura_px": 48,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/favicon.ico",
+      "bytes": 75700,
+      "sha256": "05de8bda29d29f2a7d089d3d5d41cd82ed6710c2caea44476b989b349a7ff8ef",
+      "largura_px": 256,
+      "altura_px": 256,
+      "formato": "ICO",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/icone-app-1024.png",
+      "bytes": 632422,
+      "sha256": "db0c8d1d76641adbcb551f3ad4cb1a91a0df685f6c4ba8a6ff205c7ce4b231cf",
+      "largura_px": 1024,
+      "altura_px": 1024,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/icone-app-192.png",
+      "bytes": 27484,
+      "sha256": "886d9c56b63650800bd119a2026e11308974b0404c0008c965c625fcfcda548a",
+      "largura_px": 192,
+      "altura_px": 192,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/icone-app-512.png",
+      "bytes": 191930,
+      "sha256": "6d97de1ba817f786c3bca0aaf6d48a414a8c050199025ba5ce25c3eb305490eb",
+      "largura_px": 512,
+      "altura_px": 512,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "icones/icone-app-master.png",
+      "bytes": 1168663,
+      "sha256": "de65522d5f7bf473b05610500bf081dbef49cc4ab5e2edee6cf3cdae8fe1664c",
+      "largura_px": 1254,
+      "altura_px": 1254,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "implementacao/tokens.css",
+      "bytes": 645,
+      "sha256": "4da32e3005884ade8bb118e36b5852e88d34827b4ac00f16721033fa5f2abf98"
+    },
+    {
+      "arquivo": "implementacao/tokens.json",
+      "bytes": 734,
+      "sha256": "704d25eb4a028a599cff4babb40711b27b00287446c140c2c43a386c34c6bc66"
+    },
+    {
+      "arquivo": "logos/logo-fundo-escuro.png",
+      "bytes": 1269291,
+      "sha256": "ae1a2e22c8539cd0e09cfa97ecec7c9e3e5afd57f1cc768ec87045a318bd2cdc",
+      "largura_px": 2171,
+      "altura_px": 724,
+      "formato": "PNG",
+      "modo": "RGB"
+    },
+    {
+      "arquivo": "logos/logo-monocromatico-transparente.png",
+      "bytes": 704315,
+      "sha256": "e55f70ea276934f01e12abbfbb11e023fdc2ce1a83c47029ca02644b05c7c472",
+      "largura_px": 2172,
+      "altura_px": 724,
+      "formato": "PNG",
+      "modo": "RGBA",
+      "alfa_minimo": 0
+    },
+    {
+      "arquivo": "logos/logo-principal-transparente.png",
+      "bytes": 767392,
+      "sha256": "7b5524bb335e7d8a1cec38e65025164709fa5a9d156e28587a4b610892646048",
+      "largura_px": 2172,
+      "altura_px": 724,
+      "formato": "PNG",
+      "modo": "RGBA",
+      "alfa_minimo": 0
+    },
+    {
+      "arquivo": "referencia/prancha-aprovada.png",
+      "bytes": 1959748,
+      "sha256": "682bcb06556d9ad899f9b3b1d225b3d72e70b6da315adaffd30432db8a4391eb",
+      "largura_px": 1536,
+      "altura_px": 1024,
+      "formato": "PNG",
+      "modo": "RGBA",
+      "alfa_minimo": 255
+    },
+    {
+      "arquivo": "simbolos/simbolo-transparente.png",
+      "bytes": 889459,
+      "sha256": "04c7d95d12a0d0536a1e942611baadeed12a565ffc8ca8ecd79874c1b8077691",
+      "largura_px": 1254,
+      "altura_px": 1254,
+      "formato": "PNG",
+      "modo": "RGBA",
+      "alfa_minimo": 0
+    }
+  ]
+}

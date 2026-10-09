@@ -1,4 +1,4 @@
-// Sistema visual v2 (spec §13)
+// Marca Amigo Oculto Já! · Segredo simpático v1.0 (docs/marca.md §6)
 export const colors = {
   text: '#111418',
   textSecondary: '#5F6670',
@@ -9,6 +9,8 @@ export const colors = {
   surfaceAlt: '#F4F5F6',
   accent: '#C63D24',
   accentDark: '#A8321C',
+  /** pêssego claro: fundo de apoio da marca (avatares, blocos institucionais, ícone) */
+  peach: '#F6E3DC',
   whatsapp: '#0E7A5F',
   successBg: '#DDEFE6',
   successText: '#0B5E48',
@@ -23,6 +25,12 @@ export const fonts = {
   semibold: 'Figtree_600SemiBold',
   bold: 'Figtree_700Bold',
   extrabold: 'Figtree_800ExtraBold',
+} as const;
+
+export const radius = {
+  control: 12,
+  card: 20,
+  pill: 999,
 } as const;
 
 export const layout = {

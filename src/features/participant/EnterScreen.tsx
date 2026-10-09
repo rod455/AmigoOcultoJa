@@ -40,7 +40,7 @@ export function EnterScreen({ group, onClaimed }: { group: PublicGroup; onClaime
         </View>
       }
     >
-      <Logo />
+      <Logo height={32} />
       <View style={{ gap: 24, paddingTop: 32 }}>
         <View style={{ gap: 6 }}>
           <T size={16} color={colors.textSecondary}>

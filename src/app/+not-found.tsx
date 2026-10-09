@@ -13,7 +13,7 @@ export default function NotFound() {
         </Link>
       }
     >
-      <Logo />
+      <Logo height={32} />
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 16 }}>
         <Title size={34}>Essa página não existe.</Title>
         <Sub>Confere o link que você recebeu? Ele começa com /g/ e tem um código de 6 letras.</Sub>

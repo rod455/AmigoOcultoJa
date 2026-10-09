@@ -3,7 +3,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { Bell, Check, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
-import { friendlyError, myResult, nudge, type MyResult, type Product, resolveLink, setWishItems, suggestions, type WishItem } from '@/lib/api';
+import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveLink, setWishItems, suggestions, type WishItem } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
 import { firstName, formatBRL, groupMeta, storeLabel } from '@/lib/format';
 import { colors, tints } from '@/theme/tokens';
@@ -107,7 +107,8 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
       track('app_install_prompt_shown', undefined, { code, participantId });
       setTimeout(() => setSavedFlash(false), 3000);
     } catch (e) {
-      setError(friendlyError(e));
+      const msg = friendlyError(e);
+      setError(msg === GENERIC_ERROR ? 'Não conseguimos salvar. Tente de novo.' : msg);
     } finally {
       setSaving(false);
     }
@@ -178,14 +179,14 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             </T>
           </View>
           <T size={13} color={colors.textSecondary} align="center" lineHeight={18}>
-            {friendFirst} vê o aviso ao abrir o Amigo Oculto Já, sem saber que foi você. Dá para lembrar de novo em 12 horas.
+            {friendFirst} vê o aviso ao abrir o Amigo Oculto Já!, sem saber que foi você. Dá para lembrar de novo em 12 horas.
           </T>
         </View>
       ) : (
         <>
           <Button label={`Lembrar ${friendFirst}, sem revelar você`} icon={<Bell size={20} color="#FFFFFF" />} onPress={remindFriend} loading={nudging} />
           <T size={12} color={colors.textSecondary} align="center">
-            O aviso aparece para {friendFirst} dentro do Amigo Oculto Já. Nada é enviado pelo seu WhatsApp.
+            O aviso aparece para {friendFirst} dentro do Amigo Oculto Já!. Nada é enviado pelo seu WhatsApp.
           </T>
         </>
       )}
@@ -300,7 +301,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           </>
         )}
         <T size={12} color={colors.textSecondary} lineHeight={17} style={{ paddingTop: 8 }}>
-          As lojas pagam comissão ao Amigo Oculto Já pelos links. O preço para você é o mesmo.
+          As lojas pagam comissão ao Amigo Oculto Já! pelos links. O preço para você é o mesmo.
         </T>
       </View>
 
@@ -375,7 +376,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
 
           {picks.length > 0 ? (
             <View>
-              <Overline style={{ paddingBottom: 4 }}>Sua lista</Overline>
+              <Overline style={{ paddingBottom: 4 }}>Minha lista de presentes</Overline>
               {picks.map((p) => (
                 <View key={p.key} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 60, borderBottomWidth: 1, borderBottomColor: colors.line }}>
                   <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: colors.successBg, alignItems: 'center', justifyContent: 'center' }}>
@@ -425,7 +426,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             </View>
           ))}
           <T size={14} color={savedFlash ? colors.successText : colors.textSecondary} style={{ paddingTop: 10 }}>
-            Salvo. Quem te tirou já está vendo.
+            Pronto, salvo! Quem te tirou já está vendo.
           </T>
           {installPrompt ? (
             <View style={{ marginTop: 16, padding: 16, borderRadius: 16, backgroundColor: colors.surfaceAlt, gap: 8 }}>
@@ -433,7 +434,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                 Quer ser avisado quando {friendFirst} escolher?
               </T>
               <T size={14} color={colors.textSecondary} lineHeight={20}>
-                O app do Amigo Oculto Já para iPhone e Android chega em novembro. Até lá, volte por este link: ele é seu.
+                O app do Amigo Oculto Já! para iPhone e Android está a caminho. Até lá, volte por este link: ele é seu.
               </T>
             </View>
           ) : null}

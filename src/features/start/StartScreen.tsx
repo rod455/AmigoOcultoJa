@@ -2,7 +2,7 @@ import { Link, useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronRight } from '@/components/icons';
-import { Button, Logo, Mark, Row, Screen, Sub, T, Title } from '@/components/ui';
+import { BrandSymbol, Button, Logo, Row, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { myGroups, type MyGroup } from '@/lib/api';
 import { getProfile, type Profile, signOut } from '@/lib/auth';
@@ -36,7 +36,7 @@ export function StartScreen() {
       footer={
         <View style={{ gap: 6 }}>
           <Link href="/criar/nome" asChild>
-            <Button label="Criar amigo oculto" onPress={() => track('create_started', { origem: 'home' })} />
+            <Button label="Criar meu grupo" onPress={() => track('create_started', { origem: 'home' })} />
           </Link>
           <Link href="/entrar" asChild>
             <Button label="Tenho um convite" variant="ghost" />
@@ -45,7 +45,7 @@ export function StartScreen() {
       }
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Logo />
+        <Logo height={44} />
         {profile ? (
           <Pressable
             accessibilityRole="button"
@@ -64,9 +64,11 @@ export function StartScreen() {
         ) : null}
       </View>
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 20, paddingVertical: 32 }}>
-        <Mark />
-        <Title size={38}>Amigo oculto sem papelzinho.</Title>
-        <Sub>Monte em 1 minuto. Cada um descobre quem tirou por um link no WhatsApp.</Sub>
+        <View style={{ width: 132, height: 132, borderRadius: 32, backgroundColor: colors.peach, alignItems: 'center', justifyContent: 'center' }}>
+          <BrandSymbol size={92} />
+        </View>
+        <Title size={36}>Bora organizar o amigo oculto?</Title>
+        <Sub>A surpresa fica. A complicação sai. Você monta o grupo e cada um descobre quem tirou por um link no WhatsApp.</Sub>
       </View>
       {groups.length > 0 ? (
         <View style={{ paddingBottom: 8 }}>

@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
+  Image,
   Platform,
   Pressable,
   type PressableProps,
@@ -173,7 +174,8 @@ export function BackButton({ to }: { to?: string }) {
 
 type ButtonProps = PressableProps & {
   label: string;
-  variant?: 'primary' | 'accent' | 'whatsapp' | 'ghost' | 'outline';
+  /** primary = vermelho da marca (ação principal); dark = carvão (secundária) */
+  variant?: 'primary' | 'accent' | 'dark' | 'whatsapp' | 'ghost' | 'outline';
   loading?: boolean;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -181,7 +183,14 @@ type ButtonProps = PressableProps & {
 
 export function Button({ label, variant = 'primary', loading, icon, disabled, style, ...rest }: ButtonProps) {
   const bg =
-    variant === 'primary' ? colors.text : variant === 'accent' ? colors.accent : variant === 'whatsapp' ? colors.whatsapp : 'transparent';
+    variant === 'primary' || variant === 'accent'
+      ? colors.accent
+      : variant === 'dark'
+        ? colors.text
+        : variant === 'whatsapp'
+          ? colors.whatsapp
+          : 'transparent';
+  const pressedBg = variant === 'primary' || variant === 'accent' ? colors.accentDark : undefined;
   const fg = variant === 'ghost' || variant === 'outline' ? colors.text : '#FFFFFF';
   const isDisabled = disabled || loading;
   return (
@@ -195,7 +204,7 @@ export function Button({ label, variant = 'primary', loading, icon, disabled, st
         { backgroundColor: isDisabled && variant !== 'ghost' && variant !== 'outline' ? colors.disabled : bg },
         variant === 'ghost' && { height: 52 },
         variant === 'outline' && { borderWidth: 1.5, borderColor: colors.lineStrong },
-        (pressed) && !isDisabled && { opacity: 0.88 },
+        pressed && !isDisabled && (pressedBg ? { backgroundColor: pressedBg } : { opacity: 0.88 }),
         typeof style === 'function' ? undefined : style,
       ]}
     >
@@ -337,43 +346,41 @@ export function Loading() {
   );
 }
 
-/** Logotipo: "Amigo Oculto" em preto + "Já!" em vermelho */
-export function Logo({ size = 22, color = colors.text }: { size?: number; color?: string }) {
+const LOGO = require('../../assets/brand/logo.png');
+const LOGO_MONO = require('../../assets/brand/logo-mono.png');
+const SYMBOL = require('../../assets/brand/simbolo.png');
+const SYMBOL_BIG = require('../../assets/brand/simbolo-grande.png');
+const LOGO_RATIO = 960 / 299;
+const SYMBOL_RATIO = 512 / 495;
+
+/**
+ * Logotipo oficial (arte do kit, nunca redigitado).
+ * `height` define o tamanho; a largura segue a proporção do arquivo.
+ */
+export function Logo({ height = 40, mono = false }: { height?: number; mono?: boolean }) {
   return (
-    <T size={size} weight="extrabold" color={color} style={{ letterSpacing: -0.4 }} accessibilityLabel="Amigo Oculto Já">
-      Amigo Oculto{' '}
-      <T size={size} weight="extrabold" color={colors.accent} style={{ letterSpacing: -0.4 }}>
-        Já!
-      </T>
-    </T>
+    <Image
+      source={mono ? LOGO_MONO : LOGO}
+      style={{ height, width: Math.round(height * LOGO_RATIO) }}
+      resizeMode="contain"
+      accessibilityRole="image"
+      accessibilityLabel="Amigo Oculto Já!"
+    />
   );
 }
 
-/** Marca: dois quadrados inclinados com "?" (tela 1) */
-export function Mark({ scale = 1 }: { scale?: number }) {
-  const s = 76 * scale;
+/** Símbolo: os dois papelzinhos com a faixa de olhos e a piscadinha. */
+export function BrandSymbol({ size = 72, big = false, label }: { size?: number; big?: boolean; label?: string }) {
   return (
-    <View style={{ position: 'relative', width: 110 * scale, height: 100 * scale }}>
-      <View style={{ position: 'absolute', left: 0, top: 10 * scale, width: s, height: s, borderRadius: 20 * scale, backgroundColor: colors.text, transform: [{ rotate: '-8deg' }] }} />
-      <View
-        style={{
-          position: 'absolute',
-          left: 34 * scale,
-          top: 4 * scale,
-          width: s,
-          height: s,
-          borderRadius: 20 * scale,
-          backgroundColor: colors.accent,
-          transform: [{ rotate: '7deg' }],
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <T size={40 * scale} weight="extrabold" color="#FFFFFF" lineHeight={44 * scale}>
-          ?
-        </T>
-      </View>
-    </View>
+    <Image
+      source={big ? SYMBOL_BIG : SYMBOL}
+      style={{ width: size, height: Math.round(size / SYMBOL_RATIO) }}
+      resizeMode="contain"
+      accessibilityRole={label ? 'image' : undefined}
+      accessibilityLabel={label}
+      accessibilityElementsHidden={!label}
+      importantForAccessibility={label ? 'auto' : 'no-hide-descendants'}
+    />
   );
 }
 

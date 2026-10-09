@@ -11,12 +11,20 @@ export default function Root({ children }: PropsWithChildren) {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
-        <meta name="theme-color" content="#111418" />
-        <meta name="description" content="Amigo Oculto Já organiza o amigo oculto sem papelzinho. Monte em 1 minuto e mande um link no WhatsApp: cada um descobre quem tirou e escolhe o presente." />
-        <meta property="og:title" content="Amigo Oculto Já — Amigo oculto sem papelzinho" />
-        <meta property="og:description" content="Monte em 1 minuto. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
+        <meta name="theme-color" content="#C63D24" />
+        <meta name="description" content="Amigo Oculto Já!: a surpresa fica, a complicação sai. Monte o grupo, sorteie e mande um link no WhatsApp. Cada um descobre quem tirou e já escolhe o presente." />
+        <meta property="og:title" content="Amigo Oculto Já! · A surpresa fica. A complicação sai." />
+        <meta property="og:site_name" content="Amigo Oculto Já!" />
+        <meta property="og:image" content="https://amigoocultoja.com.br/brand/og.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="pt_BR" />
+        <meta property="og:description" content="Seu amigo oculto começa aqui. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />

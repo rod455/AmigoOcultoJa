@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Amigo Oculto Já",
+    "name": "Amigo Oculto Já!",
     "slug": "amigo-oculto-ja",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
     "android": {
       "package": "br.com.amigoocultoja.app",
       "adaptiveIcon": {
-        "backgroundColor": "#111418",
+        "backgroundColor": "#F6E3DC",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -46,20 +46,21 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png",
-      "name": "Amigo Oculto Já — Amigo oculto sem papelzinho",
-      "shortName": "Amigo Oculto Já",
+      "name": "Amigo Oculto Já!",
+      "shortName": "Amigo Oculto Já!",
       "lang": "pt-BR",
-      "themeColor": "#111418",
-      "backgroundColor": "#FFFFFF"
+      "themeColor": "#C63D24",
+      "backgroundColor": "#FFFFFF",
+      "description": "A surpresa fica. A complicação sai."
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#FFFFFF",
+          "backgroundColor": "#F6E3DC",
           "image": "./assets/splash-icon.png",
-          "imageWidth": 160
+          "imageWidth": 200
         }
       ],
       "expo-font",

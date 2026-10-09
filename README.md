@@ -1,12 +1,14 @@
-# Amigo Oculto Já — amigo oculto sem papelzinho
+# Amigo Oculto Já!
 
-> Nome anterior do projeto: Tirei!. O identificador técnico (`tirei`) continua em alguns lugares (projeto Supabase, projeto Vercel, pasta do repositório).
+> A surpresa fica. A complicação sai.
+>
+> Marca e regras de uso em `docs/marca.md` (guia completo e arquivos originais em `docs/marca/`). O identificador técnico antigo (`tirei`) continua só em nomes internos, como o projeto Supabase e a pasta do repositório.
 
 App do amigo oculto: o organizador cadastra os nomes, o app sorteia e gera um link para o grupo do WhatsApp. Cada participante abre o link, toca no próprio nome, descobre quem tirou e, na mesma tela, escolhe o próprio presente (com links de afiliado).
 
 Este repositório tem **um código só** para web, iOS e Android (Expo + Expo Router). A versão web é a que está no ar para testes; os apps nativos saem do mesmo projeto com `eas build`.
 
-Referências: `docs/` não existe ainda; a especificação de produto é o arquivo `tirei-spec-desenvolvimento.md` (fora do repo) e o protótipo "Amigo Oculto Já — Protótipo do app (v2 · simples)".
+Referências: a especificação de produto é o arquivo `tirei-spec-desenvolvimento.md` (fora do repo); a identidade visual está em `docs/marca.md`.
 
 ## Como está organizado
 
@@ -71,7 +73,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 
    ```bash
    SUPABASE_ACCESS_TOKEN=sbp_... \
-   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=voce@gmail.com SMTP_NAME="Amigo Oculto Já" \
+   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=voce@gmail.com SMTP_NAME="Amigo Oculto Já!" \
    node scripts/email-templates.mjs --push --site-url=https://amigoocultoja.com.br
    # acrescente --autoconfirm para desligar a confirmação de e-mail nos testes
    ```

@@ -272,6 +272,8 @@ export async function resolveLink(opts: {
 /* Mensagens de erro amigáveis                                       */
 /* ---------------------------------------------------------------- */
 
+export const GENERIC_ERROR = 'Não deu certo. Tente de novo.';
+
 export function friendlyError(e: unknown): string {
   if (e instanceof ApiError) {
     switch (e.code) {
@@ -280,11 +282,11 @@ export function friendlyError(e: unknown): string {
       case 'PARTICIPANT_NOT_FOUND':
         return 'Esse nome não está mais no grupo.';
       case 'ALREADY_CLAIMED':
-        return 'Esse nome já foi escolhido em outro aparelho. Se for você, peça ao organizador para liberar.';
+        return 'Esse nome já foi escolhido em outro aparelho. Se for você, peça a quem organiza para liberar.';
       case 'NOT_YOURS':
         return 'Esse nome está vinculado a outro aparelho.';
       case 'NOT_OWNER':
-        return 'Só o organizador pode fazer isso.';
+        return 'Só quem organiza pode fazer isso.';
       case 'NOT_DRAWN':
         return 'O sorteio ainda não aconteceu.';
       case 'DRAW_IMPOSSIBLE':
@@ -299,9 +301,9 @@ export function friendlyError(e: unknown): string {
         return 'Escolha até 3 presentes.';
       default:
         if (/fetch|network|load failed/i.test(e.message)) return 'Sem conexão. Verifique a internet e tente de novo.';
-        return e.message || 'Algo deu errado. Tenta de novo?';
+        return e.message || GENERIC_ERROR;
     }
   }
   if (e instanceof Error && /fetch|network/i.test(e.message)) return 'Sem conexão. Verifique a internet e tente de novo.';
-  return 'Algo deu errado. Tenta de novo?';
+  return GENERIC_ERROR;
 }

@@ -1,0 +1,21 @@
+/* Amigo Oculto Já! — Segredo simpático — v1.0 */
+/* Figtree deve ser carregada pela configuração de fontes do projeto. */
+:root {
+  --aoj-red: #C63D24;
+  --aoj-red-dark: #A8321C;
+  --aoj-charcoal: #111418;
+  --aoj-white: #FFFFFF;
+  --aoj-peach: #F6E3DC;
+  --aoj-surface: #F4F5F6;
+  --aoj-text-secondary: #5F6670;
+  --aoj-border: #EAECEF;
+  --aoj-whatsapp: #0E7A5F;
+  --aoj-success-bg: #DDEFE6;
+  --aoj-success-text: #0B5E48;
+  --aoj-warning-text: #8A4B0F;
+  --aoj-font: "Figtree", system-ui, "Segoe UI", Arial, sans-serif;
+  --aoj-radius-control: 12px;
+  --aoj-radius-card: 20px;
+  --aoj-radius-pill: 999px;
+  --aoj-target-min: 44px;
+}
