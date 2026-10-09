@@ -178,14 +178,14 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             </T>
           </View>
           <T size={13} color={colors.textSecondary} align="center" lineHeight={18}>
-            {friendFirst} vê o aviso ao abrir o Tirei!, sem saber que foi você. Dá para lembrar de novo em 12 horas.
+            {friendFirst} vê o aviso ao abrir o Amigo Oculto Já, sem saber que foi você. Dá para lembrar de novo em 12 horas.
           </T>
         </View>
       ) : (
         <>
           <Button label={`Lembrar ${friendFirst}, sem revelar você`} icon={<Bell size={20} color="#FFFFFF" />} onPress={remindFriend} loading={nudging} />
           <T size={12} color={colors.textSecondary} align="center">
-            O aviso aparece para {friendFirst} dentro do Tirei!. Nada é enviado pelo seu WhatsApp.
+            O aviso aparece para {friendFirst} dentro do Amigo Oculto Já. Nada é enviado pelo seu WhatsApp.
           </T>
         </>
       )}
@@ -300,7 +300,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           </>
         )}
         <T size={12} color={colors.textSecondary} lineHeight={17} style={{ paddingTop: 8 }}>
-          As lojas pagam comissão ao Tirei! pelos links. O preço para você é o mesmo.
+          As lojas pagam comissão ao Amigo Oculto Já pelos links. O preço para você é o mesmo.
         </T>
       </View>
 
@@ -433,7 +433,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                 Quer ser avisado quando {friendFirst} escolher?
               </T>
               <T size={14} color={colors.textSecondary} lineHeight={20}>
-                O app do Tirei! para iPhone e Android chega em novembro. Até lá, volte por este link: ele é seu.
+                O app do Amigo Oculto Já para iPhone e Android chega em novembro. Até lá, volte por este link: ele é seu.
               </T>
             </View>
           ) : null}

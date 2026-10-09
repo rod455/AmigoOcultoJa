@@ -1,6 +1,8 @@
-# Tirei! — Guia de marca e estratégia
+# Amigo Oculto Já — Guia de marca e estratégia
 
-> Versão 1.0 · outubro de 2026 · Produto: amigo oculto sem papelzinho · Domínio: amigoocultoja.com.br
+> Versão 1.1 · outubro de 2026 · Produto: amigo oculto sem papelzinho · Domínio: amigoocultoja.com.br
+>
+> **Decisão de 9/10:** o produto passa a se chamar **Amigo Oculto Já** (marca e domínio iguais). "Tirei!" fica como nome antigo e pode virar o nome do momento da revelação dentro do app. As seções abaixo foram escritas com o nome anterior; onde aparece "Tirei!" como marca, leia "Amigo Oculto Já". O símbolo, as cores, o tom e a estratégia não mudam. O logotipo segue a seção 5.2: "Amigo Oculto" em preto e "Já!" em vermelho.
 
 Este documento serve para três usos: (1) briefar quem vai desenhar a logo, (2) manter o app, o site, os e-mails e as redes falando a mesma língua, (3) orientar o lançamento de novembro e dezembro. Tudo que já está no código (cores, fonte, textos) foi consolidado aqui; o que ainda não existe está marcado como **a criar**.
 

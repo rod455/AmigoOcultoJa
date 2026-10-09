@@ -1,5 +1,5 @@
 /**
- * Tirei! — sorteio do amigo oculto.
+ * Amigo Oculto Já — sorteio do amigo oculto.
  *
  * Módulo puro (sem dependências) usado pela Edge Function `draw_group`
  * (Deno) e pelos testes (Node/Vitest). Nunca roda no cliente.

@@ -34,7 +34,7 @@ export default function Entrar() {
             autoFocus
             autoCapitalize="characters"
             autoCorrect={false}
-            placeholder="tirei.app/g/ABC123"
+            placeholder="amigoocultoja.com.br/g/ABC123"
             value={value}
             onChangeText={(t) => {
               setValue(t);

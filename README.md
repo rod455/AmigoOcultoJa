@@ -1,10 +1,12 @@
-# Tirei! — amigo oculto sem papelzinho
+# Amigo Oculto Já — amigo oculto sem papelzinho
+
+> Nome anterior do projeto: Tirei!. O identificador técnico (`tirei`) continua em alguns lugares (projeto Supabase, projeto Vercel, pasta do repositório).
 
 App do amigo oculto: o organizador cadastra os nomes, o app sorteia e gera um link para o grupo do WhatsApp. Cada participante abre o link, toca no próprio nome, descobre quem tirou e, na mesma tela, escolhe o próprio presente (com links de afiliado).
 
 Este repositório tem **um código só** para web, iOS e Android (Expo + Expo Router). A versão web é a que está no ar para testes; os apps nativos saem do mesmo projeto com `eas build`.
 
-Referências: `docs/` não existe ainda; a especificação de produto é o arquivo `tirei-spec-desenvolvimento.md` (fora do repo) e o protótipo "Tirei! — Protótipo do app (v2 · simples)".
+Referências: `docs/` não existe ainda; a especificação de produto é o arquivo `tirei-spec-desenvolvimento.md` (fora do repo) e o protótipo "Amigo Oculto Já — Protótipo do app (v2 · simples)".
 
 ## Como está organizado
 
@@ -62,19 +64,19 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 
 1. **Google**: criar OAuth Client ID (Web) no Google Cloud, colar client ID/secret no provider Google e adicionar `https://qqzlqnvreftablfyonux.supabase.co/auth/v1/callback` como redirect no Google.
 2. **Apple**: Services ID + chave `.p8` no provider Apple (exige Apple Developer Program).
-3. **URL Configuration**: Site URL `https://tirei.vercel.app` (depois `https://tirei.app`) e Redirect URLs `https://tirei.vercel.app/**`, `tirei://auth`. Sem isso o retorno do Google/Apple é recusado.
+3. **URL Configuration**: Site URL `https://amigoocultoja.com.br`  e Redirect URLs `https://amigoocultoja.com.br/**`, `amigoocultoja://auth`. Sem isso o retorno do Google/Apple é recusado.
 4. **E-mails com a marca**: os templates (confirmação, redefinir senha, link mágico, troca de e-mail, convite) estão em `supabase/templates/` e são gerados por `scripts/email-templates.mjs`. Para publicar no projeto com um comando (precisa de um token pessoal em supabase.com/dashboard/account/tokens):
 
    O Supabase só aceita templates personalizados com **SMTP próprio**. O mesmo comando configura o remetente:
 
    ```bash
    SUPABASE_ACCESS_TOKEN=sbp_... \
-   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=voce@gmail.com SMTP_NAME="Tirei!" \
-   node scripts/email-templates.mjs --push --site-url=https://tirei.vercel.app
+   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=voce@gmail.com SMTP_NAME="Amigo Oculto Já" \
+   node scripts/email-templates.mjs --push --site-url=https://amigoocultoja.com.br
    # acrescente --autoconfirm para desligar a confirmação de e-mail nos testes
    ```
 
-   Para testes, Gmail com senha de app (myaccount.google.com/apppasswords, exige verificação em 2 etapas) funciona na hora. Para o lançamento com `tirei.app`, use Resend (`smtp.resend.com`, porta 465, usuário `resend`, senha = API key) ou Brevo, com o domínio verificado, e o remetente `oi@tirei.app`.
+   Para testes, Gmail com senha de app (myaccount.google.com/apppasswords, exige verificação em 2 etapas) funciona na hora. Para o lançamento, use Resend (`smtp.resend.com`, porta 465, usuário `resend`, senha = API key) ou Brevo, com o domínio verificado, e o remetente `oi@amigoocultoja.com.br`.
 
    Ou cole cada `.html` e o assunto (`.subject.txt`) em Authentication → Email Templates. As imagens da marca ficam em `public/email/` e são servidas pelo site (`/email/logo-dark.png`).
 5. **E-mail**: funciona sem configuração. "Confirm email" vem ligado: o usuário recebe um link e, ao clicar, volta direto para o sorteio. Para testes rápidos, desligue "Confirm email" em Authentication → Providers → Email (ou configure um SMTP próprio: o remetente padrão tem limite baixo de envios por hora).
@@ -109,7 +111,7 @@ O conector do Supabase trata as palavras `delete`/`revoke` como comandos destrut
 
 `vercel.json` já define build (`npm run build`), saída (`dist/`) e as rewrites das rotas dinâmicas (`/g/:codigo` etc.). Variáveis necessárias no projeto: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` (as duas estão no `.env` versionado, são públicas por design) e, opcionalmente, `EXPO_PUBLIC_BASE_URL` (sem ela o link de convite usa o domínio em que a página está aberta).
 
-Para o domínio definitivo (`tirei.app`): aponte o domínio na Vercel, configure `EXPO_PUBLIC_BASE_URL=https://tirei.app` e, nos apps, os Universal Links / App Links já estão declarados em `app.json` (falta publicar `apple-app-site-association` e `assetlinks.json`).
+Para o domínio definitivo (`amigoocultoja.com.br`): aponte o domínio na Vercel, configure `EXPO_PUBLIC_BASE_URL=https://amigoocultoja.com.br` e, nos apps, os Universal Links / App Links já estão declarados em `app.json` (falta publicar `apple-app-site-association` e `assetlinks.json`).
 
 ## O que ficou para depois (conforme a spec)
 

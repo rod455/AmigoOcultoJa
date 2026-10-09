@@ -12,8 +12,8 @@ export default function Root({ children }: PropsWithChildren) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
         <meta name="theme-color" content="#111418" />
-        <meta name="description" content="Tirei! organiza o amigo oculto sem papelzinho. Monte em 1 minuto e mande um link no WhatsApp: cada um descobre quem tirou e escolhe o presente." />
-        <meta property="og:title" content="Tirei! — Amigo oculto sem papelzinho" />
+        <meta name="description" content="Amigo Oculto Já organiza o amigo oculto sem papelzinho. Monte em 1 minuto e mande um link no WhatsApp: cada um descobre quem tirou e escolhe o presente." />
+        <meta property="og:title" content="Amigo Oculto Já — Amigo oculto sem papelzinho" />
         <meta property="og:description" content="Monte em 1 minuto. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary" />

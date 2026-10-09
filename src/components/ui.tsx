@@ -337,10 +337,14 @@ export function Loading() {
   );
 }
 
-export function Logo({ size = 22 }: { size?: number }) {
+/** Logotipo: "Amigo Oculto" em preto + "Já!" em vermelho */
+export function Logo({ size = 22, color = colors.text }: { size?: number; color?: string }) {
   return (
-    <T size={size} weight="extrabold" style={{ letterSpacing: -0.3 }}>
-      Tirei!
+    <T size={size} weight="extrabold" color={color} style={{ letterSpacing: -0.4 }} accessibilityLabel="Amigo Oculto Já">
+      Amigo Oculto{' '}
+      <T size={size} weight="extrabold" color={colors.accent} style={{ letterSpacing: -0.4 }}>
+        Já!
+      </T>
     </T>
   );
 }

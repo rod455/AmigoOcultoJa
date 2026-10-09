@@ -1,4 +1,4 @@
--- Tirei! — esquema inicial (MVP)
+-- Amigo Oculto Já (ex-Tirei!) — esquema inicial (MVP)
 --
 -- Identidade no MVP web: cada aparelho gera uma chave secreta aleatória
 -- (device key). O banco guarda só o hash SHA-256 dessa chave. Nenhuma tabela
@@ -151,7 +151,7 @@ insert into public.app_settings (key, value) values
   ('search_url_amazon', 'https://www.amazon.com.br/s?k={q}&tag={tag}'),
   ('search_url_mercadolivre', 'https://lista.mercadolivre.com.br/{q}'),
   ('default_store', 'amazon'),
-  ('public_base_url', 'https://tirei.app')
+  ('public_base_url', 'https://amigoocultoja.com.br')
 on conflict (key) do nothing;
 
 -- ---------------------------------------------------------------
@@ -508,7 +508,7 @@ insert into public.app_settings (key, value) values
   ('search_url_amazon', 'https://www.amazon.com.br/s?k={q}&tag={tag}'),
   ('search_url_mercadolivre', 'https://lista.mercadolivre.com.br/{q}'),
   ('default_store', 'amazon'),
-  ('public_base_url', 'https://tirei.app')
+  ('public_base_url', 'https://amigoocultoja.com.br')
 on conflict (key) do nothing;
 
 -- ---------------------------------------------------------------

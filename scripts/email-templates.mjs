@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-// Templates dos e-mails do Supabase Auth no visual do Tirei!.
+// Templates dos e-mails do Supabase Auth no visual do Amigo Oculto Já.
 //
 //   node scripts/email-templates.mjs            → escreve supabase/templates/*.html
 //   node scripts/email-templates.mjs --push     → também publica no projeto via Management API
 //
 // Para --push: SUPABASE_ACCESS_TOKEN (token pessoal em supabase.com/dashboard/account/tokens)
 // e, opcionalmente, SUPABASE_PROJECT_REF (padrão: qqzlqnvreftablfyonux).
-// Flags extras no --push: --site-url=https://tirei.vercel.app  --autoconfirm (desliga "Confirm email")
+// Flags extras no --push: --site-url=https://amigoocultoja.com.br  --autoconfirm (desliga "Confirm email")
 //
 // SMTP próprio (obrigatório para o Supabase aceitar templates personalizados). Defina as variáveis
 // e o --push também configura o remetente:
-//   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=xxxx SMTP_FROM=voce@gmail.com SMTP_NAME="Tirei!"
+//   SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=voce@gmail.com SMTP_PASS=xxxx SMTP_FROM=voce@gmail.com SMTP_NAME="Amigo Oculto Já"
 //   (Gmail: senha de app em myaccount.google.com/apppasswords · Resend: host smtp.resend.com, user "resend", pass = API key)
 //
 // Variáveis do Supabase usadas: {{ .ConfirmationURL }}, {{ .Email }}, {{ .NewEmail }}, {{ .SiteURL }}, {{ .Data.full_name }}
@@ -18,7 +18,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BASE = process.env.EMAIL_ASSET_BASE ?? 'https://tirei.vercel.app';
+const BASE = process.env.EMAIL_ASSET_BASE ?? 'https://amigoocultoja.com.br';
 const COLORS = { text: '#111418', secondary: '#5F6670', line: '#EAECEF', accent: '#C63D24', bg: '#F4F5F6', box: '#FBF7F2' };
 
 /** Layout único: cabeçalho escuro com a marca, corpo, caixa de destaque, botão e rodapé. */
@@ -40,8 +40,8 @@ function layout({ preheader, title, greeting, intro, boxTitle, boxItems, cta, ct
 
   <!-- cabeçalho -->
   <tr><td align="center" style="background:${COLORS.text};padding:32px 32px 28px 32px">
-    <img src="${BASE}/email/logo-dark.png" width="88" height="80" alt="Tirei!" style="display:block;border:0;margin:0 auto 14px auto">
-    <div style="color:#FFFFFF;font-size:22px;font-weight:800;letter-spacing:-0.3px;line-height:26px;margin-bottom:18px">Tirei!</div>
+    <img src="${BASE}/email/logo-dark.png" width="88" height="80" alt="Amigo Oculto Já" style="display:block;border:0;margin:0 auto 14px auto">
+    <div style="color:#FFFFFF;font-size:22px;font-weight:800;letter-spacing:-0.3px;line-height:26px;margin-bottom:18px">Amigo Oculto <span style="color:${COLORS.accent}">Já!</span></div>
     <div style="color:#FFFFFF;font-size:26px;font-weight:800;letter-spacing:-0.5px;line-height:32px">${title}</div>
   </td></tr>
 
@@ -76,7 +76,7 @@ function layout({ preheader, title, greeting, intro, boxTitle, boxItems, cta, ct
   </td></tr>
 
 </table>
-<p style="margin:16px 0 0 0;color:${COLORS.secondary};font-size:12px;line-height:18px;font-family:Figtree,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">Tirei! · amigo oculto sem papelzinho · <a href="${BASE}" style="color:${COLORS.secondary}">${BASE.replace(/^https?:\/\//, '')}</a></p>
+<p style="margin:16px 0 0 0;color:${COLORS.secondary};font-size:12px;line-height:18px;font-family:Figtree,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">Amigo Oculto Já · amigo oculto sem papelzinho · <a href="${BASE}" style="color:${COLORS.secondary}">${BASE.replace(/^https?:\/\//, '')}</a></p>
 </td></tr>
 </table>
 </body>
@@ -93,17 +93,17 @@ export const TEMPLATES = {
       preheader: 'Um toque e o sorteio sai.',
       title: 'Falta um toque para sortear',
       greeting: `Oi, ${NAME}!`,
-      intro: 'Sua conta no Tirei! está quase pronta. Confirme o e-mail e você volta direto para o sorteio, exatamente de onde parou.',
+      intro: 'Sua conta no Amigo Oculto Já está quase pronta. Confirme o e-mail e você volta direto para o sorteio, exatamente de onde parou.',
       boxTitle: 'O que acontece depois',
       boxItems: ['O grupo é sorteado na hora, sem que ninguém veja o resultado dos outros.', 'Você recebe o link pronto para mandar no WhatsApp.', 'No painel, acompanha quem já viu e quem já montou a lista.'],
       cta: 'Confirmar e sortear',
       ctaUrl: '{{ .ConfirmationURL }}',
-      after: 'Se você não criou uma conta no Tirei!, pode ignorar este e-mail. Nada será criado.',
+      after: 'Se você não criou uma conta no Amigo Oculto Já, pode ignorar este e-mail. Nada será criado.',
       footer: 'Usamos seu nome e e-mail só para guardar seus grupos. Quem participa do amigo oculto não precisa de conta.',
     }),
   },
   recovery: {
-    subject: 'Redefinir sua senha do Tirei!',
+    subject: 'Redefinir sua senha do Amigo Oculto Já',
     html: layout({
       preheader: 'Escolha uma senha nova em um toque.',
       title: 'Vamos trocar sua senha',
@@ -118,22 +118,22 @@ export const TEMPLATES = {
     }),
   },
   magic_link: {
-    subject: 'Seu link para entrar no Tirei!',
+    subject: 'Seu link para entrar no Amigo Oculto Já',
     html: layout({
       preheader: 'Entre sem senha, em um toque.',
       title: 'Seu link de acesso',
       greeting: `Oi, ${NAME}!`,
-      intro: 'Toque no botão para entrar na sua conta do Tirei! sem digitar senha.',
+      intro: 'Toque no botão para entrar na sua conta do Amigo Oculto Já sem digitar senha.',
       boxTitle: 'Bom saber',
       boxItems: ['O link vale por pouco tempo e funciona uma vez só.', 'Se você não pediu este link, ignore o e-mail.'],
-      cta: 'Entrar no Tirei!',
+      cta: 'Entrar no Amigo Oculto Já',
       ctaUrl: '{{ .ConfirmationURL }}',
       after: 'Por segurança, não encaminhe este e-mail: quem tiver o link consegue entrar na sua conta.',
       footer: 'Usamos seu nome e e-mail só para guardar seus grupos.',
     }),
   },
   email_change: {
-    subject: 'Confirme a troca de e-mail no Tirei!',
+    subject: 'Confirme a troca de e-mail no Amigo Oculto Já',
     html: layout({
       preheader: 'Confirme o novo e-mail da sua conta.',
       title: 'Confirme seu novo e-mail',
@@ -148,12 +148,12 @@ export const TEMPLATES = {
     }),
   },
   invite: {
-    subject: 'Você foi convidado para o Tirei!',
+    subject: 'Você foi convidado para o Amigo Oculto Já',
     html: layout({
       preheader: 'Crie sua senha e entre.',
       title: 'Você foi convidado',
       greeting: 'Oi!',
-      intro: 'Alguém criou uma conta para você no Tirei!, o amigo oculto sem papelzinho. Toque no botão para escolher uma senha e entrar.',
+      intro: 'Alguém criou uma conta para você no Amigo Oculto Já, o amigo oculto sem papelzinho. Toque no botão para escolher uma senha e entrar.',
       boxTitle: 'O que dá para fazer',
       boxItems: ['Criar grupos e sortear em 1 minuto.', 'Mandar o link no WhatsApp e acompanhar quem já viu.'],
       cta: 'Aceitar convite',
@@ -209,7 +209,7 @@ if (process.argv.includes('--push')) {
     body.smtp_user = process.env.SMTP_USER;
     body.smtp_pass = process.env.SMTP_PASS;
     body.smtp_admin_email = process.env.SMTP_FROM;
-    body.smtp_sender_name = process.env.SMTP_NAME ?? 'Tirei!';
+    body.smtp_sender_name = process.env.SMTP_NAME ?? 'Amigo Oculto Já';
     body.smtp_max_frequency = 1; // segundos entre envios para o mesmo destinatário
     body.rate_limit_email_sent = Number(process.env.SMTP_RATE_PER_HOUR ?? 100);
   }

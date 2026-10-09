@@ -7,7 +7,7 @@ export function baseUrl(): string {
   if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location) {
     return window.location.origin;
   }
-  return 'https://tirei.app';
+  return 'https://amigoocultoja.com.br';
 }
 
 export function inviteUrl(code: string): string {

@@ -4,14 +4,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useViewportWidth } from '@/lib/useViewportWidth';
 import { type DimensionValue, type NativeSyntheticEvent, type NativeScrollEvent, Platform, Pressable, ScrollView, type TextInput, View, type ViewStyle } from 'react-native';
 import { Check, Close, EyeOff, WhatsApp } from '@/components/icons';
-import { Button, Mark, T, UnderlineInput } from '@/components/ui';
+import { Button, Logo, Mark, T, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { loadDraft, saveDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
 
 const MAX_W = 1040;
 
-const META_TITLE = 'Tirei! — Sorteio de amigo oculto pelo WhatsApp, sem cadastro';
+const META_TITLE = 'Amigo Oculto Já — Sorteio de amigo oculto pelo WhatsApp, sem cadastro';
 const META_DESC =
   'Sorteie o amigo oculto e mande um link no grupo do WhatsApp em 1 minuto. Cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Grátis, sem cadastro e sem baixar app.';
 
@@ -139,7 +139,7 @@ export function LandingPage() {
           <Section eyebrow="Dúvidas" title="Perguntas frequentes">
             <Faq
               items={[
-                ['É grátis mesmo?', 'Sim. Criar o grupo, sortear, mandar o link, montar a lista de presentes: tudo grátis, sem limite de grupos. O Tirei! ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.'],
+                ['É grátis mesmo?', 'Sim. Criar o grupo, sortear, mandar o link, montar a lista de presentes: tudo grátis, sem limite de grupos. O Amigo Oculto Já ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.'],
                 ['Precisa baixar alguma coisa ou criar conta?', 'Não. Você cria o grupo aqui no navegador e quem participa só abre o link. Nenhuma senha, nenhum e-mail. O app para iPhone e Android chega em novembro, só para quem quiser receber avisos.'],
                 ['O organizador consegue ver quem tirou quem?', 'Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista.'],
                 ['E se alguém sair ou entrar depois do sorteio?', 'Você remove ou adiciona a pessoa no painel. O sorteio é reparado com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link. Ninguém mais precisa fazer nada.'],
@@ -185,9 +185,7 @@ export function LandingPage() {
 function Nav() {
   return (
     <View style={{ height: 68, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-      <T size={24} weight="extrabold" style={{ letterSpacing: -0.4 }}>
-        Tirei!
-      </T>
+      <Logo size={22} />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
         <Link href="/entrar" asChild>
           <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
@@ -309,7 +307,7 @@ function WhatsAppBubble() {
         Toque no link, escolha seu nome e descubra quem você tirou:
       </T>
       <T size={16} lineHeight={23} color="#0B57D0" style={{ textDecorationLine: 'underline' }}>
-        tirei.app/g/K7MXQ2
+        amigoocultoja.com.br/g/K7MXQ2
       </T>
       <T size={11} color={colors.textMuted} align="right" style={{ paddingTop: 4 }}>
         10:42 ✓✓
@@ -388,7 +386,7 @@ function Compare({ wide }: { wide: boolean }) {
           Papelzinho
         </T>
         <T size={13} weight="bold" color={colors.accentDark} style={[{ flex: 1 }, { textTransform: 'uppercase', letterSpacing: 0.3 }]}>
-          Tirei!
+          Amigo Oculto Já
         </T>
       </View>
       {rows.map(([s, p, t], i) => (
@@ -473,7 +471,7 @@ function Footer() {
   return (
     <View style={{ paddingVertical: 32, gap: 10, borderTopWidth: 1, borderTopColor: colors.line }}>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
-        As lojas pagam comissão ao Tirei! pelos links de presente. O preço para você é o mesmo.
+        As lojas pagam comissão ao Amigo Oculto Já pelos links de presente. O preço para você é o mesmo.
       </T>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
         Os nomes cadastrados pelo organizador são usados só para o sorteio e ficam visíveis apenas para quem tem o link do grupo.
@@ -494,7 +492,7 @@ function Footer() {
           </Pressable>
         </Link>
         <T size={13} color={colors.textMuted}>
-          © {new Date().getFullYear()} Tirei!
+          © {new Date().getFullYear()} Amigo Oculto Já
         </T>
       </View>
     </View>
