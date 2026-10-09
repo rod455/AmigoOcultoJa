@@ -193,7 +193,7 @@ if (process.argv.includes('--push')) {
   const siteUrl = process.argv.find((a) => a.startsWith('--site-url='))?.slice('--site-url='.length);
   if (siteUrl) {
     body.site_url = siteUrl;
-    body.uri_allow_list = [`${siteUrl}/**`, 'tirei://auth'].join(',');
+    body.uri_allow_list = [`${siteUrl}/**`, `${siteUrl.replace('://', '://www.')}/**`, 'amigoocultoja://auth'].join(',');
   }
   if (process.argv.includes('--autoconfirm')) body.mailer_autoconfirm = true;
 
