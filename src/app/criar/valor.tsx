@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, TextInput, View } from 'react-native';
 import { ChevronRight, Close } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
 import { Calendar } from '@/components/Calendar';
@@ -16,9 +16,18 @@ import { colors, fonts } from '@/theme/tokens';
 const BUDGETS: Array<{ label: string; cents: number | null }> = [
   { label: 'R$ 50', cents: 5000 },
   { label: 'R$ 100', cents: 10000 },
-  { label: 'R$ 200', cents: 20000 },
   { label: 'Sem valor', cents: null },
 ];
+const PRESETS = new Set<number | null>(BUDGETS.map((b) => b.cents));
+const MIN_REAIS = 5;
+const MAX_REAIS = 10000;
+
+/** "150" → 15000 centavos; vazio ou fora da faixa → null */
+function parseReais(text: string): number | null {
+  const n = Number(text.replace(/\D/g, ''));
+  if (!Number.isFinite(n) || n < MIN_REAIS || n > MAX_REAIS) return null;
+  return n * 100;
+}
 
 function quickDates(): Array<{ label: string; iso: string }> {
   const y = new Date().getFullYear();
@@ -40,6 +49,21 @@ export default function Valor() {
   const [picking, setPicking] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // "Outro": valor digitado por quem organiza
+  const [custom, setCustom] = useState(false);
+  const [customText, setCustomText] = useState('');
+  const customRef = useRef<TextInput>(null);
+
+  // rascunho salvo com valor fora dos atalhos (ex.: R$ 150) abre já em "Outro"
+  useEffect(() => {
+    if (ready && !PRESETS.has(draft.budgetCents) && draft.budgetCents != null) {
+      setCustom(true);
+      setCustomText(String(Math.round(draft.budgetCents / 100)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready]);
+
+  const customValid = !custom || parseReais(customText) != null;
 
   useEffect(() => {
     if (ready && (!draft.name || !draft.organizerName)) router.replace('/criar/nome');
@@ -69,6 +93,11 @@ export default function Valor() {
   const removePair = (i: number) => update((d) => ({ exclusions: d.exclusions.filter((_, k) => k !== i) }));
 
   const sortear = async () => {
+    if (!customValid) {
+      setError(`Digite o valor do presente, de R$ ${MIN_REAIS} a R$ ${MAX_REAIS.toLocaleString('pt-BR')}.`);
+      customRef.current?.focus();
+      return;
+    }
     setLoading(true);
     setError('');
     // Login acontece aqui, só na hora de criar (spec §6.1). O rascunho já está salvo.
@@ -123,33 +152,67 @@ export default function Valor() {
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
           {BUDGETS.map((b) => {
-            const on = draft.budgetCents === b.cents;
+            const on = !custom && draft.budgetCents === b.cents;
             return (
-              <Pressable
+              <BudgetTile
                 key={b.label}
-                accessibilityRole="button"
-                accessibilityState={{ selected: on }}
-                onPress={() => update({ budgetCents: b.cents })}
-                style={({ pressed }) => ({
-                  width: '47%',
-                  flexGrow: 1,
-                  height: 72,
-                  borderRadius: 18,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: on ? colors.text : colors.surface,
-                  borderWidth: on ? 0 : 1.5,
-                  borderColor: colors.line,
-                  opacity: pressed ? 0.85 : 1,
-                })}
-              >
-                <T size={20} weight="bold" color={on ? '#FFFFFF' : colors.text}>
-                  {b.label}
-                </T>
-              </Pressable>
+                label={b.label}
+                on={on}
+                onPress={() => {
+                  setCustom(false);
+                  setError('');
+                  update({ budgetCents: b.cents });
+                }}
+              />
             );
           })}
+          <BudgetTile
+            label={custom && parseReais(customText) != null ? `R$ ${Number(customText.replace(/\D/g, '')).toLocaleString('pt-BR')}` : 'Outro'}
+            on={custom}
+            onPress={() => {
+              setCustom(true);
+              setError('');
+              const cents = parseReais(customText);
+              if (cents != null) update({ budgetCents: cents });
+              setTimeout(() => customRef.current?.focus(), 50);
+            }}
+          />
         </View>
+
+        {custom ? (
+          <View style={{ gap: 6, marginTop: -12 }}>
+            <T size={14} weight="semibold" color={colors.textSecondary} nativeID="lbl-valor">
+              Valor do presente
+            </T>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, borderBottomWidth: 2, borderBottomColor: customValid || !customText ? colors.text : colors.accent }}>
+              <T size={24} weight="semibold">
+                R$
+              </T>
+              <TextInput
+                ref={customRef}
+                value={customText}
+                onChangeText={(t) => {
+                  const digits = t.replace(/\D/g, '').slice(0, 5);
+                  setCustomText(digits);
+                  setError('');
+                  const cents = parseReais(digits);
+                  if (cents != null) update({ budgetCents: cents });
+                }}
+                placeholder="150"
+                placeholderTextColor={colors.textMuted}
+                keyboardType="number-pad"
+                inputMode="numeric"
+                maxLength={5}
+                returnKeyType="done"
+                accessibilityLabelledBy="lbl-valor"
+                style={[{ flex: 1, height: 56, fontSize: 24, fontFamily: fonts.semibold, color: colors.text, paddingVertical: 0 }, Platform.OS === 'web' && ({ outlineStyle: 'none' } as object)]}
+              />
+            </View>
+            <T size={13} color={customText && !customValid ? colors.accentDark : colors.textSecondary}>
+              {customText && !customValid ? `Use um valor de R$ ${MIN_REAIS} a R$ ${MAX_REAIS.toLocaleString('pt-BR')}.` : 'Só números, em reais.'}
+            </T>
+          </View>
+        ) : null}
 
         <View>
           <Pressable accessibilityRole="button" onPress={() => setDateSheet(true)}>
@@ -275,5 +338,31 @@ export default function Valor() {
         </View>
       </Sheet>
     </Screen>
+  );
+}
+
+function BudgetTile({ label, on, onPress }: { label: string; on: boolean; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected: on }}
+      onPress={onPress}
+      style={({ pressed }) => ({
+        width: '47%',
+        flexGrow: 1,
+        height: 72,
+        borderRadius: 18,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: on ? colors.text : colors.surface,
+        borderWidth: on ? 0 : 1.5,
+        borderColor: colors.line,
+        opacity: pressed ? 0.85 : 1,
+      })}
+    >
+      <T size={20} weight="bold" color={on ? '#FFFFFF' : colors.text}>
+        {label}
+      </T>
+    </Pressable>
   );
 }
