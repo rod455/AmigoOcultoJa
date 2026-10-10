@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Platform, Pressable, type TextStyle, TextInput, View, type ViewStyle } from 'react-native';
 import { AppleLogo, Eye, EyeOff, GoogleLogo } from '@/components/icons';
@@ -250,7 +250,15 @@ export default function Conta() {
         </View>
 
         <T size={12} color={colors.textSecondary} lineHeight={17} align="center">
-          Usamos seu nome e e-mail só para guardar seus grupos. Quem participa não precisa de conta.
+          Usamos seu nome e e-mail só para guardar seus grupos. Quem participa não precisa de conta. Ao continuar, você aceita os{' '}
+          <Link href="/termos" style={{ textDecorationLine: 'underline', color: colors.textSecondary }}>
+            Termos de Uso
+          </Link>{' '}
+          e a{' '}
+          <Link href="/privacidade" style={{ textDecorationLine: 'underline', color: colors.textSecondary }}>
+            Política de Privacidade
+          </Link>
+          .
         </T>
       </View>
     </Screen>

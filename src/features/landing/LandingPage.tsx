@@ -543,6 +543,20 @@ function Footer() {
             </T>
           </Pressable>
         </Link>
+        <Link href="/privacidade" asChild>
+          <Pressable accessibilityRole="link">
+            <T size={13} weight="semibold" color={colors.textSecondary}>
+              Privacidade
+            </T>
+          </Pressable>
+        </Link>
+        <Link href="/termos" asChild>
+          <Pressable accessibilityRole="link">
+            <T size={13} weight="semibold" color={colors.textSecondary}>
+              Termos de Uso
+            </T>
+          </Pressable>
+        </Link>
         <T size={13} color={colors.textMuted}>
           © {new Date().getFullYear()} Amigo Oculto Já! · amigoocultoja.com.br
         </T>
