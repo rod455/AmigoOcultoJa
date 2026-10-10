@@ -62,7 +62,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 - **Participante**: sem conta. Cada aparelho gera uma chave secreta (`device key`, 64 hex) guardada localmente; o banco só conhece o hash SHA-256. Assumir um nome vincula o nome à chave.
 - **Organizador**: conta Supabase Auth (Google, Apple ou e-mail+senha; só nome e e-mail). O login acontece na hora de tocar em "Sortear" (tela `/conta`); todo o preenchimento anterior fica no rascunho local. O grupo guarda `owner_user_id` e `owner_key_hash`; `is_owner()` aceita qualquer um dos dois, então o organizador vê o painel e "Seus grupos" em qualquer aparelho logado. As Edge Functions leem o JWT do usuário no `Authorization`.
 
-**Conta principal:** `amigoocultoja@gmail.com` envia os e-mails de login (SMTP do Gmail com senha de app) e é dona do projeto no Google Cloud usado no login com Google.
+**Conta principal:** `amigoocultoja@gmail.com` é dona das contas do Resend (e-mails de login saem de `oi@amigoocultoja.com.br` via `smtp.resend.com`, porta 465, usuário `resend`, senha = API key), do Google Cloud (login com Google) e da Amazon Associados. DNS do Resend no Registro.br: TXT `resend._domainkey`, CNAME `rsend`, CNAME `send`, TXT `_dmarc`.
 
 **Para ativar os logins no painel do Supabase** (Authentication → Providers / URL Configuration):
 
@@ -75,7 +75,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 
    ```bash
    SUPABASE_ACCESS_TOKEN=sbp_... \
-   SMTP_HOST=smtp.gmail.com SMTP_PORT=465 SMTP_USER=amigoocultoja@gmail.com SMTP_PASS=senha-de-app SMTP_FROM=amigoocultoja@gmail.com SMTP_NAME="Amigo Oculto Já!" \
+   SMTP_HOST=smtp.resend.com SMTP_PORT=465 SMTP_USER=resend SMTP_PASS=re_... SMTP_FROM=oi@amigoocultoja.com.br SMTP_NAME="Amigo Oculto Já!" \
    node scripts/email-templates.mjs --push --site-url=https://amigoocultoja.com.br
    # acrescente --autoconfirm para desligar a confirmação de e-mail nos testes
    ```
