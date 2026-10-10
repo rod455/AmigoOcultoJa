@@ -140,6 +140,7 @@ export default function Privacidade() {
       intro="O Amigo Oculto Já! organiza o sorteio do amigo oculto e a lista de presentes. Esta política explica, em linguagem direta, quais dados guardamos, por que guardamos e o que você pode pedir sobre eles."
       sections={sections}
       other={{ href: '/termos', label: 'Termos de Uso' }}
+      path="/privacidade"
     />
   );
 }

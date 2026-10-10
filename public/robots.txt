@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /g/
+Disallow: /painel/
+Disallow: /pronto/
+Disallow: /r/
+Disallow: /conta
+Disallow: /criar/
+Disallow: /entrar
+Disallow: /app
+
+Sitemap: https://amigoocultoja.com.br/sitemap.xml

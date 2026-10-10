@@ -116,6 +116,7 @@ export default function Termos() {
       intro="Estes são os combinados para usar o Amigo Oculto Já!. Escrevemos de forma direta para que todo mundo do grupo entenda."
       sections={sections}
       other={{ href: '/privacidade', label: 'Política de Privacidade' }}
+      path="/termos"
     />
   );
 }

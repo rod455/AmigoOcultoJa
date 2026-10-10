@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, Pressable, type TextStyle, TextInput, View, type ViewStyle } from 'react-native';
 import { AppleLogo, Eye, EyeOff, GoogleLogo } from '@/components/icons';
 import { BrandSymbol, Button, ErrorText, Screen, T, TopBar } from '@/components/ui';
-import { authErrorMessage, getSession, resetPassword, signInWithEmail, signInWithProvider, signUpWithEmail, updatePassword } from '@/lib/auth';
+import { authErrorMessage, DEFAULT_PROVIDERS, enabledProviders, type EnabledProviders, getSession, resetPassword, signInWithEmail, signInWithProvider, signUpWithEmail, updatePassword } from '@/lib/auth';
 import { loadDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
 
@@ -23,6 +23,16 @@ export default function Conta() {
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [busy, setBusy] = useState<'' | 'google' | 'apple' | 'email'>('');
+  const [providers, setProviders] = useState<EnabledProviders>(DEFAULT_PROVIDERS);
+
+  useEffect(() => {
+    let alive = true;
+    enabledProviders().then((p) => alive && setProviders(p));
+    return () => {
+      alive = false;
+    };
+  }, []);
+  const hasSocial = providers.google || providers.apple;
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -124,7 +134,9 @@ export default function Conta() {
 
         {mode !== 'reset' ? (
           <>
+            {hasSocial ? (
             <View style={{ gap: 8 }}>
+              {providers.google ? (
               <Pressable
                 accessibilityRole="button"
                 onPress={() => provider('google')}
@@ -136,6 +148,8 @@ export default function Conta() {
                   {busy === 'google' ? 'Abrindo o Google…' : 'Continuar com Google'}
                 </T>
               </Pressable>
+              ) : null}
+              {providers.apple ? (
               <Pressable
                 accessibilityRole="button"
                 onPress={() => provider('apple')}
@@ -147,18 +161,22 @@ export default function Conta() {
                   {busy === 'apple' ? 'Abrindo a Apple…' : 'Continuar com Apple'}
                 </T>
               </Pressable>
+              ) : null}
               <T size={12} color={colors.textSecondary} align="center">
                 Rápido e sem precisar de senha
               </T>
             </View>
+            ) : null}
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-              <View style={{ flex: 1, height: 1, backgroundColor: colors.line }} />
-              <T size={13} color={colors.textSecondary}>
-                ou com e-mail
-              </T>
-              <View style={{ flex: 1, height: 1, backgroundColor: colors.line }} />
-            </View>
+            {hasSocial ? (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: colors.line }} />
+                <T size={13} color={colors.textSecondary}>
+                  ou com e-mail
+                </T>
+                <View style={{ flex: 1, height: 1, backgroundColor: colors.line }} />
+              </View>
+            ) : null}
 
             {/* alternador entrar / criar conta */}
             <View style={{ flexDirection: 'row', backgroundColor: colors.surfaceAlt, borderRadius: 12, padding: 3 }}>

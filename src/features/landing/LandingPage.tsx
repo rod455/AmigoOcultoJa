@@ -53,6 +53,8 @@ export function LandingPage() {
         <meta property="og:description" content={META_DESC} />
         <meta property="og:image" content="https://amigoocultoja.com.br/brand/og.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:url" content="https://amigoocultoja.com.br/" />
+        <link rel="canonical" href="https://amigoocultoja.com.br/" />
       </Head>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }} onScroll={onScroll} scrollEventThrottle={100}>

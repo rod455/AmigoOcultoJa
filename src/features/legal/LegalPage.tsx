@@ -22,6 +22,7 @@ export function LegalPage({
   intro,
   sections,
   other,
+  path,
 }: {
   title: string;
   metaTitle: string;
@@ -29,6 +30,8 @@ export function LegalPage({
   intro: string;
   sections: LegalSection[];
   other: { href: '/privacidade' | '/termos'; label: string };
+  /** caminho público da página, para o link canônico */
+  path: '/privacidade' | '/termos';
 }) {
   const width = useViewportWidth();
   const pad = width >= 600 ? 32 : 20;
@@ -39,6 +42,7 @@ export function LegalPage({
       <Head>
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={`https://amigoocultoja.com.br${path}`} />
       </Head>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ width: '100%', maxWidth: 760, paddingHorizontal: pad, paddingBottom: 64 }}>

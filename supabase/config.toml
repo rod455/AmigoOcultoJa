@@ -1,8 +1,11 @@
 # Configuração mínima para a CLI do Supabase (desenvolvimento local).
 project_id = "tirei"
 
+# As funções aceitam a chave anon (organizador sem login no fluxo antigo) e leem
+# o JWT do usuário quando houver; a autorização é feita dentro de cada função.
+
 [functions.draw_group]
-verify_jwt = true
+verify_jwt = false
 
 [functions.repair_group]
-verify_jwt = true
+verify_jwt = false

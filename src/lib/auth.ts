@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import type { Session, User } from '@supabase/supabase-js';
 import { track } from './analytics';
 import { baseUrl } from './share';
-import { isConfigured, supabase } from './supabase';
+import { anonKeyValue, isConfigured, supabase, supabaseUrl } from './supabase';
 
 /**
  * Conta do organizador. Só guardamos nome e e-mail (vêm do Google/Apple ou do
@@ -39,6 +39,30 @@ export function onAuthChange(cb: (session: Session | null) => void): () => void 
   if (!isConfigured) return () => undefined;
   const { data } = supabase().auth.onAuthStateChange((_e, session) => cb(session));
   return () => data.subscription.unsubscribe();
+}
+
+/**
+ * Quais logins sociais estão ligados no Supabase (Authentication › Providers).
+ * Assim o botão só aparece quando o provedor funciona; ligar a Apple no painel
+ * faz o botão surgir sem novo deploy.
+ */
+export type EnabledProviders = Record<Provider, boolean>;
+export const DEFAULT_PROVIDERS: EnabledProviders = { google: true, apple: false };
+let providersPromise: Promise<EnabledProviders> | null = null;
+
+export function enabledProviders(): Promise<EnabledProviders> {
+  if (!isConfigured) return Promise.resolve(DEFAULT_PROVIDERS);
+  providersPromise ??= fetch(`${supabaseUrl}/auth/v1/settings`, { headers: { apikey: anonKeyValue } })
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then((s: { external?: Partial<Record<string, boolean>> }) => ({
+      google: Boolean(s.external?.google),
+      apple: Boolean(s.external?.apple),
+    }))
+    .catch(() => {
+      providersPromise = null;
+      return DEFAULT_PROVIDERS;
+    });
+  return providersPromise;
 }
 
 /** URL para onde o provedor devolve o usuário depois do login. */

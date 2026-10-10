@@ -36,3 +36,4 @@ export const isConfigured = Boolean(url && anonKey);
 
 export const functionsUrl = url ? `${url}/functions/v1` : '';
 export const anonKeyValue = anonKey;
+export const supabaseUrl = url;
