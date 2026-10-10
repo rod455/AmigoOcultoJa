@@ -55,7 +55,7 @@ export function LegalPage({
               {title}
             </T>
             <T size={14} color={colors.textSecondary}>
-              Atualizada em {LEGAL_UPDATED}
+              Última atualização: {LEGAL_UPDATED}
             </T>
             <T size={17} color={colors.textSecondary} lineHeight={26} style={{ paddingTop: 8 }}>
               {intro}
