@@ -7,6 +7,17 @@ export function formatBRL(cents: number | null | undefined, opts: { prefix?: boo
   return (opts.prefix === false ? '' : 'R$ ') + value;
 }
 
+/**
+ * Faixa de valor de um produto ("até R$ 100"). A Amazon não permite exibir
+ * preço fixo de produto fora da API oficial, então a interface mostra só a faixa;
+ * o preço aproximado guardado no banco serve para filtrar pelo valor do grupo.
+ */
+export function priceBand(cents: number | null | undefined): string {
+  if (cents == null) return '';
+  for (const top of [5000, 10000, 20000, 40000]) if (cents <= top) return `Até ${formatBRL(top)}`;
+  return `Acima de ${formatBRL(40000)}`;
+}
+
 /** "24 de dez" a partir de "2026-12-24" */
 export function formatDay(iso: string | null | undefined): string {
   if (!iso) return '';

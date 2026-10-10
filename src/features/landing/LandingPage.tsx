@@ -570,7 +570,7 @@ function Footer() {
 /** Mockup estático da tela 8 dentro de uma moldura de celular. */
 function PhoneMock({ scale = 1 }: { scale?: number }) {
   const rows: Array<[string, string, string]> = [
-    ['Fone bluetooth', 'R$ 99 · Amazon', 'Comprar'],
+    ['Fone bluetooth', 'Até R$ 100 · Amazon', 'Comprar'],
     ['Livro de ficção', 'Opções até R$ 100 · Amazon', 'Ver'],
   ];
   const w = Math.round(320 * scale);

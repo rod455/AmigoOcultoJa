@@ -5,7 +5,7 @@ import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen
 import { track } from '@/lib/analytics';
 import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveLink, setWishItems, suggestions, type WishItem } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
-import { firstName, formatBRL, groupMeta, storeLabel } from '@/lib/format';
+import { firstName, formatBRL, groupMeta, priceBand, storeLabel } from '@/lib/format';
 import { colors, tints } from '@/theme/tokens';
 import { openExternal } from '@/lib/open';
 
@@ -265,7 +265,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                     {it.title}
                   </T>
                   <T size={14} color={colors.textSecondary}>
-                    {it.is_search ? `Opções${budget ? ` até ${formatBRL(budget)}` : ''} · ${storeLabel(it.store)}` : `${formatBRL(it.price_cents)} · ${storeLabel(it.store)}`}
+                    {it.is_search ? `Opções${budget ? ` até ${formatBRL(budget)}` : ''} · ${storeLabel(it.store)}` : `${priceBand(it.price_cents)} · ${storeLabel(it.store)}`}
                   </T>
                 </View>
                 <Pill label={it.is_search ? 'Ver' : 'Comprar'} onPress={() => buy({ wishItemId: it.id, origin: 'lista_amigo' })} />
@@ -283,14 +283,14 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             {ideas.length > 0 ? (
               <>
                 <Overline style={{ paddingTop: 16 }}>{budget ? `Enquanto isso, ideias até ${formatBRL(budget)}` : 'Enquanto isso, algumas ideias'}</Overline>
-                {ideas.map((p, i) => (
+                {ideas.map((p) => (
                   <View key={p.id} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, minHeight: 64, borderBottomWidth: 1, borderBottomColor: colors.line }}>
                     <View style={{ flexGrow: 1, flexShrink: 1, gap: 2 }}>
                       <T size={17} weight="semibold">
                         {p.name}
                       </T>
                       <T size={13} color={colors.textSecondary}>
-                        {i === 0 ? 'Uma das mais escolhidas' : `${formatBRL(p.price_cents)}`}
+                        {priceBand(p.price_cents)}
                       </T>
                     </View>
                     <Pill label={`Ver na ${storeLabel(p.store)}`} variant="outline" small onPress={() => buy({ productId: p.id, origin: 'ideias' })} />
@@ -325,7 +325,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                   key={p.id}
                   accessibilityRole="button"
                   accessibilityState={{ selected: on }}
-                  accessibilityLabel={`${p.name}, ${formatBRL(p.price_cents)}, ${storeLabel(p.store)}`}
+                  accessibilityLabel={`${p.name}, ${priceBand(p.price_cents)}, ${storeLabel(p.store)}`}
                   onPress={() => togglePick(p)}
                   style={{ width: 136, gap: 8, padding: 8, paddingBottom: 12, borderRadius: 18, borderWidth: 2, borderColor: on ? colors.text : colors.line, backgroundColor: colors.surface }}
                 >
@@ -341,8 +341,8 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                     {p.name}
                   </T>
                   <View style={{ gap: 1 }}>
-                    <T size={16} weight="extrabold">
-                      {formatBRL(p.price_cents)}
+                    <T size={14} weight="extrabold">
+                      {priceBand(p.price_cents)}
                     </T>
                     <T size={12} color={colors.textSecondary}>
                       {storeLabel(p.store)}
@@ -387,7 +387,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                       {p.title}
                     </T>
                     <T size={13} color={colors.textSecondary}>
-                      {p.product_id ? `${formatBRL(p.price_cents)} · ${storeLabel(p.store)}` : `Vira um link de busca${budget ? ` até ${formatBRL(budget)}` : ''}`}
+                      {p.product_id ? `${priceBand(p.price_cents)} · ${storeLabel(p.store)}` : `Vira um link de busca${budget ? ` até ${formatBRL(budget)}` : ''}`}
                     </T>
                   </View>
                   <IconButton label={`Remover ${p.title}`} onPress={() => setPicks((cur) => cur.filter((c) => c.key !== p.key))}>
@@ -420,7 +420,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                   {it.title}
                 </T>
                 <T size={13} color={colors.textSecondary}>
-                  {it.is_search ? `Link de busca · ${storeLabel(it.store)}` : `${formatBRL(it.price_cents)} · ${storeLabel(it.store)}`}
+                  {it.is_search ? `Link de busca · ${storeLabel(it.store)}` : `${priceBand(it.price_cents)} · ${storeLabel(it.store)}`}
                 </T>
               </View>
             </View>
