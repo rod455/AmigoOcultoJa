@@ -12,7 +12,7 @@ const sections: LegalSection[] = [
     title: 'O que é o serviço',
     body: [
       'O Amigo Oculto Já! permite montar um grupo de amigo oculto, sortear quem tira quem, enviar o convite por um link e montar listas de presentes.',
-      'O uso é gratuito. Ganhamos uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.',
+      'O uso é gratuito. Ganhamos uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo. Como Associado da Amazon, recebemos por compras qualificadas.',
     ],
   },
   {

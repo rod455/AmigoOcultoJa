@@ -523,7 +523,7 @@ function Footer() {
         </T>
       </View>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
-        As lojas pagam comissão ao Amigo Oculto Já! pelos links de presente. O preço para você é o mesmo.
+        As lojas pagam comissão ao Amigo Oculto Já! pelos links de presente. O preço para você é o mesmo. Como Associado da Amazon, recebemos por compras qualificadas.
       </T>
       <T size={13} color={colors.textSecondary} lineHeight={19}>
         Os nomes cadastrados por quem organiza são usados só para o sorteio e ficam visíveis apenas para quem tem o link do grupo.

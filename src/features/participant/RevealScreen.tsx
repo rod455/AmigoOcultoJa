@@ -301,7 +301,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           </>
         )}
         <T size={12} color={colors.textSecondary} lineHeight={17} style={{ paddingTop: 8 }}>
-          As lojas pagam comissão ao Amigo Oculto Já! pelos links. O preço para você é o mesmo.
+          As lojas pagam comissão ao Amigo Oculto Já! pelos links. O preço para você é o mesmo. Como Associado da Amazon, recebemos por compras qualificadas.
         </T>
       </View>
 
