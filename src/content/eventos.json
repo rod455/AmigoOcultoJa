@@ -1,0 +1,207 @@
+{
+  "_comment": "Catálogo de eventos: a pergunta que fez cada um nascer e como ler. Fonte única: o app só aceita nomes daqui (o tipo de track() vem deste arquivo), a migração copia as linhas para analytics.event_catalog e tests/eventos.test.ts reprova se os dois divergirem ou se um evento daqui não for emitido em lugar nenhum. natureza: sessao (repete a cada visita), ato (uma vez por pessoa, participante ou grupo), tecnico (mede o app, não as pessoas). unidade: quem o evento conta (aparelho, conta, participante, grupo). desde: o dia em que o evento passou a existir; antes dele é 'sem medição', não zero. fonte: app (track) ou servidor (SQL e edge functions). ressalva: sempre com data.",
+  "eventos": {
+    "session_started": {
+      "pergunta": "Quantos aparelhos chegam ao site e ao app por dia, e de onde vieram (campanha, busca, IA, indicação)?",
+      "natureza": "sessao",
+      "unidade": "aparelho",
+      "desde": "2026-10-11",
+      "fonte": "app"
+    },
+    "faq_opened": {
+      "pergunta": "Quais dúvidas a página inicial deixa sem resposta?",
+      "natureza": "sessao",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "create_started": {
+      "pergunta": "Quem chega começa a montar um grupo? Por qual botão?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "group_name_set": {
+      "pergunta": "Quem começa passa do primeiro passo (nome do grupo)?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "participants_set": {
+      "pergunta": "Quem começa chega a cadastrar os participantes? Com quantas pessoas?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "budget_set": {
+      "pergunta": "Quem cadastra as pessoas escolhe o valor? Qual valor?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "draw_impossible": {
+      "pergunta": "Quantos travam porque as restrições tornam o sorteio impossível?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "auth_required": {
+      "pergunta": "Quantos chegam ao pedido de conta, o portão antes de sortear?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-08",
+      "fonte": "app"
+    },
+    "auth_started": {
+      "pergunta": "Por qual login tentam entrar (Google, Apple, e-mail)?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-09",
+      "fonte": "app"
+    },
+    "auth_pending_confirmation": {
+      "pergunta": "Quantos criam conta por e-mail e ficam esperando a confirmação?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-08",
+      "fonte": "app"
+    },
+    "auth_completed": {
+      "pergunta": "Quantos passam pelo portão de conta, e por qual login?",
+      "natureza": "ato",
+      "unidade": "conta",
+      "desde": "2026-10-11",
+      "fonte": "app",
+      "ressalva": "11/10/2026: antes desta data o retorno do Google e do link de e-mail no web não emitia o evento. Para contar contas criadas, a verdade é auth.users."
+    },
+    "draw_completed_client": {
+      "pergunta": "Quanto tempo o sorteio leva, visto do aparelho de quem organiza?",
+      "natureza": "tecnico",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "draw_completed": {
+      "pergunta": "Quantos grupos foram sorteados, com quantas pessoas e restrições?",
+      "natureza": "ato",
+      "unidade": "grupo",
+      "desde": "2026-10-04",
+      "fonte": "servidor",
+      "ressalva": "11/10/2026: para contar grupos a verdade é a tabela groups; o evento serve para o tamanho e o tempo do sorteio."
+    },
+    "share_whatsapp_clicked": {
+      "pergunta": "Quem sorteou manda o convite pelo WhatsApp?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "link_copied": {
+      "pergunta": "Quem sorteou manda o convite copiando o link (outro mensageiro)?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "nudge_sent": {
+      "pergunta": "Os lembretes (do organizador e o anônimo) são usados?",
+      "natureza": "sessao",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "participant_removed": {
+      "pergunta": "Quantos grupos precisam tirar alguém depois do sorteio, e quanto o sorteio muda?",
+      "natureza": "ato",
+      "unidade": "grupo",
+      "desde": "2026-10-04",
+      "fonte": "servidor"
+    },
+    "participant_added": {
+      "pergunta": "Quantos grupos precisam incluir alguém depois do sorteio, e quanto o sorteio muda?",
+      "natureza": "ato",
+      "unidade": "grupo",
+      "desde": "2026-10-04",
+      "fonte": "servidor"
+    },
+    "invite_opened": {
+      "pergunta": "Quantos abrem o link do convite? No site ou no app?",
+      "natureza": "sessao",
+      "unidade": "aparelho",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "participant_claimed": {
+      "pergunta": "Quem abre o convite escolhe o próprio nome?",
+      "natureza": "ato",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app",
+      "ressalva": "11/10/2026: para contar, a verdade é participants.claimed_at; o evento liga o passo ao aparelho e à origem."
+    },
+    "result_viewed": {
+      "pergunta": "Quem escolhe o nome chega a ver quem tirou? Quanto tempo depois?",
+      "natureza": "ato",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app",
+      "ressalva": "11/10/2026: para contar, a verdade é participants.revealed_at."
+    },
+    "name_hidden_toggled": {
+      "pergunta": "Quem usa o botão de esconder o nome do amigo?",
+      "natureza": "sessao",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "amazon_search_opened": {
+      "pergunta": "Quem monta a lista abre a busca da Amazon?",
+      "natureza": "sessao",
+      "unidade": "participante",
+      "desde": "2026-10-11",
+      "fonte": "app"
+    },
+    "wish_item_added": {
+      "pergunta": "Que tipo de presente as pessoas põem na lista (sugestão, busca, link da Amazon, fora da Amazon)?",
+      "natureza": "sessao",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "wish_list_saved": {
+      "pergunta": "Quem vê o resultado monta a lista de presentes?",
+      "natureza": "ato",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app",
+      "ressalva": "11/10/2026: para saber quem TEM lista, a verdade é a tabela wish_items."
+    },
+    "app_install_prompt_shown": {
+      "pergunta": "Quantos participantes veem o convite para instalar o app?",
+      "natureza": "tecnico",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app"
+    },
+    "outbound_click": {
+      "pergunta": "Quantos tocam para comprar um presente (a porta da comissão)?",
+      "natureza": "sessao",
+      "unidade": "participante",
+      "desde": "2026-10-04",
+      "fonte": "app",
+      "ressalva": "11/10/2026: o clique que vale é o da tabela outbound_clicks, gravado pelo servidor ao montar o link. Venda e comissão só no relatório da Amazon."
+    },
+    "account_deleted": {
+      "pergunta": "Quantas contas são excluídas pelo próprio dono?",
+      "natureza": "ato",
+      "unidade": "conta",
+      "desde": "2026-10-11",
+      "fonte": "servidor"
+    }
+  }
+}

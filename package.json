@@ -8,6 +8,8 @@
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@supabase/supabase-js": "^2.117.2",
     "expo": "~57.0.26",
+    "expo-apple-authentication": "~57.0.2",
+    "expo-application": "~57.0.3",
     "expo-clipboard": "~57.0.2",
     "expo-constants": "~57.0.20",
     "expo-font": "~57.0.4",
@@ -27,6 +29,7 @@
     "react-native-web": "^0.21.3"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "@types/react": "~19.2.2",
     "@types/react-dom": "~19.2.0",
     "typescript": "~6.0.3",
@@ -40,8 +43,10 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "export:web": "node scripts/llms.mjs && expo export -p web && node scripts/postexport.mjs",
-    "build": "node scripts/llms.mjs && expo export -p web && node scripts/postexport.mjs"
+    "export:web": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
+    "build": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
+    "conferir:app": "node scripts/conferir-app.mjs",
+    "eas-build-pre-install": "node scripts/conferir-app.mjs"
   },
   "private": true
 }

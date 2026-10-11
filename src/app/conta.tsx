@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, Pressable, type TextStyle, TextInput, View, type ViewStyle } from 'react-native';
 import { AppleLogo, Eye, EyeOff, GoogleLogo } from '@/components/icons';
 import { BrandSymbol, Button, ErrorText, Screen, T, TopBar } from '@/components/ui';
-import { authErrorMessage, DEFAULT_PROVIDERS, enabledProviders, type EnabledProviders, getSession, resetPassword, signInWithEmail, signInWithProvider, signUpWithEmail, updatePassword } from '@/lib/auth';
+import { appleSignInAvailable, authErrorMessage, DEFAULT_PROVIDERS, enabledProviders, type EnabledProviders, getSession, resetPassword, signInWithApple, signInWithEmail, signInWithProvider, signUpWithEmail, updatePassword } from '@/lib/auth';
 import { loadDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
 
@@ -25,14 +25,21 @@ export default function Conta() {
   const [busy, setBusy] = useState<'' | 'google' | 'apple' | 'email'>('');
   const [providers, setProviders] = useState<EnabledProviders>(DEFAULT_PROVIDERS);
 
+  const [appleReady, setAppleReady] = useState(false);
+
   useEffect(() => {
     let alive = true;
     enabledProviders().then((p) => alive && setProviders(p));
+    appleSignInAvailable().then((ok) => alive && setAppleReady(ok));
     return () => {
       alive = false;
     };
   }, []);
-  const hasSocial = providers.google || providers.apple;
+  // Apple: só no iPhone, pela folha nativa. No iPhone a App Store exige a
+  // Apple sempre que houver Google (diretriz 4.8), então um não vai sem o outro.
+  const showApple = Platform.OS === 'ios' && appleReady && providers.apple;
+  const showGoogle = providers.google && (Platform.OS !== 'ios' || showApple);
+  const hasSocial = showGoogle || showApple;
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -53,6 +60,11 @@ export default function Conta() {
     setBusy(p);
     setError('');
     try {
+      if (p === 'apple') {
+        await signInWithApple();
+        goNext();
+        return;
+      }
       const r = await signInWithProvider(p, next);
       if (!r.redirected) goNext();
     } catch (e) {
@@ -136,7 +148,7 @@ export default function Conta() {
           <>
             {hasSocial ? (
             <View style={{ gap: 8 }}>
-              {providers.google ? (
+              {showGoogle ? (
               <Pressable
                 accessibilityRole="button"
                 onPress={() => provider('google')}
@@ -149,7 +161,7 @@ export default function Conta() {
                 </T>
               </Pressable>
               ) : null}
-              {providers.apple ? (
+              {showApple ? (
               <Pressable
                 accessibilityRole="button"
                 onPress={() => provider('apple')}

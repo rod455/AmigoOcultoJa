@@ -2,6 +2,8 @@
 
 > A surpresa fica. A complicação sai.
 >
+> Apps (iPhone e Android, EAS): `docs/apps.md` · ficha da versão: `docs/lojas/novidades-1.0.md` · medição: `docs/dados/como-medimos.md`.
+>
 > Marca e regras de uso em `docs/marca.md` (guia completo e arquivos originais em `docs/marca/`). O identificador técnico antigo (`tirei`) continua só em nomes internos, como o projeto Supabase e a pasta do repositório.
 
 App do amigo oculto: o organizador cadastra os nomes, o app sorteia e gera um link para o grupo do WhatsApp. Cada participante abre o link, toca no próprio nome, descobre quem tirou e, na mesma tela, escolhe o próprio presente (com links de afiliado).
@@ -24,6 +26,8 @@ src/app/                 rotas (Expo Router)
   painel/[codigo].tsx    tela 6 · painel do organizador (status, lembrar, liberar, remover, adicionar)
   g/[codigo].tsx         link do convite → telas 7, 8 e 9
   r/[id].tsx             redirecionador de afiliado (registra o clique)
+  minha-conta.tsx        sair e excluir a conta (exigência das lojas)
+  auth.tsx               volta dos links de e-mail no app (amigoocultoja://auth)
 src/features/            telas compostas (landing, start, participante, rascunho)
 src/components/          UI (Screen, Button, Row, Sheet, ícones)
 src/lib/                 api (RPCs/Edge Functions), device key, share (WhatsApp), analytics, formatação

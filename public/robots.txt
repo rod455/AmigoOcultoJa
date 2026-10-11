@@ -12,5 +12,7 @@ Disallow: /conta
 Disallow: /criar/
 Disallow: /entrar
 Disallow: /app
+Disallow: /minha-conta
+Disallow: /auth
 
 Sitemap: https://amigoocultoja.com.br/sitemap.xml

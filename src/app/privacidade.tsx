@@ -25,7 +25,8 @@ const sections: LegalSection[] = [
           ['Participação:', 'quando alguém escolhe o próprio nome, ligamos esse nome a um código aleatório criado no aparelho da pessoa. Guardamos só uma versão cifrada desse código, além do momento em que a pessoa entrou e viu o resultado.'],
           ['Lista de presentes:', 'até 3 itens escolhidos por cada participante.'],
           ['Lembretes:', 'quando alguém pede um lembrete anônimo, registramos o pedido para mostrar o aviso a quem precisa montar a lista, sem revelar quem pediu.'],
-          ['Uso do serviço:', 'eventos como "grupo criado", "link compartilhado" ou "clique em presente", ligados ao grupo e à plataforma usada (site, iPhone ou Android). Esses eventos não guardam seu IP.'],
+          ['Uso do serviço:', 'eventos como "grupo criado", "link compartilhado" ou "clique em presente", ligados ao grupo, à plataforma usada (site, iPhone ou Android), à versão do app e a um código aleatório de medição criado no aparelho. Quando você está logado, o evento também fica ligado à sua conta. Guardamos ainda a campanha e o site de onde você chegou (por exemplo, uma busca ou um anúncio), quando o endereço traz essa informação. Esses eventos não guardam seu IP.'],
+          ['Erros:', 'quando o site ou o app encontra um erro, registramos a mensagem técnica, a tela, a plataforma e a versão, para corrigir o problema.'],
           ['Dados técnicos:', 'nossos provedores de hospedagem registram endereço IP, navegador e horário das conexões, para segurança e funcionamento do serviço.'],
         ],
       },
@@ -67,8 +68,10 @@ const sections: LegalSection[] = [
         list: [
           ['Supabase:', 'banco de dados e login, com servidores em São Paulo.'],
           ['Vercel:', 'hospedagem do site.'],
-          ['Google:', 'envio dos e-mails da conta pelo Gmail, login com Google e as fontes de texto do site.'],
-          ['Apple:', 'login com Apple, para quem escolher essa opção.'],
+          ['Resend:', 'envio dos e-mails da conta, como confirmação de cadastro e nova senha.'],
+          ['Google:', 'login com Google e as fontes de texto do site.'],
+          ['Apple:', 'login com Apple no iPhone, para quem escolher essa opção.'],
+          ['Expo:', 'distribuição de atualizações do aplicativo para iPhone e Android.'],
           ['Lojas parceiras, como a Amazon:', 'quando você toca em um link de presente, a loja recebe a visita com a nossa identificação de afiliado. A partir daí vale a política de privacidade da loja.'],
           ['WhatsApp:', 'só quando você mesmo escolhe enviar o convite por lá.'],
         ],
@@ -80,7 +83,7 @@ const sections: LegalSection[] = [
   {
     title: 'O que fica guardado no seu aparelho',
     body: [
-      'O site e o app guardam no próprio aparelho o código aleatório que identifica sua participação, o rascunho do grupo que você está montando e sua sessão de login. Isso fica no armazenamento local do navegador ou do app.',
+      'O site e o app guardam no próprio aparelho o código aleatório que identifica sua participação, um outro código aleatório usado só para medir o uso (ele não identifica você fora do Amigo Oculto Já!), a campanha de onde você chegou, o rascunho do grupo que você está montando e sua sessão de login. Isso fica no armazenamento local do navegador ou do app.',
       'Não usamos cookies de publicidade nem ferramentas de rastreamento de terceiros. Se você apagar os dados do navegador, vai precisar escolher seu nome de novo no grupo. Quem organiza pode liberar o nome no painel.',
     ],
   },
@@ -88,7 +91,8 @@ const sections: LegalSection[] = [
     title: 'Por quanto tempo guardamos',
     body: [
       'Guardamos os dados da conta enquanto ela existir e os dados do grupo enquanto ele existir, para que todos possam rever o resultado e a lista até a troca e depois dela.',
-      `Você pode pedir a exclusão da sua conta ou de um grupo que organizou a qualquer momento pelo e-mail ${CONTACT_EMAIL}. Os registros técnicos ficam pelo prazo dos nossos provedores ou pelo prazo que a lei exigir.`,
+      'Você mesmo exclui sua conta a qualquer momento, no site ou no app, em amigoocultoja.com.br/minha-conta. A exclusão apaga nome, e-mail e login, e desliga sua conta dos eventos de uso. Os grupos que você criou continuam funcionando para quem participa.',
+      `Também dá para pedir a exclusão da conta ou de um grupo que você organizou pelo e-mail ${CONTACT_EMAIL}. Os registros técnicos ficam pelo prazo dos nossos provedores ou pelo prazo que a lei exigir.`,
     ],
   },
   {

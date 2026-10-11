@@ -12,8 +12,8 @@ export type LegalBlock = string | { list: Array<string | [string, string]> };
 export type LegalSection = { title: string; body: LegalBlock[] };
 
 export const CONTACT_EMAIL = 'amigoocultoja@gmail.com';
-export const LEGAL_UPDATED = '10 de outubro de 2026';
-export const LEGAL_UPDATED_ISO = '2026-10-10';
+export const LEGAL_UPDATED = '11 de outubro de 2026';
+export const LEGAL_UPDATED_ISO = '2026-10-11';
 
 /** Página de texto legal (privacidade, termos), com a mesma moldura do site. */
 export function LegalPage({

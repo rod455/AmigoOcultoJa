@@ -5,7 +5,7 @@ import { ChevronRight } from '@/components/icons';
 import { BrandSymbol, Button, Logo, Row, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { myGroups, type MyGroup } from '@/lib/api';
-import { getProfile, type Profile, signOut } from '@/lib/auth';
+import { getProfile, type Profile } from '@/lib/auth';
 import { isConfigured } from '@/lib/supabase';
 import { groupMeta } from '@/lib/format';
 import { colors } from '@/theme/tokens';
@@ -47,20 +47,13 @@ export function StartScreen() {
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Logo height={44} />
         {profile ? (
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={`Sair da conta de ${profile.name}`}
-            onPress={async () => {
-              await signOut();
-              setProfile(null);
-              setGroups([]);
-            }}
-            hitSlop={8}
-          >
-            <T size={13} color={colors.textSecondary}>
-              {profile.name} · <T size={13} weight="semibold">sair</T>
-            </T>
-          </Pressable>
+          <Link href="/minha-conta" asChild>
+            <Pressable accessibilityRole="link" accessibilityLabel={`Conta de ${profile.name}`} hitSlop={8}>
+              <T size={13} color={colors.textSecondary}>
+                {profile.name} · <T size={13} weight="semibold">conta</T>
+              </T>
+            </Pressable>
+          </Link>
         ) : null}
       </View>
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 20, paddingVertical: 32 }}>

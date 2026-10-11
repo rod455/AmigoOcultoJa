@@ -1,9 +1,11 @@
+import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { Platform } from 'react-native';
 import type { Session, User } from '@supabase/supabase-js';
 import { track } from './analytics';
 import { baseUrl } from './share';
+import { getItem, removeItem, setItem } from './storage';
 import { anonKeyValue, isConfigured, supabase, supabaseUrl } from './supabase';
 
 /**
@@ -72,6 +74,37 @@ function redirectUrl(next: string): string {
 }
 
 /**
+ * No app, todo link de e-mail (confirmação, nova senha) volta em
+ * `amigoocultoja://auth?code=...`, sempre o mesmo endereço (é o que está na
+ * lista de URLs do Supabase). O destino depois do login fica guardado aqui e
+ * a rota `/auth` o lê.
+ */
+const PENDING_NEXT = 'aoj.auth_next';
+
+async function rememberNext(next: string): Promise<void> {
+  if (Platform.OS !== 'web') await setItem(PENDING_NEXT, next);
+}
+
+export async function takePendingNext(): Promise<string | null> {
+  const v = await getItem(PENDING_NEXT);
+  if (v) await removeItem(PENDING_NEXT);
+  return v && v.startsWith('/') ? v : null;
+}
+
+/** Login pelo navegador do sistema em andamento: a rota `/auth` não deve trocar o código de novo. */
+let oauthInFlight = false;
+export function isOAuthInFlight(): boolean {
+  return oauthInFlight;
+}
+
+/** Troca o código do link pela sessão. Se outra parte do app já trocou, a sessão existente basta. */
+export async function exchangeCode(code: string): Promise<boolean> {
+  const { error } = await supabase().auth.exchangeCodeForSession(code);
+  if (!error) return true;
+  return Boolean(await getSession());
+}
+
+/**
  * Google / Apple via Supabase Auth.
  * Web: redireciona a página inteira e volta em `next` com a sessão.
  * App: abre o navegador do sistema e troca o código pela sessão.
@@ -92,15 +125,58 @@ export async function signInWithProvider(provider: Provider, next: string): Prom
     options: { redirectTo, skipBrowserRedirect: true },
   });
   if (error || !data.url) throw error ?? new Error('Sem URL de login');
-  const res = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-  if (res.type !== 'success') throw new Error('CANCELLED');
-  const { queryParams } = Linking.parse(res.url);
-  const code = typeof queryParams?.code === 'string' ? queryParams.code : null;
-  if (!code) throw new Error('Login não concluído');
-  const { error: exErr } = await supabase().auth.exchangeCodeForSession(code);
-  if (exErr) throw exErr;
+  oauthInFlight = true;
+  try {
+    const res = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+    if (res.type !== 'success') throw new Error('CANCELLED');
+    const { queryParams } = Linking.parse(res.url);
+    const code = typeof queryParams?.code === 'string' ? queryParams.code : null;
+    if (!code) throw new Error('Login não concluído');
+    if (!(await exchangeCode(code))) throw new Error('Login não concluído');
+  } finally {
+    oauthInFlight = false;
+  }
   track('auth_completed', { metodo: provider });
   return { redirected: false };
+}
+
+/**
+ * Entrar com a Apple só existe no iPhone, pela folha nativa do sistema (a
+ * Apple exige essa opção quando o app oferece Google). O Supabase valida o
+ * token com o bundle id em Authentication › Providers › Apple › Client IDs.
+ */
+export async function appleSignInAvailable(): Promise<boolean> {
+  if (Platform.OS !== 'ios') return false;
+  try {
+    return await AppleAuthentication.isAvailableAsync();
+  } catch {
+    return false;
+  }
+}
+
+export async function signInWithApple(): Promise<Profile> {
+  track('auth_started', { metodo: 'apple' });
+  let cred: AppleAuthentication.AppleAuthenticationCredential;
+  try {
+    cred = await AppleAuthentication.signInAsync({
+      requestedScopes: [AppleAuthentication.AppleAuthenticationScope.FULL_NAME, AppleAuthentication.AppleAuthenticationScope.EMAIL],
+    });
+  } catch (e) {
+    if ((e as { code?: string }).code === 'ERR_REQUEST_CANCELED') throw new Error('CANCELLED');
+    throw e;
+  }
+  if (!cred.identityToken) throw new Error('Login não concluído');
+  const { data, error } = await supabase().auth.signInWithIdToken({ provider: 'apple', token: cred.identityToken });
+  if (error) throw error;
+  // a Apple só manda o nome no primeiro login; guardamos na conta
+  const fullName = [cred.fullName?.givenName, cred.fullName?.familyName].filter(Boolean).join(' ').trim();
+  let user = data.user;
+  if (fullName && user && !(user.user_metadata as Record<string, unknown> | undefined)?.full_name) {
+    const upd = await supabase().auth.updateUser({ data: { full_name: fullName } });
+    if (upd.data.user) user = upd.data.user;
+  }
+  track('auth_completed', { metodo: 'apple' });
+  return profileFromUser(user);
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<Profile> {
@@ -117,6 +193,7 @@ export async function signUpWithEmail(name: string, email: string, password: str
     password,
     options: { data: { full_name: name.trim() }, emailRedirectTo: redirectUrl('/criar/valor?auto=1') },
   });
+  await rememberNext('/criar/valor?auto=1');
   if (error) throw error;
   if (data.session && data.user) {
     track('auth_completed', { metodo: 'email_signup' });
@@ -127,6 +204,7 @@ export async function signUpWithEmail(name: string, email: string, password: str
 }
 
 export async function resetPassword(email: string): Promise<void> {
+  await rememberNext('/conta?mode=reset');
   const { error } = await supabase().auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo: redirectUrl('/conta?mode=reset') });
   if (error) throw error;
 }
@@ -142,6 +220,17 @@ export async function signOut(): Promise<void> {
   } catch {
     // ignora
   }
+}
+
+/**
+ * Exclui a conta (exigência da App Store e da Play). Os grupos continuam
+ * funcionando para os outros participantes; só deixam de estar ligados a
+ * você. Ver `rpc_delete_my_account`.
+ */
+export async function deleteAccount(): Promise<void> {
+  const { error } = await supabase().rpc('rpc_delete_my_account');
+  if (error) throw error;
+  await signOut();
 }
 
 /** Mensagens de erro de auth em português. */

@@ -11,7 +11,7 @@ const CLAIMS = 'tirei.claims'; // { [code]: participantId }
 const SEEN_VERSION = 'tirei.seen_version'; // { [code:participantId]: version }
 const DRAFT = 'tirei.draft';
 
-function randomHex(bytes: number): string {
+export function randomHex(bytes: number): string {
   const arr = new Uint8Array(bytes);
   const c = (globalThis as unknown as { crypto?: Crypto }).crypto;
   if (c && typeof c.getRandomValues === 'function') {

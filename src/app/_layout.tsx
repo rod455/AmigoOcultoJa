@@ -6,19 +6,28 @@ import {
   Figtree_800ExtraBold,
   useFonts,
 } from '@expo-google-fonts/figtree';
-import { Stack, usePathname } from 'expo-router';
+import { type ErrorBoundaryProps, router, Stack, usePathname } from 'expo-router';
 import Head from 'expo-router/head';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NoIndex } from '@/components/NoIndex';
+import { Button, Sub, Title } from '@/components/ui';
 import { AuthUrlHandler } from '@/features/auth/AuthUrlHandler';
+import { getAttribution } from '@/lib/attribution';
+import { installErrorHandlers, reportError, setCurrentScreen } from '@/lib/errors';
+import { startSession } from '@/lib/session';
 import { colors } from '@/theme/tokens';
 
 if (Platform.OS !== 'web') {
   void SplashScreen.preventAutoHideAsync();
+}
+if (typeof window !== 'undefined' || Platform.OS !== 'web') {
+  installErrorHandlers();
+  // lê a campanha da URL antes que qualquer tela a limpe
+  void getAttribution();
 }
 
 /** Únicas páginas que os buscadores podem indexar (ver public/sitemap.xml). */
@@ -37,6 +46,11 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded && Platform.OS !== 'web') void SplashScreen.hideAsync();
   }, [loaded]);
+
+  useEffect(() => {
+    setCurrentScreen(pathname);
+    startSession(pathname);
+  }, [pathname]);
 
   // No web, renderiza mesmo antes da fonte (fallback system-ui) para o export estático.
   if (!loaded && Platform.OS !== 'web') return null;
@@ -61,6 +75,26 @@ export default function RootLayout() {
           animation: 'slide_from_right',
         }}
       />
+    </SafeAreaProvider>
+  );
+}
+
+/**
+ * Erro ao desenhar uma tela: em vez de fechar o app (ou deixar a página em
+ * branco), registra em app_errors e oferece tentar de novo.
+ */
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  useEffect(() => {
+    reportError('render', error);
+  }, [error]);
+  return (
+    <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: colors.surface, padding: 24, justifyContent: 'center', gap: 16 }}>
+        <Title size={28}>Ops, algo deu errado aqui</Title>
+        <Sub>Já recebemos o aviso do problema. Tente de novo; se continuar, volte para o início.</Sub>
+        <Button label="Tentar de novo" onPress={() => void retry()} />
+        <Button label="Ir para o início" variant="ghost" onPress={() => router.replace('/')} />
+      </View>
     </SafeAreaProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
+import { track } from '@/lib/analytics';
 import { onAuthChange } from '@/lib/auth';
 import { loadDraft } from '@/lib/device';
 import { isConfigured, supabase } from '@/lib/supabase';
@@ -23,6 +24,9 @@ export function AuthUrlHandler() {
     const off = onAuthChange((session) => {
       if (!session) return;
       off();
+      // volta do Google ou do link de e-mail no web: o login terminou aqui
+      const provider = (session.user.app_metadata as { provider?: string } | undefined)?.provider;
+      track('auth_completed', { metodo: isRecovery ? 'nova_senha' : (provider ?? 'link') });
       const clean = window.location.pathname;
       window.history.replaceState({}, '', clean);
       if (isRecovery) {
