@@ -28,38 +28,85 @@ e o Expo gera os projetos nativos sozinho. Por isso:
 | perfil de provisionamento sem a capability do Sign In with Apple | o EAS sincroniza as capabilities do App ID a cada build | mesmo assim, o primeiro build de produção é o teste |
 | client id do Google no `Info.plist` | não precisa | o login com Google abre o navegador do sistema pelo Supabase; não usa SDK nativo do Google |
 
-## 2. O que precisa existir antes do primeiro build (é com você)
+## 2. A primeira subida (uma vez só, uns 30 minutos)
 
-Tudo com a conta principal **amigoocultoja@gmail.com**.
+As contas da Apple e da Google Play já existem. Falta ligar a Expo a elas.
+Tudo pelo navegador, sem instalar nada no seu computador.
 
-| conta | para quê | custo |
-|---|---|---|
-| **Expo** (expo.dev) | compilar, assinar, enviar e atualizar | grátis no começo (fila mais lenta) |
-| **Apple Developer Program** | publicar no iPhone | US$ 99 por ano |
-| **Google Play Console** | publicar no Android | US$ 25 uma vez |
+### 2.1 Conta da Expo e o token do GitHub
 
-Depois de criar a conta da Expo, crie o projeto em expo.dev (ou rode
-`npx eas-cli@latest init` num computador) e me mande o **Project ID** (não é
-segredo). Eu coloco no `app.json` e ligo o EAS Update.
+1. Crie a conta em expo.dev com amigoocultoja@gmail.com.
+2. Em expo.dev › Account settings › Access tokens, crie um token chamado
+   `github-actions`. Copie (aparece uma vez só).
+3. No GitHub, no repositório: Settings › Secrets and variables › Actions ›
+   New repository secret. Nome `EXPO_TOKEN`, valor o token. Nunca mande o
+   token pelo chat.
 
-Para eu disparar builds daqui sem computador seu, crie em expo.dev ›
-Account settings › Access tokens um token e guarde como segredo
-`EXPO_TOKEN` no ambiente desta sessão (nunca pelo chat). Sem isso, o build
-sai pelo botão do expo.dev (GitHub conectado) ou pelo seu computador:
+### 2.2 A sessão no Codespaces (o certificado da Apple nasce aqui)
+
+O iPhone precisa de um certificado de distribuição criado com o seu login da
+Apple (com o código de dois fatores). Isso não roda sozinho; é a única etapa
+interativa. No GitHub, no repositório: botão verde **Code › Codespaces ›
+Create codespace**. Abre um VS Code no navegador já com as dependências
+instaladas. No terminal de baixo, um comando por vez:
 
 ```bash
-npx eas-cli@latest build --platform all --profile production   # .ipa e .aab
-npx eas-cli@latest submit --platform all --profile production  # TestFlight e Play interna
+npx eas-cli@latest login            # usuário e senha da Expo
+npx eas-cli@latest init             # cria o projeto na Expo; responda Y
+npx eas-cli@latest build -p ios --profile production --auto-submit
 ```
 
-No primeiro build de iPhone o EAS pede o login da Apple e cria sozinho o
-certificado, o perfil e o App ID com Sign In with Apple e Associated Domains.
-No Android, o EAS gera e guarda a chave de upload.
+No último comando, responda:
 
-**Primeiro envio da Play é à mão**: a API do Google só aceita envio depois que
-o app recebeu um primeiro .aab pelo Play Console. Baixe o .aab do expo.dev e
-suba em Testes › Teste interno. Depois disso, `eas submit` resolve (com a
-conta de serviço do Google cadastrada no expo.dev).
+- "Do you want to log in to your Apple account?" › **Y**, com o Apple ID da
+  conta de desenvolvedor e o código de 6 dígitos.
+- Tudo que perguntar sobre gerar certificado, perfil e bundle identifier ›
+  **Y** (deixe o EAS gerar).
+- No envio: se o app ainda não existe no App Store Connect, ele cria
+  (nome "Amigo Oculto Já!"). Quando perguntar da **App Store Connect API
+  Key**, deixe gerar uma nova: é ela que permite as próximas subidas
+  sem ninguém digitar nada.
+
+Depois, ainda no Codespaces:
+
+```bash
+npx eas-cli@latest build -p android --profile production
+```
+
+Se algum comando perguntar se pode fazer commit das mudanças, responda **Y**
+(é o `app.json` com o ID do projeto). O Android gera a chave de assinatura sozinho. Pode fechar o Codespaces: os
+builds continuam na nuvem da Expo (o do iPhone leva de 15 a 40 minutos na
+fila grátis). **Me mande** (nenhum é segredo):
+
+- o **Project ID** que o `init` mostrou (ou o link do projeto no expo.dev);
+- o **Apple ID do app** (App Store Connect › o app › Informações do app ›
+  "ID Apple", um número de 10 dígitos);
+- o **Team ID** da Apple (developer.apple.com › Membership details).
+
+### 2.3 O primeiro envio da Play é à mão
+
+A API do Google só aceita envio automático depois que o app recebeu um
+primeiro .aab pelo site:
+
+1. Play Console › Criar app: nome "Amigo Oculto Já!", idioma português
+   (Brasil), App, Gratuito.
+2. Baixe o .aab do build Android no expo.dev (projeto › Builds ›
+   Download).
+3. Play Console › Testar e lançar › Teste interno › Criar versão › suba
+   o .aab › Salvar e publicar para os testadores.
+4. Para os próximos envios serem automáticos: crie uma conta de serviço do
+   Google com acesso à Play (guia: https://expo.fyi/creating-google-service-account)
+   e suba o arquivo JSON em expo.dev › projeto › Credentials › Android ›
+   Google Service Account Key. O JSON não passa pelo chat.
+5. Me mande o **SHA-256** da chave de assinatura (Play Console ›
+   Configuração › Integridade do app › Assinatura de apps).
+
+### 2.4 Daí em diante: um botão
+
+Com o Project ID e o Apple ID do app no repositório (eu coloco), toda subida
+é: GitHub › Actions › **Lojas (iPhone e Android)** › Run workflow (ou me
+peça "sobe os apps"). Ele roda typecheck, testes e a conferência, compila os
+dois e envia para o TestFlight e a faixa interna da Play.
 
 ## 3. Os perfis do `eas.json`
 

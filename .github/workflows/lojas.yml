@@ -1,0 +1,70 @@
+# Compila e envia os apps pelo EAS (Expo). Roda pelo botão "Run workflow" em
+# Actions › Lojas, ou disparado pelo Claude. Precisa do segredo EXPO_TOKEN no
+# repositório (Settings › Secrets and variables › Actions). Guia: docs/apps.md.
+name: Lojas (iPhone e Android)
+
+on:
+  workflow_dispatch:
+    inputs:
+      plataforma:
+        description: Qual app
+        type: choice
+        options: [all, ios, android]
+        default: all
+      perfil:
+        description: production = lojas · preview = teste interno (APK)
+        type: choice
+        options: [production, preview]
+        default: production
+      enviar:
+        description: Enviar para TestFlight e Play (faixa interna) ao terminar (só production)
+        type: boolean
+        default: true
+
+concurrency:
+  group: lojas-${{ inputs.plataforma }}-${{ inputs.perfil }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Conferir o segredo EXPO_TOKEN
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::Falta o segredo EXPO_TOKEN em Settings › Secrets and variables › Actions (ver docs/apps.md)."
+            exit 1
+          fi
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - run: npm ci
+
+      - name: Typecheck e testes
+        run: npm run typecheck && npm test
+
+      - name: Conferência do app (variáveis, endereço, versão nova)
+        env:
+          EAS_BUILD_PROFILE: ${{ inputs.perfil }}
+        run: node scripts/conferir-app.mjs
+
+      - name: Build no EAS
+        run: >
+          eas build
+          --platform ${{ inputs.plataforma }}
+          --profile ${{ inputs.perfil }}
+          --non-interactive
+          ${{ (inputs.enviar && inputs.perfil == 'production') && '--auto-submit' || '' }}
