@@ -7,21 +7,57 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/g/:codigo", "destination": "/g" },
-    { "source": "/painel/:codigo", "destination": "/painel" },
-    { "source": "/pronto/:codigo", "destination": "/pronto" },
-    { "source": "/r/:id", "destination": "/r" }
+    {
+      "source": "/g/:codigo",
+      "destination": "/g"
+    },
+    {
+      "source": "/painel/:codigo",
+      "destination": "/painel"
+    },
+    {
+      "source": "/pronto/:codigo",
+      "destination": "/pronto"
+    },
+    {
+      "source": "/r/:id",
+      "destination": "/r"
+    }
   ],
   "headers": [
     {
       "source": "/_expo/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(llms.txt|llms-full.txt|robots.txt)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]

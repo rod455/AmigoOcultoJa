@@ -12,16 +12,16 @@ export default function Root({ children }: PropsWithChildren) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
         <meta name="theme-color" content="#C63D24" />
-        <meta name="description" content="Amigo Oculto Já!: a surpresa fica, a complicação sai. Monte o grupo, sorteie e mande um link no WhatsApp. Cada um descobre quem tirou e já escolhe o presente." />
-        <meta property="og:title" content="Amigo Oculto Já! · A surpresa fica. A complicação sai." />
+        <meta name="application-name" content="Amigo Oculto Já!" />
+        <meta name="apple-mobile-web-app-title" content="Amigo Oculto Já!" />
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="Resumo para assistentes de IA" />
         <meta property="og:site_name" content="Amigo Oculto Já!" />
         <meta property="og:image" content="https://amigoocultoja.com.br/brand/og.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="pt_BR" />
-        <meta property="og:description" content="Seu amigo oculto começa aqui. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />

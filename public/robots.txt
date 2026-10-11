@@ -1,3 +1,7 @@
+# Amigo Oculto Já! · buscadores e assistentes de IA (GPTBot, ClaudeBot,
+# PerplexityBot, Google-Extended e outros) podem ler as páginas públicas.
+# Resumo para IAs: https://amigoocultoja.com.br/llms.txt
+# Convites, painéis e telas de criação são privados e ficam de fora.
 User-agent: *
 Allow: /
 Disallow: /g/

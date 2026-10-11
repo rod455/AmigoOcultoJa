@@ -13,6 +13,7 @@ export type LegalSection = { title: string; body: LegalBlock[] };
 
 export const CONTACT_EMAIL = 'amigoocultoja@gmail.com';
 export const LEGAL_UPDATED = '10 de outubro de 2026';
+export const LEGAL_UPDATED_ISO = '2026-10-10';
 
 /** Página de texto legal (privacidade, termos), com a mesma moldura do site. */
 export function LegalPage({
@@ -42,7 +43,26 @@ export function LegalPage({
       <Head>
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
+        <meta name="robots" content="index, follow" />
         <link rel="canonical" href={`https://amigoocultoja.com.br${path}`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: title,
+            url: `https://amigoocultoja.com.br${path}`,
+            inLanguage: 'pt-BR',
+            dateModified: LEGAL_UPDATED_ISO,
+            isPartOf: { '@type': 'WebSite', name: 'Amigo Oculto Já!', url: 'https://amigoocultoja.com.br' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://amigoocultoja.com.br/' },
+                { '@type': 'ListItem', position: 2, name: title, item: `https://amigoocultoja.com.br${path}` },
+              ],
+            },
+          })}
+        </script>
       </Head>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ width: '100%', maxWidth: 760, paddingHorizontal: pad, paddingBottom: 64 }}>
@@ -68,7 +88,7 @@ export function LegalPage({
 
           {sections.map((s, i) => (
             <View key={s.title} style={{ gap: 12, paddingVertical: 24, borderTopWidth: 1, borderTopColor: colors.line, marginTop: i === 0 ? 16 : 0 }}>
-              <T size={wide ? 24 : 21} weight="extrabold" lineHeight={wide ? 30 : 27} style={{ letterSpacing: -0.3 }} accessibilityRole="header">
+              <T size={wide ? 24 : 21} weight="extrabold" lineHeight={wide ? 30 : 27} style={{ letterSpacing: -0.3 }} accessibilityRole="header" aria-level={2}>
                 {`${i + 1}. ${s.title}`}
               </T>
               {s.body.map((b, j) =>

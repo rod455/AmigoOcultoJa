@@ -8,12 +8,65 @@ import { BrandSymbol, Button, Logo, T, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { loadDraft, saveDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
+import site from '@/content/site.json';
 
 const MAX_W = 1040;
 
-const META_TITLE = 'Amigo Oculto Já! · Sorteio de amigo oculto pelo WhatsApp';
+const META_TITLE = 'Sorteio de Amigo Oculto Online e Grátis | Amigo Oculto Já!';
 const META_DESC =
-  'A surpresa fica. A complicação sai. Monte o grupo, sorteie e mande um link no WhatsApp: cada um toca no próprio nome, descobre quem tirou e já escolhe o presente. Grátis, e quem participa não precisa de cadastro nem de app.';
+  'Faça o sorteio do amigo oculto (amigo secreto) online e grátis. Mande um link no WhatsApp: cada um descobre quem tirou e já monta a lista de presentes.';
+
+/** Dados estruturados (schema.org) gerados do mesmo conteúdo da página. */
+const JSON_LD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${site.url}/#org`,
+      name: site.name,
+      url: site.url,
+      logo: `${site.url}/icon-512.png`,
+      email: site.email,
+      slogan: site.tagline,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#site`,
+      name: site.name,
+      alternateName: ['Amigo Oculto Já', 'amigoocultoja.com.br'],
+      url: site.url,
+      inLanguage: 'pt-BR',
+      publisher: { '@id': `${site.url}/#org` },
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${site.url}/#app`,
+      name: site.name,
+      url: site.url,
+      description: site.summary,
+      applicationCategory: 'LifestyleApplication',
+      operatingSystem: 'Web',
+      browserRequirements: 'Navegador do celular ou do computador',
+      inLanguage: 'pt-BR',
+      isAccessibleForFree: true,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+      featureList: site.facts.map(([k, v]) => `${k}: ${v}`),
+      publisher: { '@id': `${site.url}/#org` },
+    },
+    {
+      '@type': 'HowTo',
+      name: 'Como fazer o sorteio do amigo oculto online',
+      inLanguage: 'pt-BR',
+      totalTime: 'PT2M',
+      step: site.steps.map(([name, text], i) => ({ '@type': 'HowToStep', position: i + 1, name, text })),
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: 'pt-BR',
+      mainEntity: site.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+    },
+  ],
+});
 const CTA = 'Criar meu grupo';
 const MICROCOPY = 'Grátis · 3 passos · quem participa não se cadastra';
 
@@ -54,7 +107,9 @@ export function LandingPage() {
         <meta property="og:image" content="https://amigoocultoja.com.br/brand/og.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:url" content="https://amigoocultoja.com.br/" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
         <link rel="canonical" href="https://amigoocultoja.com.br/" />
+        <script type="application/ld+json">{JSON_LD}</script>
       </Head>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }} onScroll={onScroll} scrollEventThrottle={100}>
@@ -89,6 +144,27 @@ export function LandingPage() {
             </View>
           </View>
 
+          {/* EM RESUMO: definição e fatos (resposta direta para buscadores e assistentes de IA) */}
+          <Section eyebrow="Em resumo" title="Sorteio de amigo oculto online, grátis e secreto">
+            <View style={{ gap: 20 }}>
+              <T size={wide ? 19 : 17} lineHeight={wide ? 29 : 26} style={{ maxWidth: 760 }}>
+                {site.summary}
+              </T>
+              <View style={{ flexDirection: wide ? 'row' : 'column', flexWrap: 'wrap', columnGap: 32 }}>
+                {(site.facts as Array<[string, string]>).map(([k, v]) => (
+                  <View key={k} style={{ width: wide ? '47%' : '100%', flexDirection: 'row', gap: 12, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.line }}>
+                    <T size={15} weight="bold" style={{ width: wide ? 150 : 120 }}>
+                      {k}
+                    </T>
+                    <T size={15} color={colors.textSecondary} lineHeight={22} style={{ flex: 1 }}>
+                      {v}
+                    </T>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </Section>
+
           {/* O QUE O GRUPO RECEBE */}
           <Section eyebrow="O que o grupo recebe" title="Uma mensagem só. Cada pessoa descobre o seu em 2 toques.">
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: wide ? 40 : 24, alignItems: wide ? 'flex-start' : 'stretch' }}>
@@ -103,7 +179,7 @@ export function LandingPage() {
               </View>
               <View style={{ flex: 1, gap: 12 }}>
                 <FactRow n="3" label="passos para criar: nome do grupo, pessoas, valor." />
-                <FactRow n="0" label="cadastros para quem participa. Quem organiza entra com Google, Apple ou e-mail." />
+                <FactRow n="0" label="cadastros para quem participa. Quem organiza entra com Google ou e-mail." />
                 <FactRow n="1" label="link no grupo. Quem não abriu recebe um lembrete seu." />
                 <FactRow n="50" label="pessoas por grupo, com casais que não podem se tirar." />
               </View>
@@ -148,17 +224,7 @@ export function LandingPage() {
 
           {/* FAQ */}
           <Section eyebrow="Dúvidas" title="Perguntas frequentes">
-            <Faq
-              items={[
-                ['É grátis mesmo?', 'Sim. Criar o grupo, sortear, mandar o link, montar a lista de presentes: tudo grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo.'],
-                ['Precisa baixar alguma coisa ou criar conta?', 'Quem participa não: só abre o link, sem senha e sem e-mail. Quem organiza monta tudo aqui no navegador e, na hora de sortear, entra com Google, Apple ou e-mail (pedimos só nome e e-mail) para acompanhar o grupo de qualquer aparelho. O app para iPhone e Android está a caminho.'],
-                ['Quem organiza consegue ver quem tirou quem?', 'Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista.'],
-                ['E se alguém sair ou entrar depois do sorteio?', 'Você remove ou adiciona a pessoa no painel. O sorteio é reparado com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link. Ninguém mais precisa fazer nada.'],
-                ['Dá para impedir que casais se tirem?', 'Sim. Na hora de sortear, marque quem não pode se tirar. Se as restrições tornarem o sorteio impossível, o app avisa qual delas trava.'],
-                ['Alguém escolheu o meu nome por engano. E agora?', 'Peça para quem organiza: no painel dá para liberar o nome em um toque, e você escolhe de novo no seu celular.'],
-                ['Funciona para quem não tem WhatsApp?', 'Funciona. O link é um endereço normal: pode ir por SMS, e-mail ou qualquer mensageiro. O botão do WhatsApp só deixa a mensagem pronta.'],
-              ]}
-            />
+            <Faq items={site.faq as Array<[string, string]>} />
           </Section>
 
         </View>
@@ -199,7 +265,7 @@ function Campaign({ wide, pad, daysToXmas }: { wide: boolean; pad: number; daysT
             Faltam {daysToXmas} dias para o Natal
           </T>
         ) : null}
-        <T size={wide ? 76 : 52} weight="extrabold" color="#FFFFFF" lineHeight={wide ? 80 : 56} style={{ letterSpacing: wide ? -2.4 : -1.6 }} accessibilityRole="header">
+        <T size={wide ? 76 : 52} weight="extrabold" color="#FFFFFF" lineHeight={wide ? 80 : 56} style={{ letterSpacing: wide ? -2.4 : -1.6 }} accessibilityRole="header" aria-level={2}>
           Quem será?
         </T>
         <T size={wide ? 28 : 22} weight="medium" color="#FFFFFF" lineHeight={wide ? 36 : 29} style={{ maxWidth: 440 }}>
@@ -373,7 +439,7 @@ function Section({ title, eyebrow, children }: { title: string; eyebrow: string;
         <T size={13} weight="bold" color={colors.accentDark} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
           {eyebrow}
         </T>
-        <T size={wide ? 34 : 28} weight="extrabold" lineHeight={wide ? 40 : 33} style={{ letterSpacing: -0.6 }} accessibilityRole="header">
+        <T size={wide ? 34 : 28} weight="extrabold" lineHeight={wide ? 40 : 33} style={{ letterSpacing: -0.6 }} accessibilityRole="header" aria-level={2}>
           {title}
         </T>
       </View>
@@ -384,9 +450,9 @@ function Section({ title, eyebrow, children }: { title: string; eyebrow: string;
 
 function Steps({ wide }: { wide: boolean }) {
   const steps: Array<[string, string, string]> = [
-    ['Monte o grupo', 'Nome do grupo, quem participa, valor do presente e, se quiser, quem não pode se tirar.', '3 passos'],
-    ['Sorteie e envie o convite', 'Toque em "Sortear", entre com Google, Apple ou e-mail e a mensagem vai pronta para o grupo do WhatsApp.', '1 mensagem'],
-    ['Cada um descobre e escolhe', 'A pessoa toca no próprio nome, vê quem tirou e escolhe até 3 presentes. Quem a tirou vê a lista na hora.', 'sem cadastro'],
+    [site.steps[0][0], site.steps[0][1], '3 passos'],
+    [site.steps[1][0], site.steps[1][1], '1 mensagem'],
+    [site.steps[2][0], site.steps[2][1], 'sem cadastro'],
   ];
   return (
     <View style={{ flexDirection: wide ? 'row' : 'column', gap: wide ? 32 : 24 }}>
@@ -402,7 +468,7 @@ function Steps({ wide }: { wide: boolean }) {
               {tag}
             </T>
           </View>
-          <T size={20} weight="bold">
+          <T size={20} weight="bold" accessibilityRole="header" aria-level={3}>
             {t}
           </T>
           <T size={16} color={colors.textSecondary} lineHeight={24}>
@@ -464,7 +530,7 @@ function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: st
   return (
     <View style={{ flex: wide ? 1 : undefined, gap: 10, paddingVertical: wide ? 0 : 20, borderBottomWidth: wide ? 0 : 1, borderBottomColor: colors.line }}>
       <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
-      <T size={20} weight="bold">
+      <T size={20} weight="bold" accessibilityRole="header" aria-level={3}>
         {title}
       </T>
       <T size={16} color={colors.textSecondary} lineHeight={24}>
@@ -477,7 +543,7 @@ function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: st
 function Audience({ title, text }: { title: string; text: string }) {
   return (
     <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: colors.peach, gap: 8 }}>
-      <T size={20} weight="bold">
+      <T size={20} weight="bold" accessibilityRole="header" aria-level={3}>
         {title}
       </T>
       <T size={15} color={colors.textSecondary} lineHeight={22}>
@@ -496,18 +562,17 @@ function Faq({ items }: { items: Array<[string, string]> }) {
         return (
           <View key={q} style={{ borderBottomWidth: 1, borderBottomColor: colors.line }}>
             <Pressable accessibilityRole="button" accessibilityState={{ expanded: on }} onPress={() => { setOpen(on ? null : i); if (!on) track('faq_opened', { pergunta: i }); }} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 14 }}>
-              <T size={18} weight="semibold" style={{ flex: 1 }}>
+              <T size={18} weight="semibold" style={{ flex: 1 }} accessibilityRole="header" aria-level={3}>
                 {q}
               </T>
               <T size={22} color={colors.textSecondary}>
                 {on ? '−' : '+'}
               </T>
             </Pressable>
-            {on ? (
-              <T size={16} color={colors.textSecondary} lineHeight={24} style={{ paddingBottom: 18 }}>
-                {a}
-              </T>
-            ) : null}
+            {/* resposta sempre no HTML (buscadores e IAs leem); só fica oculta na tela */}
+            <T size={16} color={colors.textSecondary} lineHeight={24} style={{ paddingBottom: 18, display: on ? 'flex' : 'none' }}>
+              {a}
+            </T>
           </View>
         );
       })}

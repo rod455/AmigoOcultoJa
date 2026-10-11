@@ -1,0 +1,37 @@
+{
+  "_comment": "Fonte única do conteúdo factual da landing, dos dados estruturados (JSON-LD) e de /llms.txt. Edite aqui; scripts/llms.mjs gera public/llms.txt e public/llms-full.txt no build. Só escreva o que o app faz hoje.",
+  "name": "Amigo Oculto Já!",
+  "url": "https://amigoocultoja.com.br",
+  "email": "amigoocultoja@gmail.com",
+  "tagline": "A surpresa fica. A complicação sai.",
+  "summary": "O Amigo Oculto Já! é um site gratuito para fazer o sorteio do amigo oculto, também chamado de amigo secreto, pela internet. Quem organiza cadastra os nomes e o valor do presente, e o sistema sorteia. Cada participante recebe um link pelo WhatsApp, descobre quem tirou e monta uma lista com até 3 presentes.",
+  "facts": [
+    ["Preço", "Grátis, sem limite de grupos. O site ganha comissão das lojas quando alguém compra pelos links de presente."],
+    ["Participantes", "De 3 a 50 pessoas por grupo, com a opção de marcar quem não pode tirar quem (por exemplo, casais)."],
+    ["Cadastro", "Quem participa não se cadastra: só abre o link. Quem organiza entra com Google ou e-mail na hora de sortear."],
+    ["Onde funciona", "No navegador do celular ou do computador, sem baixar aplicativo. O convite vai por WhatsApp ou qualquer mensageiro."],
+    ["Sigilo", "O sorteio é feito no servidor e cada pessoa só consegue ver o próprio resultado. Nem quem organiza vê quem tirou quem."],
+    ["Valor do presente", "R$ 50, R$ 100, sem valor definido ou outro valor escolhido por quem organiza."],
+    ["Lista de presentes", "Até 3 itens por pessoa: sugestões da Amazon dentro do valor, um produto escolhido na Amazon pelo link ou qualquer presente fora da Amazon, escrito à mão."],
+    ["Mudanças depois do sorteio", "Dá para remover ou adicionar pessoas pelo painel. O sorteio é refeito com a menor troca possível."]
+  ],
+  "steps": [
+    ["Monte o grupo", "Digite o nome do grupo, o seu nome e o dos outros participantes, o valor do presente e, se quiser, a data da troca e quem não pode se tirar."],
+    ["Sorteie e envie o convite", "Toque em Sortear, entre com Google ou e-mail e envie a mensagem pronta para o grupo do WhatsApp."],
+    ["Cada um descobre e escolhe", "Cada pessoa abre o link, toca no próprio nome, vê quem tirou e escolhe até 3 presentes. Quem a tirou vê a lista na hora."]
+  ],
+  "faq": [
+    ["É grátis mesmo?", "Sim. Criar o grupo, sortear, mandar o link e montar a lista de presentes é tudo grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo."],
+    ["Como fazer o sorteio do amigo oculto online?", "Digite o nome do grupo, o seu nome e o dos participantes, escolha o valor do presente e toque em Sortear. O site gera um link para mandar no grupo do WhatsApp. Cada pessoa abre o link, toca no próprio nome e descobre quem tirou."],
+    ["Amigo oculto e amigo secreto são a mesma coisa?", "Sim. É a mesma brincadeira, e o nome muda conforme a região do Brasil. O Amigo Oculto Já! serve para os dois."],
+    ["Precisa baixar alguma coisa ou criar conta?", "Quem participa não: só abre o link, sem senha e sem e-mail. Quem organiza monta tudo no navegador e, na hora de sortear, entra com Google ou e-mail (pedimos só nome e e-mail) para acompanhar o grupo de qualquer aparelho. O app para iPhone e Android está a caminho."],
+    ["Quem organiza consegue ver quem tirou quem?", "Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista."],
+    ["Quantas pessoas podem participar?", "De 3 a 50 pessoas por grupo. Quem organiza também entra no sorteio."],
+    ["Dá para fazer amigo oculto à distância?", "Dá. Cada pessoa descobre quem tirou pelo link, de onde estiver, e a lista de presentes tem links para comprar e mandar entregar."],
+    ["E se alguém sair ou entrar depois do sorteio?", "Você remove ou adiciona a pessoa no painel. O sorteio é refeito com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link."],
+    ["Dá para impedir que casais se tirem?", "Sim. Na hora de sortear, marque quem não pode se tirar. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava."],
+    ["Posso pedir um presente que não está na Amazon?", "Pode. Na sua lista, escolha Fora da Amazon e escreva o que você quer. Quem te tirou vê o pedido e compra onde preferir."],
+    ["Alguém escolheu o meu nome por engano. E agora?", "Peça para quem organiza: no painel dá para liberar o nome em um toque, e você escolhe de novo no seu celular."],
+    ["Funciona para quem não tem WhatsApp?", "Funciona. O link é um endereço normal: pode ir por SMS, e-mail ou qualquer mensageiro. O botão do WhatsApp só deixa a mensagem pronta."]
+  ]
+}

@@ -7,6 +7,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/figtree';
 import { Stack, usePathname } from 'expo-router';
+import Head from 'expo-router/head';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
@@ -43,6 +44,14 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
+      {/* padrões de cada página; a landing, as legais e o convite substituem */}
+      <Head>
+        <title>Amigo Oculto Já!</title>
+        <meta name="description" content="Sorteio de amigo oculto (amigo secreto) online e grátis. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
+        <meta property="og:title" content="Amigo Oculto Já! · A surpresa fica. A complicação sai." />
+        <meta property="og:description" content="Seu amigo oculto começa aqui. Cada um descobre quem tirou por um link no WhatsApp e já escolhe o presente." />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <AuthUrlHandler />
       {Platform.OS === 'web' && !PUBLIC_PATHS.has(pathname) ? <NoIndex /> : null}
       <Stack

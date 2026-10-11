@@ -40,8 +40,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "export:web": "expo export -p web && node scripts/postexport.mjs",
-    "build": "expo export -p web && node scripts/postexport.mjs"
+    "export:web": "node scripts/llms.mjs && expo export -p web && node scripts/postexport.mjs",
+    "build": "node scripts/llms.mjs && expo export -p web && node scripts/postexport.mjs"
   },
   "private": true
 }
