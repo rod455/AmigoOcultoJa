@@ -94,7 +94,8 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 | `rpc_get_group` | qualquer um com o link | nome, valor, data, nomes e quem já entrou |
 | `rpc_claim` | participante | vincula o nome ao aparelho (trava) |
 | `rpc_my_result` | participante | quem eu tirei + lista dele + minha lista; marca `revealed_at` |
-| `rpc_set_wish_items` | participante | salva até 3 itens (produto ou texto livre → link de busca com tag) |
+| `rpc_set_wish_items` | participante | salva até 3 itens de 4 tipos (`kind`): sugestão do catálogo, busca na Amazon, produto escolhido na Amazon (só o ASIN; a URL é montada com o nosso ID) e texto fora da Amazon (sem link) |
+| Edge `resolve_amazon_link` | participante | abre links curtos da Amazon (`a.co`, `amzn.to`) seguindo só os redirecionamentos e devolve o ASIN |
 | `rpc_suggestions` | participante | 6 produtos dentro do valor, vitrine varia por pessoa |
 | `rpc_resolve_link` | qualquer um | registra `outbound_clicks` e devolve a URL de afiliado |
 | `rpc_panel` / `rpc_release` / `rpc_my_groups` | organizador | painel, liberar nome, meus grupos |

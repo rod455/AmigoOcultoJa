@@ -1,10 +1,14 @@
 import { track } from './analytics';
+import { parseAmazonInput } from '../../supabase/functions/_shared/amazon';
 import { getDeviceKey } from './device';
 import { anonKeyValue, functionsUrl, supabase } from './supabase';
 
 /* ---------------------------------------------------------------- */
 /* Tipos                                                             */
 /* ---------------------------------------------------------------- */
+
+/** product = catálogo · search = busca na Amazon · link = produto escolhido na Amazon · text = fora da Amazon */
+export type WishKind = 'product' | 'search' | 'link' | 'text';
 
 export type WishItem = {
   id: string;
@@ -13,8 +17,15 @@ export type WishItem = {
   price_cents: number | null;
   store: string | null;
   position: number;
+  kind?: WishKind;
+  asin?: string | null;
   is_search: boolean;
+  has_link?: boolean;
 };
+
+export function wishKind(it: Pick<WishItem, 'kind' | 'product_id'>): WishKind {
+  return it.kind ?? (it.product_id ? 'product' : 'search');
+}
 
 export type Product = {
   id: string;
@@ -234,7 +245,7 @@ export async function myResult(code: string, participantId: string): Promise<MyR
 export async function setWishItems(
   code: string,
   participantId: string,
-  items: Array<{ title: string; product_id?: string | null }>,
+  items: Array<{ title: string; product_id?: string | null; kind?: WishKind; asin?: string | null }>,
 ): Promise<WishItem[]> {
   const key = await getDeviceKey();
   const r = await rpc<{ ok: boolean; items: WishItem[] }>('rpc_set_wish_items', {
@@ -248,6 +259,20 @@ export async function setWishItems(
 
 export async function suggestions(code: string, participantId?: string, limit = 6): Promise<Product[]> {
   return rpc<Product[]>('rpc_suggestions', { p_code: code, p_participant_id: participantId ?? null, p_limit: limit });
+}
+
+/**
+ * Link de produto colado por quem participa → ASIN. Links completos do
+ * amazon.com.br são lidos aqui mesmo; links curtos (a.co, amzn.to) passam pela
+ * Edge Function, que segue o redirecionamento.
+ */
+export async function resolveAmazonLink(text: string): Promise<string> {
+  const parsed = parseAmazonInput(text);
+  if (parsed.kind === 'asin') return parsed.asin;
+  if (parsed.kind === 'not_amazon') throw new ApiError('NOT_AMAZON', 'Esse link não é da Amazon.');
+  if (parsed.kind === 'no_product') throw new ApiError('NO_PRODUCT', 'Esse link não é de um produto.');
+  const r = await callFunction<{ asin: string }>('resolve_amazon_link', { text });
+  return r.asin;
 }
 
 export async function resolveLink(opts: {
@@ -299,6 +324,11 @@ export function friendlyError(e: unknown): string {
         return e.message || 'Tem nome repetido. Inclua o sobrenome.';
       case 'TOO_MANY_ITEMS':
         return 'Escolha até 3 presentes.';
+      case 'NOT_AMAZON':
+        return 'Esse link não é da Amazon. Para outras lojas, use "Fora da Amazon".';
+      case 'NO_PRODUCT':
+      case 'INVALID_LINK':
+        return 'Não achamos o produto nesse link. Abra a página do produto na Amazon e copie o link de lá.';
       default:
         if (/fetch|network|load failed/i.test(e.message)) return 'Sem conexão. Verifique a internet e tente de novo.';
         return e.message || GENERIC_ERROR;

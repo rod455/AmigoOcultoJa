@@ -3,13 +3,15 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { Bell, Check, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
-import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveLink, setWishItems, suggestions, type WishItem } from '@/lib/api';
+import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveAmazonLink, resolveLink, setWishItems, suggestions, type WishItem, type WishKind, wishKind } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
 import { firstName, formatBRL, groupMeta, priceBand, storeLabel } from '@/lib/format';
 import { colors, tints } from '@/theme/tokens';
-import { openExternal } from '@/lib/open';
+import { openExternalAfter } from '@/lib/open';
 
-type Pick = { key: string; title: string; product_id: string | null; price_cents: number | null; store: string | null };
+type Pick = { key: string; title: string; product_id: string | null; price_cents: number | null; store: string | null; kind: WishKind; asin: string | null };
+
+type AddTab = 'amazon' | 'outro';
 
 const MAX_ITEMS = 3;
 
@@ -22,6 +24,10 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   const [editing, setEditing] = useState(false);
   const [picks, setPicks] = useState<Pick[]>([]);
   const [draft, setDraft] = useState('');
+  const [link, setLink] = useState('');
+  const [freeText, setFreeText] = useState('');
+  const [addTab, setAddTab] = useState<AddTab>('amazon');
+  const [adding, setAdding] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   const [updatedNotice, setUpdatedNotice] = useState(false);
@@ -79,17 +85,74 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
       if (on) return cur.filter((c) => c.product_id !== p.id);
       if (cur.length >= MAX_ITEMS) return cur;
       track('wish_item_added', { origem: 'sugestao', produto_id: p.id, loja: p.store }, { code, participantId });
-      return [...cur, { key: p.id, title: p.name, product_id: p.id, price_cents: p.price_cents, store: p.store }];
+      return [...cur, { key: p.id, title: p.name, product_id: p.id, price_cents: p.price_cents, store: p.store, kind: 'product', asin: null }];
     });
   };
 
-  const addDraft = () => {
-    const t = draft.trim();
-    if (!t || picks.length >= MAX_ITEMS) return;
+  const full = picks.length >= MAX_ITEMS;
+
+  /** Abre a busca da Amazon (com o nosso ID) para a pessoa escolher o produto. */
+  const searchAmazon = () => {
+    const q = draft.trim();
+    if (!q) {
+      setError('Digite o que você quer para buscar na Amazon.');
+      return;
+    }
+    setError('');
+    track('amazon_search_opened', undefined, { code, participantId });
+    openExternalAfter(() => resolveLink({ query: q, code, participantId, origin: 'busca_lista' }).then((r) => r.url)).catch((e) =>
+      setError(friendlyError(e)),
+    );
+  };
+
+  /** Na Amazon: com link vira o produto escolhido; sem link, vira busca. */
+  const addAmazon = async () => {
+    if (full || adding) return;
+    const title = draft.trim();
+    const pasted = link.trim();
+    if (!title) {
+      setError(pasted ? 'Dê um nome curto para o presente, como "Fone JBL".' : 'Digite o que você quer ganhar.');
+      return;
+    }
+    setError('');
+    if (!pasted) {
+      if (picks.some((p) => p.title.toLowerCase() === title.toLowerCase())) return;
+      track('wish_item_added', { origem: 'busca' }, { code, participantId });
+      setPicks((cur) => [...cur, { key: `busca:${title}`, title, product_id: null, price_cents: null, store: 'amazon', kind: 'search', asin: null }]);
+      setDraft('');
+      return;
+    }
+    setAdding(true);
+    try {
+      const asin = await resolveAmazonLink(pasted);
+      if (picks.some((p) => p.asin === asin)) {
+        setError('Esse produto já está na sua lista.');
+        return;
+      }
+      track('wish_item_added', { origem: 'link_amazon' }, { code, participantId });
+      setPicks((cur) => [...cur, { key: `link:${asin}`, title, product_id: null, price_cents: null, store: 'amazon', kind: 'link', asin }]);
+      setDraft('');
+      setLink('');
+    } catch (e) {
+      setError(friendlyError(e));
+    } finally {
+      setAdding(false);
+    }
+  };
+
+  /** Fora da Amazon: fica salvo só como texto. */
+  const addFree = () => {
+    const t = freeText.trim().replace(/\s+/g, ' ');
+    if (full) return;
+    if (!t) {
+      setError('Escreva o que você quer ganhar.');
+      return;
+    }
     if (picks.some((p) => p.title.toLowerCase() === t.toLowerCase())) return;
-    track('wish_item_added', { origem: 'texto' }, { code, participantId });
-    setPicks((cur) => [...cur, { key: `txt:${t}`, title: t, product_id: null, price_cents: null, store: null }]);
-    setDraft('');
+    setError('');
+    track('wish_item_added', { origem: 'fora_amazon' }, { code, participantId });
+    setPicks((cur) => [...cur, { key: `txt:${t}`, title: t.slice(0, 120), product_id: null, price_cents: null, store: null, kind: 'text', asin: null }]);
+    setFreeText('');
   };
 
   const save = async () => {
@@ -97,7 +160,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
     setSaving(true);
     setError('');
     try {
-      const items = await setWishItems(code, participantId, picks.map((p) => ({ title: p.title, product_id: p.product_id })));
+      const items = await setWishItems(code, participantId, picks.map((p) => ({ title: p.title, product_id: p.product_id, kind: p.kind, asin: p.asin })));
       track('wish_list_saved', { qtd_itens: items.length }, { code, participantId });
       setData({ ...data, my_items: items });
       setPicks(items.map(itemToPick));
@@ -117,8 +180,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   const buy = async (opts: { wishItemId?: string; productId?: string; query?: string; origin: string }) => {
     track('outbound_click', { origem: opts.origin }, { code, participantId });
     try {
-      const r = await resolveLink({ ...opts, code, participantId });
-      await openExternal(r.url);
+      await openExternalAfter(() => resolveLink({ ...opts, code, participantId }).then((r) => r.url));
     } catch (e) {
       setError(friendlyError(e));
     }
@@ -265,10 +327,12 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                     {it.title}
                   </T>
                   <T size={14} color={colors.textSecondary}>
-                    {it.is_search ? `Opções${budget ? ` até ${formatBRL(budget)}` : ''} · ${storeLabel(it.store)}` : `${priceBand(it.price_cents)} · ${storeLabel(it.store)}`}
+                    {itemNote(wishKind(it), it.price_cents, it.store, budget, 'amigo')}
                   </T>
                 </View>
-                <Pill label={it.is_search ? 'Ver' : 'Comprar'} onPress={() => buy({ wishItemId: it.id, origin: 'lista_amigo' })} />
+                {wishKind(it) === 'text' ? null : (
+                  <Pill label={wishKind(it) === 'search' ? 'Ver' : 'Comprar'} onPress={() => buy({ wishItemId: it.id, origin: 'lista_amigo' })} />
+                )}
               </View>
             ))}
           </>
@@ -358,20 +422,99 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             ) : null}
           </ScrollView>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: 2, borderBottomColor: colors.text }}>
-            <UnderlineInput
-              style={{ flexGrow: 1, borderBottomWidth: 0, minWidth: 0, fontSize: 17 }}
-              value={draft}
-              onChangeText={setDraft}
-              placeholder="Ou digite outro presente"
-              returnKeyType="done"
-              onSubmitEditing={addDraft}
-              editable={picks.length < MAX_ITEMS}
-              accessibilityLabel="Outro presente"
-            />
-            <IconButton label="Adicionar presente" onPress={addDraft} size={40} bg={picks.length < MAX_ITEMS && draft.trim() ? colors.text : colors.disabled}>
-              <Plus />
-            </IconButton>
+          {/* adicionar outro presente: na Amazon (busca ou link) ou fora dela */}
+          <View style={{ gap: 14, padding: 16, borderRadius: 20, backgroundColor: colors.surfaceAlt, opacity: full ? 0.6 : 1 }}>
+            <T size={17} weight="bold">
+              {full ? `Sua lista já tem ${MAX_ITEMS} presentes` : 'Quer outro presente?'}
+            </T>
+            <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderRadius: 12, padding: 3 }} accessibilityRole="tablist">
+              {([
+                ['amazon', 'Na Amazon'],
+                ['outro', 'Fora da Amazon'],
+              ] as Array<[AddTab, string]>).map(([k, label]) => {
+                const on = addTab === k;
+                return (
+                  <Pressable
+                    key={k}
+                    accessibilityRole="tab"
+                    accessibilityState={{ selected: on }}
+                    onPress={() => {
+                      setAddTab(k);
+                      setError('');
+                    }}
+                    style={{ flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? colors.text : 'transparent' }}
+                  >
+                    <T size={14} weight="bold" color={on ? '#FFFFFF' : colors.textSecondary}>
+                      {label}
+                    </T>
+                  </Pressable>
+                );
+              })}
+            </View>
+
+            {addTab === 'amazon' ? (
+              <View style={{ gap: 12 }}>
+                <View style={{ gap: 4 }}>
+                  <T size={13} weight="semibold" color={colors.textSecondary} nativeID="lbl-quero">
+                    O que você quer?
+                  </T>
+                  <UnderlineInput
+                    style={{ fontSize: 17 }}
+                    value={draft}
+                    onChangeText={setDraft}
+                    placeholder="Ex.: fone bluetooth JBL"
+                    returnKeyType="search"
+                    onSubmitEditing={searchAmazon}
+                    editable={!full}
+                    accessibilityLabelledBy="lbl-quero"
+                  />
+                </View>
+                <Button label="Procurar na Amazon" variant="outline" onPress={searchAmazon} disabled={full} style={{ height: 48 }} />
+                <View style={{ gap: 4 }}>
+                  <T size={13} weight="semibold" color={colors.textSecondary} nativeID="lbl-link">
+                    Achou? Cole o link do produto (opcional)
+                  </T>
+                  <UnderlineInput
+                    style={{ fontSize: 15 }}
+                    value={link}
+                    onChangeText={setLink}
+                    placeholder="https://a.co/d/… ou amazon.com.br/…"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="url"
+                    editable={!full}
+                    accessibilityLabelledBy="lbl-link"
+                  />
+                  <T size={12} color={colors.textSecondary} lineHeight={17}>
+                    Na Amazon, abra o produto, toque em Compartilhar e em Copiar link. Sem link, o presente vira uma busca na Amazon.
+                  </T>
+                </View>
+                <Button label={link.trim() ? 'Adicionar este produto' : 'Adicionar à lista'} onPress={addAmazon} loading={adding} disabled={full} style={{ height: 50 }} />
+              </View>
+            ) : (
+              <View style={{ gap: 12 }}>
+                <View style={{ gap: 4 }}>
+                  <T size={13} weight="semibold" color={colors.textSecondary} nativeID="lbl-livre">
+                    O que você quer ganhar?
+                  </T>
+                  <UnderlineInput
+                    style={{ fontSize: 17 }}
+                    value={freeText}
+                    onChangeText={setFreeText}
+                    placeholder="Ex.: camiseta do meu time, tamanho M"
+                    maxLength={120}
+                    returnKeyType="done"
+                    onSubmitEditing={addFree}
+                    editable={!full}
+                    accessibilityLabelledBy="lbl-livre"
+                  />
+                  <T size={12} color={colors.textSecondary} lineHeight={17}>
+                    Fica salvo só como texto. Quem te tirou vê e compra onde quiser.
+                  </T>
+                </View>
+                <Button label="Adicionar à lista" onPress={addFree} disabled={full} style={{ height: 50 }} />
+              </View>
+            )}
           </View>
 
           {picks.length > 0 ? (
@@ -387,7 +530,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                       {p.title}
                     </T>
                     <T size={13} color={colors.textSecondary}>
-                      {p.product_id ? `${priceBand(p.price_cents)} · ${storeLabel(p.store)}` : `Vira um link de busca${budget ? ` até ${formatBRL(budget)}` : ''}`}
+                      {itemNote(p.kind, p.price_cents, p.store, budget, 'minha')}
                     </T>
                   </View>
                   <IconButton label={`Remover ${p.title}`} onPress={() => setPicks((cur) => cur.filter((c) => c.key !== p.key))}>
@@ -420,7 +563,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                   {it.title}
                 </T>
                 <T size={13} color={colors.textSecondary}>
-                  {it.is_search ? `Link de busca · ${storeLabel(it.store)}` : `${priceBand(it.price_cents)} · ${storeLabel(it.store)}`}
+                  {itemNote(wishKind(it), it.price_cents, it.store, budget, 'minha')}
                 </T>
               </View>
             </View>
@@ -444,6 +587,15 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   );
 }
 
+/** Linha de apoio de cada presente, conforme o tipo. */
+function itemNote(kind: WishKind, priceCents: number | null, store: string | null, budget: number | null, quem: 'amigo' | 'minha'): string {
+  if (kind === 'text') return 'Fora da Amazon';
+  if (kind === 'link') return `Produto escolhido · ${storeLabel(store ?? 'amazon')}`;
+  if (kind === 'product') return `${priceBand(priceCents)} · ${storeLabel(store)}`;
+  const ate = budget ? ` até ${formatBRL(budget)}` : '';
+  return quem === 'amigo' ? `Opções${ate} · ${storeLabel(store)}` : `Vira uma busca na Amazon${ate}`;
+}
+
 function itemToPick(it: WishItem): Pick {
-  return { key: it.id, title: it.title, product_id: it.product_id, price_cents: it.price_cents, store: it.store };
+  return { key: it.id, title: it.title, product_id: it.product_id, price_cents: it.price_cents, store: it.store, kind: wishKind(it), asin: it.asin ?? null };
 }
