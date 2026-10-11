@@ -101,7 +101,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 | `rpc_nudge` | ambos | lembrete anônimo **in-app** (quem tirou → quem foi tirado; aparece no link da pessoa; 1 a cada 12 h) e registro do lembrete do organizador |
 | `rpc_track` | ambos | eventos de analytics (`events`) |
 
-Afiliados: a tag e os templates de busca ficam em `app_settings` (`affiliate_tag_amazon`, `search_url_amazon`, `default_store`). ID de associado da Amazon: `amigoocultoja-20` (conta de amigoocultoja@gmail.com; migração `0003_affiliate_tag.sql`). A Amazon encerra a conta se não houver 3 vendas qualificadas em 180 dias. O catálogo inicial tem 24 produtos de exemplo em `products`; substitua pelos links reais.
+Afiliados: a tag e os templates de busca ficam em `app_settings` (`affiliate_tag_amazon`, `search_url_amazon`, `default_store`). ID de associado da Amazon: `amigoocultoja-20` (conta de amigoocultoja@gmail.com; migração `0003_affiliate_tag.sql`). A Amazon encerra a conta se não houver 3 vendas qualificadas em 180 dias. O catálogo (`products`, migração `0005_catalogo_amazon.sql`) tem 28 produtos reais da Amazon em 4 faixas (até R$ 50, 100, 200 e 400), com link `/dp/ASIN?tag=amigoocultoja-20`. O preço guardado é aproximado e serve só para filtrar pelo valor do grupo; a interface mostra a faixa, porque a Amazon não permite exibir preço fixo fora da API oficial. Revise a lista de tempos em tempos: produtos podem sair de estoque.
 
 ### Testes de segurança (rodar no SQL editor)
 
