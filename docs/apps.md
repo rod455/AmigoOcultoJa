@@ -101,6 +101,34 @@ primeiro .aab pelo site:
 5. Me mande o **SHA-256** da chave de assinatura (Play Console ›
    Configuração › Integridade do app › Assinatura de apps).
 
+### 2.3b Alternativa: o primeiro .aab pelo Android Studio
+
+Vale se você já tem o Android Studio e Node 22 no computador. Só o Android:
+o iPhone continua pela seção 2.2 (ou Xcode num Mac).
+
+```bash
+git clone https://github.com/rod455/AmigoOcultoJa.git && cd AmigoOcultoJa
+git checkout claude/sleepy-cannon-d8q3dt
+npm ci
+npx expo prebuild -p android      # gera a pasta android/ (não vai para o git)
+```
+
+1. Android Studio › Open › a pasta `android/`. Espere o Gradle sincronizar.
+2. Build › Generate Signed App Bundle or APK › **Android App Bundle**.
+3. Key store path › **Create new...**: salve como
+   `amigoocultoja-upload.jks` **fora** da pasta do projeto, com senha forte,
+   alias `upload`, validade 25 anos. Guarde o arquivo e as duas senhas num
+   gerenciador de senhas: sem eles, só o suporte do Google troca a chave.
+4. Variante **release** › Create. O .aab sai em
+   `android/app/release/app-release.aab`. Suba na Play como na seção 2.3.
+5. **Antes do primeiro build pelo EAS**, entregue essa mesma chave à Expo:
+   expo.dev › projeto › Credentials › Android › Upload keystore (ou
+   `npx eas-cli@latest credentials -p android` › Keystore › usar existente).
+   Se o EAS gerar outra chave, a Play recusa os envios seguintes.
+
+Não edite nada dentro de `android/`: ela é gerada a partir do `app.json` e
+some a cada `prebuild`. Mudança nativa entra pelo `app.json`.
+
 ### 2.4 Daí em diante: um botão
 
 Com o Project ID e o Apple ID do app no repositório (eu coloco), toda subida
