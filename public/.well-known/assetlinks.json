@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.amigoocultoja.app",
+      "sha256_cert_fingerprints": [
+        "FC:73:E7:BA:97:0F:7F:75:7B:EB:BA:5A:BE:2D:CD:24:B5:3F:E0:81:38:B5:E0:77:F2:29:E7:08:0D:77:6F:C2"
+      ]
+    }
+  }
+]

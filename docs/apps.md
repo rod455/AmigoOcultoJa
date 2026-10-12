@@ -151,9 +151,11 @@ no yaml (lição 8 do guia: "não mexi em nada" não significa "nada mudou").
   12/10/2026 com o Team ID `GGM89XNN4S` (conta individual: o vendedor na App
   Store aparece como Rodrigo Moraes da Silva). Também liga o preenchimento
   automático de senha do iPhone para o site (`webcredentials`).
-- **Android**: `public/.well-known/assetlinks.json` precisa do **SHA-256 da
-  chave de assinatura do app** (Play Console › Configuração › Integridade do
-  app › Assinatura de apps). Até lá, o link abre no navegador.
+- **Android**: `public/.well-known/assetlinks.json`, publicado em 12/10/2026
+  com o SHA-256 da **chave de assinatura do app** (a que fica com o Google:
+  Play Console › Proteção da Google Play Store › Assinatura de apps). Builds
+  instalados fora da Play (assinados só com a chave de upload) não abrem o
+  link direto; os da loja abrem.
 
 ## 7. O que precisa de build e o que não
 
