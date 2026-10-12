@@ -31,7 +31,8 @@ Store Connect no mesmo dia.
 | Identificadores › ID do usuário | Funcionalidade do app, Análise | Sim |
 | Identificadores › ID do dispositivo (código aleatório nosso, não é o IDFA) | Análise | Sim |
 | Dados de uso › Interação com o produto | Análise | Sim |
-| Diagnóstico › Dados de falhas | Análise | Sim |
+| Diagnóstico › Dados de falhas | Funcionalidade do app (a Apple põe "minimizar falhas" aqui) | Sim |
+| Diagnóstico › Outros dados de diagnóstico (erros que não derrubam o app) | Funcionalidade do app | Sim |
 
 Não coletados: localização, contatos, fotos, áudio, dados financeiros, saúde,
 histórico de navegação, histórico de busca, compras.
