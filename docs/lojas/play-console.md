@@ -5,7 +5,8 @@ Respostas conferidas contra o código, o banco e a Política de Privacidade em
 console no mesmo dia.
 
 ## 1. Criar o app
-- Nome do app: `Amigo Oculto Já!`
+- Nome do app: `Amigo Oculto Já: Amigo Secreto` (30 caracteres; o nome é o campo que mais pesa na busca da Play, e "amigo secreto" é como boa parte do Brasil procura a brincadeira)
+- Nome do pacote: `br.com.amigoocultoja.app` (precisa ser igual ao do .aab; não muda nunca mais)
 - Idioma padrão: Português (Brasil) – pt-BR
 - App ou jogo: **App** · Gratuito ou pago: **Gratuito**
 - Aceitar as declarações (Políticas do programa e leis de exportação dos EUA).
@@ -86,10 +87,10 @@ Não coletados: localização, contatos, fotos, áudio, arquivos, calendário,
 informações financeiras, saúde, mensagens, histórico de navegação.
 
 ## 4. Presença na loja › Página principal da loja
-- Nome do app (30): `Amigo Oculto Já!`
+- Nome do app (30): `Amigo Oculto Já: Amigo Secreto`
 - Breve descrição (80):
 ```
-Sorteio de amigo oculto grátis. Cada um descobre quem tirou pelo WhatsApp.
+Sorteio de amigo oculto e amigo secreto pelo WhatsApp. Sem papelzinho e grátis.
 ```
 - Descrição completa (4.000):
 ```
