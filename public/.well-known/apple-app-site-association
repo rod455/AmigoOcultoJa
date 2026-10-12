@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["GGM89XNN4S.br.com.amigoocultoja.app"],
+        "components": [{ "/": "/g/*", "comment": "convite do grupo abre no app" }]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["GGM89XNN4S.br.com.amigoocultoja.app"]
+  }
+}

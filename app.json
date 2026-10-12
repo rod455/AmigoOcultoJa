@@ -12,7 +12,8 @@
       "supportsTablet": false,
       "bundleIdentifier": "br.com.amigoocultoja.app",
       "associatedDomains": [
-        "applinks:amigoocultoja.com.br"
+        "applinks:amigoocultoja.com.br",
+        "webcredentials:amigoocultoja.com.br"
       ],
       "usesAppleSignIn": true,
       "config": {

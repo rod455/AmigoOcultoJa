@@ -173,8 +173,10 @@ O `app.json` já declara `applinks:amigoocultoja.com.br` (iPhone) e o filtro
 de `/g` com verificação (Android). Para valer, o site precisa servir dois
 arquivos, que dependem de dados das contas:
 
-- `public/.well-known/apple-app-site-association`: precisa do **Team ID** da
-  Apple (Membership details no developer.apple.com).
+- `public/.well-known/apple-app-site-association`: **publicado em 12/10/2026**
+  com o Team ID `GGM89XNN4S` (conta individual: o vendedor na App Store
+  aparece como Rodrigo Moraes da Silva). Também liga o preenchimento
+  automático de senha do iPhone para amigoocultoja.com.br (`webcredentials`).
 - `public/.well-known/assetlinks.json`: precisa do **SHA-256 da chave de
   assinatura** (Play Console › Configuração › Integridade do app).
 
