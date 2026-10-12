@@ -28,6 +28,14 @@ if (base && base !== 'https://amigoocultoja.com.br') {
   errors.push(`EXPO_PUBLIC_BASE_URL deve ser https://amigoocultoja.com.br (sem www e sem barra), está "${base}"`);
 }
 
+// 2b. Origem do expo-router: sem ela, o <Head> do iPhone abre um alerta na
+// tela de produção ("Expo Head: Add the handoff origin...") logo ao abrir o app
+const routerPlugin = (JSON.parse(read('app.json')).expo.plugins || []).find((p) => (Array.isArray(p) ? p[0] : p) === 'expo-router');
+const routerOrigin = Array.isArray(routerPlugin) ? routerPlugin[1]?.origin : undefined;
+if (routerOrigin !== 'https://amigoocultoja.com.br') {
+  errors.push(`app.json: o plugin expo-router precisa de { origin: "https://amigoocultoja.com.br" } (está ${JSON.stringify(routerOrigin)})`);
+}
+
 // 3. Versão nova de verdade, no build que vai para as lojas
 const app = JSON.parse(read('app.json')).expo;
 const published = JSON.parse(read('docs/lojas/publicadas.json'));
