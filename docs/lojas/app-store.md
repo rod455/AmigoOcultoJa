@@ -37,7 +37,13 @@ Não coletados: localização, contatos, fotos, áudio, dados financeiros, saúd
 histórico de navegação, histórico de busca, compras.
 
 ## 4. Versão 1.0 (página "Preparar para envio")
-- Capturas iPhone 6,9": `docs/lojas/imagens/ios-tela-1.png`, `-2`, `-3` (1320 x 2868). O iPad não é necessário (`supportsTablet: false`).
+- Capturas (pasta `docs/lojas/imagens/`), na aba de cada tamanho:
+  - iPhone com Dynamic Island, tela média (6,1"/6,3"): `iphone-6.3-1..3.png` (1206 x 2622)
+  - iPhone tela grande (6,9"), se a aba aparecer: `iphone-6.9-1..3.png` (1320 x 2868)
+  - iPad 13": `ipad-13-1..3.png` (2064 x 2752). O app é só para iPhone
+    (`supportsTablet: false`); a exigência do iPad some quando o build é
+    anexado, mas subir estas não atrapalha.
+  - As capturas da Play (`tela-*.png`, 1080 x 1920) a Apple recusa.
 - Texto promocional (170):
 ```
 Organize o amigo oculto em minutos: cada um descobre quem tirou pelo WhatsApp e já monta a lista de presentes. Sem papelzinho e sem ninguém ver o resultado dos outros.
