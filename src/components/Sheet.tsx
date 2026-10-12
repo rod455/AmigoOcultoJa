@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { T } from './ui';
 import { colors, layout } from '@/theme/tokens';
@@ -24,7 +24,8 @@ export function Sheet({
   const insets = useSafeAreaInsets();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.backdropWrap}>
+      {/* a folha sobe junto com o teclado (ex.: "Adicionar pessoa" abre com o campo focado) */}
+      <KeyboardAvoidingView style={styles.backdropWrap} behavior={Platform.OS === 'ios' ? 'padding' : Platform.OS === 'android' ? 'height' : undefined}>
         <Pressable accessibilityRole="button" accessibilityLabel="Fechar" style={styles.backdrop} onPress={onClose} />
         <View style={[styles.sheet, { paddingBottom: Platform.OS === 'web' ? 24 : Math.max(insets.bottom, 16) + 8 }]}>
           <View style={styles.handle} />
@@ -38,7 +39,7 @@ export function Sheet({
           </ScrollView>
           {footer ? <View style={{ paddingTop: 16 }}>{footer}</View> : null}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

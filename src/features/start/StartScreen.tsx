@@ -1,4 +1,4 @@
-import { Link, useFocusEffect } from 'expo-router';
+import { Link, router, useFocusEffect, usePathname } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { ChevronRight } from '@/components/icons';
@@ -14,6 +14,8 @@ import { colors } from '@/theme/tokens';
 export function StartScreen() {
   const [groups, setGroups] = useState<MyGroup[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [checked, setChecked] = useState(false);
+  const pathname = usePathname();
 
   useFocusEffect(
     useCallback(() => {
@@ -22,7 +24,11 @@ export function StartScreen() {
         myGroups()
           .then((g) => alive && setGroups(g))
           .catch(() => undefined);
-        getProfile().then((p) => alive && setProfile(p));
+        getProfile().then((p) => {
+          if (!alive) return;
+          setProfile(p);
+          setChecked(true);
+        });
       }
       return () => {
         alive = false;
@@ -54,6 +60,19 @@ export function StartScreen() {
               </T>
             </Pressable>
           </Link>
+        ) : checked || !isConfigured ? (
+          // quem já tem conta entra aqui e vê os grupos que criou em outro aparelho
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Entrar na minha conta"
+            hitSlop={8}
+            onPress={() => router.push({ pathname: '/conta', params: { mode: 'login', next: pathname || '/' } })}
+            style={({ pressed }) => ({ height: 38, paddingHorizontal: 16, borderRadius: 19, borderWidth: 1.5, borderColor: colors.lineStrong, justifyContent: 'center', opacity: pressed ? 0.6 : 1 })}
+          >
+            <T size={14} weight="semibold">
+              Entrar
+            </T>
+          </Pressable>
         ) : null}
       </View>
       <View style={{ flexGrow: 1, justifyContent: 'center', gap: 20, paddingVertical: 32 }}>

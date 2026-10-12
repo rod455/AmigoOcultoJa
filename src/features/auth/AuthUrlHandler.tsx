@@ -33,9 +33,16 @@ export function AuthUrlHandler() {
         router.replace({ pathname: '/conta', params: { mode: 'reset' } });
         return;
       }
+      // só volta ao sorteio quem estava nele (ou caiu na raiz com um rascunho
+      // guardado); quem tocou em "Entrar" fica onde estava
+      if (clean.startsWith('/criar')) {
+        router.replace('/criar/valor?auto=1' as never);
+        return;
+      }
+      if (clean !== '/') return;
       loadDraft().then((d) => {
         if (d.name && d.organizerName) router.replace('/criar/valor?auto=1' as never);
-        else if (clean === '/') router.replace('/app');
+        else router.replace('/app');
       });
     });
     return off;

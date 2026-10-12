@@ -187,13 +187,18 @@ export async function signInWithEmail(email: string, password: string): Promise<
 }
 
 /** Cria a conta. Se o projeto exigir confirmação de e-mail, não há sessão ainda. */
-export async function signUpWithEmail(name: string, email: string, password: string): Promise<{ profile: Profile | null; needsConfirmation: boolean }> {
+export async function signUpWithEmail(
+  name: string,
+  email: string,
+  password: string,
+  next = '/criar/valor?auto=1',
+): Promise<{ profile: Profile | null; needsConfirmation: boolean }> {
   const { data, error } = await supabase().auth.signUp({
     email: email.trim().toLowerCase(),
     password,
-    options: { data: { full_name: name.trim() }, emailRedirectTo: redirectUrl('/criar/valor?auto=1') },
+    options: { data: { full_name: name.trim() }, emailRedirectTo: redirectUrl(next) },
   });
-  await rememberNext('/criar/valor?auto=1');
+  await rememberNext(next);
   if (error) throw error;
   if (data.session && data.user) {
     track('auth_completed', { metodo: 'email_signup' });

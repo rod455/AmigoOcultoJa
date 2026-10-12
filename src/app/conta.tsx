@@ -17,6 +17,8 @@ type Mode = 'login' | 'signup' | 'reset';
 export default function Conta() {
   const params = useLocalSearchParams<{ next?: string; mode?: string }>();
   const next = typeof params.next === 'string' && params.next.startsWith('/') ? params.next : '/criar/valor?auto=1';
+  // veio do "Sortear" (no meio da criação do grupo) ou do botão "Entrar" da tela inicial
+  const forDraw = next.startsWith('/criar');
   const [mode, setMode] = useState<Mode>(params.mode === 'reset' ? 'reset' : params.mode === 'login' ? 'login' : 'signup');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -87,11 +89,15 @@ export default function Conta() {
         await signInWithEmail(email, password);
         goNext();
       } else if (mode === 'signup') {
-        const r = await signUpWithEmail(name, email, password);
+        const r = await signUpWithEmail(name, email, password, next);
         if (r.needsConfirmation) {
           // já deixa a aba de login pronta, com e-mail e senha preenchidos
           setMode('login');
-          setNotice(`Enviamos um link para ${email.trim()}. Confirme pelo e-mail e você volta direto para o sorteio. Se preferir, confirme e depois toque em "Entrar e sortear" aqui.`);
+          setNotice(
+            forDraw
+              ? `Enviamos um link para ${email.trim()}. Confirme pelo e-mail e você volta direto para o sorteio. Se preferir, confirme e depois toque em "Entrar e sortear" aqui.`
+              : `Enviamos um link para ${email.trim()}. Confirme pelo e-mail e depois toque em "Entrar" aqui.`,
+          );
         } else {
           goNext();
         }
@@ -121,14 +127,16 @@ export default function Conta() {
     }
   };
 
-  const title = mode === 'reset' ? 'Nova senha' : 'Salve seu amigo oculto';
+  const title = mode === 'reset' ? 'Nova senha' : forDraw ? 'Salve seu amigo oculto' : mode === 'login' ? 'Entrar na sua conta' : 'Crie sua conta';
   const subtitle =
     mode === 'reset'
       ? 'Escolha uma senha nova para a sua conta.'
-      : 'Crie uma conta para sortear e acompanhar quem já viu. Pedimos só nome e e-mail.';
+      : forDraw
+        ? 'Crie uma conta para sortear e acompanhar quem já viu. Pedimos só nome e e-mail.'
+        : 'Veja e acompanhe os seus grupos em qualquer aparelho. Pedimos só nome e e-mail.';
 
   return (
-    <Screen top={<TopBar backTo="/criar/valor" />} padTop={12}>
+    <Screen top={<TopBar backTo={forDraw ? '/criar/valor' : '/'} />} padTop={12}>
       <View style={{ gap: 18, paddingTop: 8, paddingBottom: 24 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <View style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: colors.peach, alignItems: 'center', justifyContent: 'center' }}>
@@ -265,7 +273,7 @@ export default function Conta() {
           ) : null}
           <ErrorText>{error}</ErrorText>
           <Button
-            label={mode === 'login' ? 'Entrar e sortear' : mode === 'signup' ? 'Criar conta e sortear' : 'Salvar senha'}
+            label={mode === 'login' ? (forDraw ? 'Entrar e sortear' : 'Entrar') : mode === 'signup' ? (forDraw ? 'Criar conta e sortear' : 'Criar conta') : 'Salvar senha'}
             onPress={submit}
             disabled={!canSubmit}
             loading={busy === 'email'}

@@ -3,6 +3,7 @@ import React from 'react';
 import {
   ActivityIndicator,
   Image,
+  KeyboardAvoidingView,
   Platform,
   Pressable,
   type PressableProps,
@@ -104,9 +105,12 @@ export function Screen({ children, footer, scroll = true, top, padTop = 20, gap 
   const body = (
     <View style={[{ flexGrow: 1, gap }, contentStyle]}>{children}</View>
   );
+  // No iPhone o teclado cobre o rodapé ("Continuar", "Sortear"); a tela sobe
+  // junto com ele. No Android o sistema já redimensiona a janela.
+  const Shell = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
   return (
     <View style={styles.root} testID={testID}>
-      <View style={[styles.phone, isWeb && styles.phoneWeb]}>
+      <Shell style={[styles.phone, isWeb && styles.phoneWeb]} {...(Platform.OS === 'ios' ? { behavior: 'padding' as const } : null)}>
         <View style={{ height: isWeb ? padTop : insets.top + padTop }} />
         {top ? <View style={{ paddingHorizontal: layout.paddingX }}>{top}</View> : null}
         {scroll ? (
@@ -114,6 +118,7 @@ export function Screen({ children, footer, scroll = true, top, padTop = 20, gap 
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingHorizontal: layout.paddingX, flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
+            keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
             showsVerticalScrollIndicator={false}
           >
             {body}
@@ -128,7 +133,7 @@ export function Screen({ children, footer, scroll = true, top, padTop = 20, gap 
         ) : (
           <View style={{ height: isWeb ? 32 : Math.max(insets.bottom, 16) }} />
         )}
-      </View>
+      </Shell>
     </View>
   );
 }
