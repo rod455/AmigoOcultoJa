@@ -28,6 +28,7 @@ Idioma: português do Brasil. Público: famílias, amigos e equipes de trabalho 
 - [Início](https://amigoocultoja.com.br/): O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.
 - [Política de Privacidade](https://amigoocultoja.com.br/privacidade): Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).
 - [Termos de Uso](https://amigoocultoja.com.br/termos): Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.
+- [Ajuda e suporte](https://amigoocultoja.com.br/suporte): Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.
 
 ## Mais detalhes
 

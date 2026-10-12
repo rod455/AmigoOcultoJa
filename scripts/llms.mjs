@@ -12,6 +12,7 @@ const pages = [
   [`${site.url}/`, 'Início', 'O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.'],
   [`${site.url}/privacidade`, 'Política de Privacidade', 'Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).'],
   [`${site.url}/termos`, 'Termos de Uso', 'Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.'],
+  [`${site.url}/suporte`, 'Ajuda e suporte', 'Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.'],
 ];
 
 const facts = site.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n');

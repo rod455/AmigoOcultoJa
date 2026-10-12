@@ -11,6 +11,8 @@ export type LegalBlock = string | { list: Array<string | [string, string]> };
 
 export type LegalSection = { title: string; body: LegalBlock[] };
 
+export type LegalPath = '/privacidade' | '/termos' | '/suporte';
+
 export const CONTACT_EMAIL = 'amigoocultoja@gmail.com';
 export const LEGAL_UPDATED = '11 de outubro de 2026';
 export const LEGAL_UPDATED_ISO = '2026-10-11';
@@ -30,9 +32,9 @@ export function LegalPage({
   metaDescription: string;
   intro: string;
   sections: LegalSection[];
-  other: { href: '/privacidade' | '/termos'; label: string };
+  other: { href: LegalPath; label: string };
   /** caminho público da página, para o link canônico */
-  path: '/privacidade' | '/termos';
+  path: LegalPath;
 }) {
   const width = useViewportWidth();
   const pad = width >= 600 ? 32 : 20;

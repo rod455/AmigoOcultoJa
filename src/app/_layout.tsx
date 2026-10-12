@@ -31,7 +31,7 @@ if (typeof window !== 'undefined' || Platform.OS !== 'web') {
 }
 
 /** Únicas páginas que os buscadores podem indexar (ver public/sitemap.xml). */
-const PUBLIC_PATHS = new Set(['/', '/privacidade', '/termos']);
+const PUBLIC_PATHS = new Set(['/', '/privacidade', '/termos', '/suporte']);
 
 export default function RootLayout() {
   const pathname = usePathname();
