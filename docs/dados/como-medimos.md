@@ -112,4 +112,4 @@ select id, 'Rodrigo' from auth.users where email = 'SEU_EMAIL_AQUI';
 | Coletor diário (n8n) e retrato diário | a temporada começa em novembro; vale ligar antes dela, com Search Console e Amazon. Pronto para montar quando você quiser |
 | Retenção por coorte | o produto é sazonal (uma vez por ano); a pergunta certa é "quem organizou em 2026 volta em 2027" |
 | Migalha do último passo (crash nativo) | os painéis das lojas cobrem crash nativo; erros de JavaScript já estão em `app_errors` |
-| Aviso de "versão nova" no app | com EAS Update, as correções chegam sem loja |
+| Aviso de "versão nova" no app | entra se alguém ficar muitas versões atrás; hoje cada versão passa pela loja |

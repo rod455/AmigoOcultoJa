@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Conferência antes do build dos apps. Roda sozinha no EAS (eas-build-pre-install)
-// e à mão com `npm run conferir:app` (acrescente `-- --rede` para testar os endereços).
-// Só usa o Node puro: no EAS ela roda antes do npm install.
+// Conferência antes do build dos apps. Roda no Codemagic (codemagic.yaml, com
+// APP_PROFILE=production) e à mão com `npm run conferir:app` (acrescente
+// `-- --rede` para testar os endereços). Só usa o Node puro.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,7 +20,7 @@ const env = Object.fromEntries(
 );
 const get = (k) => process.env[k] || env[k] || '';
 for (const k of ['EXPO_PUBLIC_SUPABASE_URL', 'EXPO_PUBLIC_SUPABASE_ANON_KEY', 'EXPO_PUBLIC_BASE_URL']) {
-  if (!get(k)) errors.push(`${k} está vazia (.env ou variável do EAS)`);
+  if (!get(k)) errors.push(`${k} está vazia (.env ou variável do Codemagic)`);
 }
 // 2. Endereço final, sem salto: o apex é o principal e o www redireciona para ele
 const base = get('EXPO_PUBLIC_BASE_URL');
@@ -31,8 +31,8 @@ if (base && base !== 'https://amigoocultoja.com.br') {
 // 3. Versão nova de verdade, no build que vai para as lojas
 const app = JSON.parse(read('app.json')).expo;
 const published = JSON.parse(read('docs/lojas/publicadas.json'));
-const profile = process.env.EAS_BUILD_PROFILE || process.env.EXPO_PUBLIC_APP_PROFILE || '';
-const platform = process.env.EAS_BUILD_PLATFORM || '';
+const profile = process.env.APP_PROFILE || '';
+const platform = process.env.APP_PLATFORM || '';
 if (profile === 'production') {
   for (const p of platform ? [platform] : ['ios', 'android']) {
     if ((published[p] ?? []).includes(app.version)) {

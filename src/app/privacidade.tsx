@@ -71,7 +71,6 @@ const sections: LegalSection[] = [
           ['Resend:', 'envio dos e-mails da conta, como confirmação de cadastro e nova senha.'],
           ['Google:', 'login com Google e as fontes de texto do site.'],
           ['Apple:', 'login com Apple no iPhone, para quem escolher essa opção.'],
-          ['Expo:', 'distribuição de atualizações do aplicativo para iPhone e Android.'],
           ['Lojas parceiras, como a Amazon:', 'quando você toca em um link de presente, a loja recebe a visita com a nossa identificação de afiliado. A partir daí vale a política de privacidade da loja.'],
           ['WhatsApp:', 'só quando você mesmo escolhe enviar o convite por lá.'],
         ],

@@ -1,0 +1,220 @@
+# Amigo Oculto Já! · iPhone e Android pelo Codemagic. Guia: docs/apps.md.
+#
+# O app é Expo com geração nativa (CNG): as pastas ios/ e android/ não estão no
+# repositório, nascem a cada build com `expo prebuild` a partir do app.json.
+# Por isso nada de editar Xcode ou Gradle à mão: mudança nativa vai no app.json.
+#
+# Configuração que mora no painel do Codemagic (Team settings), não aqui:
+#   - Integração App Store Connect chamada  asc-amigoocultoja
+#   - Code signing identities:
+#       certificado iOS Apple Distribution do time GGM89XNN4S
+#       perfil App Store de br.com.amigoocultoja.app (com Sign In with Apple
+#       e Associated Domains)
+#       keystore Android com o nome de referência  amigoocultoja-upload
+#   - Grupo de variáveis  google_play  com GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+# As variáveis EXPO_PUBLIC_* não são segredo e vêm do .env do repositório.
+
+definitions:
+  env_comum: &env_comum
+    node: 22
+    vars: &vars_comuns
+      BUNDLE_ID: br.com.amigoocultoja.app
+      PACKAGE_NAME: br.com.amigoocultoja.app
+      APP_STORE_APPLE_ID: 6821636982
+      APP_PROFILE: production
+
+  scripts:
+    - &instalar
+      name: Instalar dependências
+      script: npm ci
+
+    - &conferir
+      name: Typecheck, testes e conferência do app
+      script: |
+        npm run typecheck
+        npm test
+        node scripts/conferir-app.mjs
+
+    # ---------------- Android ----------------
+    - &android_numero
+      name: Android · número de build (versionCode)
+      script: |
+        set -e
+        ULTIMO=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME" 2>/dev/null | tail -1 || true)
+        case "$ULTIMO" in ''|*[!0-9]*) echo "Play não respondeu um número (\"$ULTIMO\"); usando 0"; ULTIMO=0 ;; esac
+        VC=$((ULTIMO + 1))
+        # nunca abaixo do contador do Codemagic, para dois envios não disputarem o mesmo número
+        if [ -n "$BUILD_NUMBER" ] && [ "$BUILD_NUMBER" -gt "$VC" ]; then VC=$BUILD_NUMBER; fi
+        echo "ANDROID_VERSION_CODE=$VC" >> $CM_ENV
+        echo "versionCode deste envio: $VC"
+
+    - &android_prebuild
+      name: Android · gerar projeto nativo
+      script: APP_BUILD_NUMBER=$ANDROID_VERSION_CODE npx expo prebuild --platform android --clean --no-install
+
+    - &android_aab
+      name: Android · compilar e assinar o .aab
+      script: |
+        set -e
+        cd android
+        ./gradlew bundleRelease \
+          -Pandroid.injected.signing.store.file="$CM_KEYSTORE_PATH" \
+          -Pandroid.injected.signing.store.password="$CM_KEYSTORE_PASSWORD" \
+          -Pandroid.injected.signing.key.alias="$CM_KEY_ALIAS" \
+          -Pandroid.injected.signing.key.password="$CM_KEY_PASSWORD"
+        ls -la app/build/outputs/bundle/release/
+
+    # ---------------- iPhone ----------------
+    - &ios_numero
+      name: iPhone · número de build (CFBundleVersion)
+      script: |
+        set -e
+        ULTIMO=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null | tail -1 || true)
+        case "$ULTIMO" in ''|*[!0-9]*) echo "App Store Connect não respondeu um número (\"$ULTIMO\"); usando 0"; ULTIMO=0 ;; esac
+        BN=$((ULTIMO + 1))
+        if [ -n "$BUILD_NUMBER" ] && [ "$BUILD_NUMBER" -gt "$BN" ]; then BN=$BUILD_NUMBER; fi
+        echo "IOS_BUILD_NUMBER=$BN" >> $CM_ENV
+        echo "build do iPhone deste envio: $BN"
+
+    - &ios_prebuild
+      name: iPhone · gerar projeto nativo e pods
+      script: |
+        set -e
+        APP_BUILD_NUMBER=$IOS_BUILD_NUMBER npx expo prebuild --platform ios --clean --no-install
+        cd ios && pod install
+
+    - &ios_assinatura
+      name: iPhone · perfis de assinatura (e conferir as capabilities)
+      script: |
+        set -e
+        xcode-project use-profiles
+        # Perfil emitido antes de a capability entrar no App ID baixa normalmente
+        # e só quebra no fim do archive. Aqui falha cedo e diz o que fazer.
+        ACHOU=0
+        for P in "$HOME/Library/MobileDevice/Provisioning Profiles/"*.mobileprovision; do
+          XML=$(security cms -D -i "$P" 2>/dev/null) || continue
+          echo "$XML" | grep -q "$BUNDLE_ID" || continue
+          ACHOU=1
+          for CAP in com.apple.developer.applesignin com.apple.developer.associated-domains; do
+            if ! echo "$XML" | grep -q "$CAP"; then
+              echo "O perfil $(basename "$P") não tem $CAP."
+              echo "Conserto: developer.apple.com > Identifiers > $BUNDLE_ID > marque a capability,"
+              echo "gere o perfil App Store de novo e substitua em Codemagic > Code signing identities."
+              exit 1
+            fi
+          done
+        done
+        [ "$ACHOU" = 1 ] || { echo "Nenhum perfil para $BUNDLE_ID em Code signing identities."; exit 1; }
+        echo "Perfil com Sign In with Apple e Associated Domains: ok"
+
+    - &ios_ipa
+      name: iPhone · compilar o .ipa
+      script: |
+        set -e
+        WS=$(ls -d ios/*.xcworkspace | head -1)
+        SCHEME=$(basename "$WS" .xcworkspace)
+        xcodebuild -version
+        echo "workspace $WS · scheme $SCHEME"
+        if ! xcode-project build-ipa --workspace "$WS" --scheme "$SCHEME"; then
+          # o wrapper devolve só "status code 65"; o erro de verdade está no log do xcodebuild
+          echo "---- últimas linhas com erro do xcodebuild ----"
+          grep -h -E "error:|fatal error|ld: " /tmp/xcodebuild_logs/*.log | tail -40 || true
+          exit 1
+        fi
+
+workflows:
+  # Um clique, os dois apps. Android primeiro (é o mais previsível); se o
+  # iPhone falhar, nada é publicado.
+  lojas:
+    name: Lojas (iPhone e Android)
+    instance_type: mac_mini_m2
+    max_build_duration: 90
+    integrations:
+      app_store_connect: asc-amigoocultoja
+    environment:
+      <<: *env_comum
+      xcode: latest
+      cocoapods: default
+      java: 17
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: br.com.amigoocultoja.app
+      android_signing:
+        - amigoocultoja-upload
+      groups:
+        - google_play
+    scripts:
+      - *instalar
+      - *conferir
+      - *android_numero
+      - *android_prebuild
+      - *android_aab
+      - *ios_numero
+      - *ios_prebuild
+      - *ios_assinatura
+      - *ios_ipa
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false
+
+  ios-testflight:
+    name: iPhone (TestFlight)
+    instance_type: mac_mini_m2
+    max_build_duration: 75
+    integrations:
+      app_store_connect: asc-amigoocultoja
+    environment:
+      <<: *env_comum
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: br.com.amigoocultoja.app
+    scripts:
+      - *instalar
+      - *conferir
+      - *ios_numero
+      - *ios_prebuild
+      - *ios_assinatura
+      - *ios_ipa
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  android-play:
+    name: Android (Play, faixa interna)
+    instance_type: linux_x2
+    max_build_duration: 60
+    environment:
+      <<: *env_comum
+      java: 17
+      android_signing:
+        - amigoocultoja-upload
+      groups:
+        - google_play
+    scripts:
+      - *instalar
+      - *conferir
+      - *android_numero
+      - *android_prebuild
+      - *android_aab
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+    publishing:
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false

@@ -2,13 +2,13 @@
 
 > A surpresa fica. A complicação sai.
 >
-> Apps (iPhone e Android, EAS): `docs/apps.md` · ficha da versão: `docs/lojas/novidades-1.0.md` · medição: `docs/dados/como-medimos.md`.
+> Apps (iPhone e Android, Codemagic): `docs/apps.md` · ficha da versão: `docs/lojas/novidades-1.0.md` · medição: `docs/dados/como-medimos.md`.
 >
 > Marca e regras de uso em `docs/marca.md` (guia completo e arquivos originais em `docs/marca/`). O identificador técnico antigo (`tirei`) continua só em nomes internos, como o projeto Supabase e a pasta do repositório.
 
 App do amigo oculto: o organizador cadastra os nomes, o app sorteia e gera um link para o grupo do WhatsApp. Cada participante abre o link, toca no próprio nome, descobre quem tirou e, na mesma tela, escolhe o próprio presente (com links de afiliado).
 
-Este repositório tem **um código só** para web, iOS e Android (Expo + Expo Router). A versão web é a que está no ar para testes; os apps nativos saem do mesmo projeto com `eas build`.
+Este repositório tem **um código só** para web, iOS e Android (Expo + Expo Router). A versão web é a que está no ar para testes; os apps nativos saem do mesmo projeto pelo Codemagic (`codemagic.yaml`).
 
 Referências: a especificação de produto é o arquivo `tirei-spec-desenvolvimento.md` (fora do repo); a identidade visual está em `docs/marca.md`.
 
@@ -54,7 +54,7 @@ iOS / Android (Expo Go ou development build):
 
 ```bash
 npx expo start                  # escaneie o QR com o Expo Go
-npx eas-cli@latest build -p ios --profile preview   # quando for para as lojas
+# lojas: Codemagic › workflow "Lojas (iPhone e Android)" (docs/apps.md)
 ```
 
 ## Backend (Supabase)

@@ -45,8 +45,7 @@
     "lint": "expo lint",
     "export:web": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
     "build": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
-    "conferir:app": "node scripts/conferir-app.mjs",
-    "eas-build-pre-install": "node scripts/conferir-app.mjs"
+    "conferir:app": "node scripts/conferir-app.mjs"
   },
   "private": true
 }
