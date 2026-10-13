@@ -37,7 +37,7 @@ Os nomes abaixo precisam bater exatamente com o `codemagic.yaml`.
 ### 2.1 App
 Codemagic › **Add application** › GitHub › `rod455/AmigoOcultoJa` ›
 tipo **React Native** (ou "Other") › ele encontra o `codemagic.yaml` no
-branch `claude/sleepy-cannon-d8q3dt`.
+branch `main`.
 
 ### 2.2 Integração App Store Connect: `asc-amigoocultoja`
 1. App Store Connect › **Usuários e acesso › Integrações › App Store Connect
@@ -92,7 +92,7 @@ cd C:\Apps\amigoocultoja
 git config --global core.longpaths true
 git clone https://github.com/rod455/AmigoOcultoJa.git app
 cd app
-git checkout claude/sleepy-cannon-d8q3dt
+git checkout main
 npm ci
 npx expo prebuild -p android
 ```
@@ -109,8 +109,9 @@ No PowerShell do Windows, um comando por linha (`&&` não funciona).
 
 ## 4. O dia a dia
 
-Codemagic › o app › **Start new build** › branch
-`claude/sleepy-cannon-d8q3dt` › workflow:
+Codemagic › o app › **Start new build** › branch **`main`** › workflow
+(toda mudança, do site e dos apps, chega à `main`; é dela que saem os
+builds das duas lojas):
 
 | workflow | máquina | gera | publica em |
 |---|---|---|---|

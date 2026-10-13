@@ -33,6 +33,8 @@ Run lint and typecheck before declaring any task done.
 
 Decided by the owner on 12/10/2026: native builds, signing and store uploads run on **Codemagic** (`codemagic.yaml`, guide in `docs/apps.md`), not EAS. Each build runs `npx expo prebuild` to generate `ios/` and `android/` from `app.json`; the build number comes from `APP_BUILD_NUMBER` via `app.config.js`. Do not add `eas.json` or EAS workflows back unless the owner asks. Over-the-air updates (EAS Update) are not set up.
 
+**Branch:** every change (site and apps, iOS and Android) is pushed to `main` as well, always. `main` is the Vercel production branch and the branch Codemagic builds both apps from.
+
 ## Rules
 
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
