@@ -199,7 +199,7 @@ workflows:
 
   android-play:
     name: Android (Play, faixa interna)
-    instance_type: linux_x2
+    instance_type: mac_mini_m2  # o plano gratuito só libera o Mac mini M2 (Linux é pago)
     max_build_duration: 60
     environment:
       <<: *env_comum

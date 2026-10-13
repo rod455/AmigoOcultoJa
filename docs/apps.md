@@ -117,7 +117,7 @@ builds das duas lojas):
 |---|---|---|---|
 | `lojas` | Mac mini M2 | .aab e .ipa | Play (interna) e TestFlight |
 | `ios-testflight` | Mac mini M2 | .ipa | TestFlight |
-| `android-play` | Linux | .aab | Play (interna) |
+| `android-play` | Mac mini M2 (o plano gratuito não libera Linux) | .aab | Play (interna) |
 
 Cada um roda, na ordem: `npm ci`, typecheck, testes e
 `scripts/conferir-app.mjs`; pergunta à loja o último número de build;
