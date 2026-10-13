@@ -22,9 +22,11 @@ export default function Root({ children }: PropsWithChildren) {
         <meta property="og:image:height" content="630" />
         <meta property="og:locale" content="pt_BR" />
         <meta property="og:type" content="website" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
+        {/* ícone do app na aba; o ?v= força o navegador a trocar o ícone antigo guardado em cache */}
+        <link rel="icon" href="/favicon.ico?v=2" sizes="48x48" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=2" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
+        <link rel="manifest" href="/manifest.json?v=2" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
