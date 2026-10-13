@@ -46,6 +46,10 @@ export default function Pronto() {
         <View style={{ gap: 6 }}>
           <Button label="Enviar convite no WhatsApp" variant="whatsapp" icon={<WhatsApp />} onPress={share} disabled={!panel} />
           <Button label={copied ? 'Link copiado!' : 'Copiar link'} variant="ghost" onPress={copy} />
+          {/* quem organiza também participa: neste aparelho o nome já está assumido e o link abre direto no resultado */}
+          {panel?.participants.some((p) => p.is_organizer) ? (
+            <Button label="Ver quem eu tirei" variant="ghost" onPress={() => router.push({ pathname: '/g/[codigo]', params: { codigo: code } })} />
+          ) : null}
           {shared ? (
             <Link href={{ pathname: '/painel/[codigo]', params: { codigo: code } }} asChild>
               <Button label="Ver quem já entrou" variant="ghost" />
