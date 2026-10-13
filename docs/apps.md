@@ -15,7 +15,7 @@ promoção para produção é um clique no console de cada loja.**
 |---|---|
 | `scripts/build-native.mjs`, `SO_NO_SITE`, `index.html` na raiz | não existe: o app roda telas nativas, não um site empacotado |
 | pastas `ios/` e `android/` versionadas, editadas no Xcode e no Gradle | **geradas a cada build** (`npx expo prebuild`) e fora do git. Mudança nativa vai no `app.json`; nunca edite as pastas geradas |
-| versão em três lugares (`content.ts`, `build.gradle`, `pbxproj`) | **um lugar**: `expo.version` no `app.json`. O app lê a versão de lá para a medição |
+| versão em três lugares (`content.ts`, `build.gradle`, `pbxproj`) | **um lugar**: `expo.version` no `app.json`. Quando uma loja anda na frente da outra, `expo.android.version` ou `expo.ios.version` vale sobre ela (ex.: Android 1.0.1 enquanto o iPhone 1.0.0 está na revisão). A medição lê a versão gravada no binário |
 | piso de `versionCode` no `gradle.properties` | o passo do yaml pergunta à loja o último número e soma 1, nunca abaixo do contador do Codemagic; vira `APP_BUILD_NUMBER`, que o `app.config.js` aplica no `prebuild`. A linha `versionCode deste envio: N` no log é a fonte que vale |
 | `agvtool new-version` | o mesmo mecanismo acima vira o `CFBundleVersion` |
 | `keystore.properties` escrito no CI | o Gradle recebe a assinatura por `-Pandroid.injected.signing.*`, as mesmas variáveis `CM_KEYSTORE_*` |
@@ -177,8 +177,10 @@ sorteio) mora no servidor.
    (`**Árvore do build:** <sha>`). O que entrar depois é da próxima versão.
 3. Rodar o workflow; rodar o roteiro no TestFlight e na faixa interna.
 4. Promover nas lojas. Só então: acrescentar a versão em
-   `docs/lojas/publicadas.json` e subir `expo.version` no `app.json` para a
-   próxima. A conferência recusa build de produção com versão já enviada.
+   `docs/lojas/publicadas.json` e subir a versão no `app.json` para a
+   próxima (`expo.version`, ou `expo.android.version` / `expo.ios.version`
+   se só uma loja andar). A conferência recusa build de produção com versão
+   já enviada para aquela loja.
 5. Sobre um build que nenhum aparelho abriu, a resposta é "sem sinal ainda".
    O segundo sinal é a medição:
    `select app_version, build, platform, count(*) from events where name = 'session_started' group by 1, 2, 3`.

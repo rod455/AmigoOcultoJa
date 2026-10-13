@@ -27,6 +27,7 @@
       }
     },
     "android": {
+      "version": "1.0.1",
       "package": "br.com.amigoocultoja.app",
       "adaptiveIcon": {
         "backgroundColor": "#F6E3DC",

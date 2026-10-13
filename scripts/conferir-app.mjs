@@ -42,9 +42,11 @@ const published = JSON.parse(read('docs/lojas/publicadas.json'));
 const profile = process.env.APP_PROFILE || '';
 const platform = process.env.APP_PLATFORM || '';
 if (profile === 'production') {
+  // cada loja anda no seu passo: android.version / ios.version valem sobre expo.version
   for (const p of platform ? [platform] : ['ios', 'android']) {
-    if ((published[p] ?? []).includes(app.version)) {
-      errors.push(`a versão ${app.version} já foi enviada para ${p}: suba expo.version no app.json`);
+    const v = app[p]?.version ?? app.version;
+    if ((published[p] ?? []).includes(v)) {
+      errors.push(`a versão ${v} já foi enviada para ${p}: suba a versão no app.json (expo.${p}.version ou expo.version)`);
     }
   }
 }
@@ -69,4 +71,5 @@ if (errors.length) {
   console.error(`conferir:app reprovou:\n- ${errors.join('\n- ')}`);
   process.exit(1);
 }
-console.log(`conferir:app ok · versão ${app.version}${profile ? ` · perfil ${profile}` : ''}${platform ? ` · ${platform}` : ''}`);
+const shownVersion = (platform && app[platform]?.version) || app.version;
+console.log(`conferir:app ok · versão ${shownVersion}${profile ? ` · perfil ${profile}` : ''}${platform ? ` · ${platform}` : ''}`);

@@ -37,7 +37,9 @@ export function getDevice(): Promise<Device> {
   return device;
 }
 
-export const appVersion: string | null = Constants.expoConfig?.version ?? null;
+// no app, a versão gravada no binário (cada loja pode estar numa versão: ios.version / android.version)
+export const appVersion: string | null =
+  Platform.OS === 'web' ? (Constants.expoConfig?.version ?? null) : (Application.nativeApplicationVersion ?? Constants.expoConfig?.version ?? null);
 export const appBuild: string | null =
   Platform.OS === 'web' ? (process.env.EXPO_PUBLIC_COMMIT || '').slice(0, 7) || null : Application.nativeBuildVersion;
 /** preview = build de teste interno ou desenvolvimento: fica fora das leituras */
