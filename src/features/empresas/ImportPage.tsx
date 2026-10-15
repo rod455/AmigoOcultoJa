@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import Head from 'expo-router/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, TextInput, View } from 'react-native';
@@ -133,6 +133,8 @@ export function ImportPage() {
   const wide = width >= 860;
   const pad = width >= 600 ? 32 : 20;
 
+  // vindo da página de empresas: "?empresa=ACME" vira o nome dos grupos
+  const { empresa } = useLocalSearchParams<{ empresa?: string }>();
   const [people, setPeople] = useState<Person[]>([]);
   const [source, setSource] = useState<Source>('xlsx');
   const [fileName, setFileName] = useState('');
@@ -155,7 +157,11 @@ export function ImportPage() {
   // volta do login (ou recarregou a página): retoma a importação
   useEffect(() => {
     const d = loadDraft();
-    if (!d) return;
+    if (!d) {
+      const nome = typeof empresa === 'string' ? empresa.trim().slice(0, 26) : '';
+      if (nome) setPrefix(`Amigo secreto ${nome}`);
+      return;
+    }
     setPeople(d.people);
     setSource(d.source);
     setFileName(d.fileName);
@@ -198,7 +204,7 @@ export function ImportPage() {
 
   const usePasted = () => {
     setError('');
-    loaded({ ...readPeople(parseDelimited(pasted)), source: 'colado' }, 'Colado do Excel');
+    loaded({ ...readPeople(parseDelimited(pasted)), source: 'colado' }, 'Lista de nomes');
     setPasting(false);
   };
 
@@ -270,7 +276,7 @@ export function ImportPage() {
             </T>
           </View>
 
-          <Step n={1} title="Baixe o modelo" done={people.length > 0}>
+          <Step n={1} title="Baixe o modelo (se for usar planilha)" done={people.length > 0}>
             <T size={15} color={colors.textSecondary} lineHeight={22}>
               Duas colunas: <T size={15} weight="bold">Nome</T> (obrigatória) e <T size={15} weight="bold">Área</T> (opcional). Não precisa de e-mail, telefone nem CPF.
             </T>
@@ -299,12 +305,12 @@ export function ImportPage() {
             </T>
           </Step>
 
-          <Step n={2} title="Envie a planilha preenchida" done={people.length > 0}>
+          <Step n={2} title="Envie a planilha ou digite os nomes" done={people.length > 0}>
             <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button label={people.length ? 'Enviar outra planilha' : 'Escolher arquivo (.xlsx ou .csv)'} variant={people.length ? 'outline' : 'biz'} onPress={chooseFile} loading={reading} style={{ width: 'auto', paddingHorizontal: 24, height: 50 }} />
               <Pressable accessibilityRole="button" onPress={() => setPasting((v) => !v)} style={{ height: 50, justifyContent: 'center', paddingHorizontal: 6 }}>
                 <T size={15} weight="semibold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
-                  {pasting ? 'Fechar' : 'Ou colar do Excel'}
+                  {pasting ? 'Fechar' : 'Ou digitar / colar os nomes'}
                 </T>
               </Pressable>
             </View>
@@ -314,7 +320,7 @@ export function ImportPage() {
                   value={pasted}
                   onChangeText={setPasted}
                   multiline
-                  placeholder={'Selecione as colunas Nome e Área no Excel, copie e cole aqui.\nAna Souza\tFinanceiro\nBruno Lima\tFinanceiro'}
+                  placeholder={'Um nome por linha. Para separar por área, use ponto e vírgula:\nAna Souza; Financeiro\nBruno Lima; Financeiro\nDiego Rocha; Marketing\n\nTambém dá para colar as colunas direto do Excel.'}
                   placeholderTextColor={colors.textMuted}
                   accessibilityLabel="Colar nomes e áreas"
                   style={{ minHeight: 160, borderWidth: 1.5, borderColor: colors.lineStrong, borderRadius: 14, padding: 14, fontFamily: fonts.regular, fontSize: 15, color: colors.text, textAlignVertical: 'top' }}

@@ -290,7 +290,21 @@ function Campaign({ wide, pad, daysToXmas }: { wide: boolean; pad: number; daysT
 }
 
 /** Topo das páginas. `empresas`: logo azul com o selo "Empresas" (submarca) e botão azul. */
-export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { empresas?: boolean; cta?: string; ctaOrigin?: string }) {
+export function Nav({
+  empresas = false,
+  cta = CTA,
+  ctaOrigin = 'lp_nav',
+  ctaHref = '/criar/nome',
+  ctaShort,
+}: {
+  empresas?: boolean;
+  cta?: string;
+  ctaOrigin?: string;
+  /** para onde o botão do topo leva (na página de empresas: a criação da empresa) */
+  ctaHref?: '/criar/nome' | '/empresas/importar';
+  /** texto do botão no celular */
+  ctaShort?: string;
+}) {
   const wide = useViewportWidth() >= 860;
   return (
     <View style={{ height: wide ? 100 : 76, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -339,10 +353,10 @@ export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { emp
             </Pressable>
           </Link>
         ) : null}
-        <Link href="/criar/nome" asChild>
+        <Link href={ctaHref} asChild>
           <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: ctaOrigin })} style={{ height: wide ? 44 : 36, paddingHorizontal: wide ? 18 : 14, borderRadius: 22, backgroundColor: empresas ? biz.accent : colors.accent, justifyContent: 'center' }}>
             <T size={15} weight="bold" color="#FFFFFF">
-              {wide ? cta : empresas ? 'Criar grupo' : cta === CTA ? 'Criar grupo' : cta}
+              {wide ? cta : ctaShort ?? (empresas ? 'Criar grupo' : cta === CTA ? 'Criar grupo' : cta)}
             </T>
           </Pressable>
         </Link>

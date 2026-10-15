@@ -1,21 +1,61 @@
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import Head from 'expo-router/head';
-import React from 'react';
+import React, { useState } from 'react';
 import { Linking, Pressable, ScrollView, View } from 'react-native';
 import { Bell, Check, EyeOff, Gift } from '@/components/icons';
-import { BrandSymbol, Button, T } from '@/components/ui';
-import { Audience, Faq, Feature, Footer, HeroForm, MAX_W, Nav, Section, Steps } from '@/features/landing/LandingPage';
+import { BrandSymbol, Button, T, UnderlineInput } from '@/components/ui';
+import { Audience, Faq, Feature, Footer, MAX_W, Nav, Section, Steps } from '@/features/landing/LandingPage';
 import { track } from '@/lib/analytics';
 import { useViewportWidth } from '@/lib/useViewportWidth';
 import content from '@/content/empresas.json';
 import site from '@/content/site.json';
-import { biz, colors } from '@/theme/tokens';
+import { biz, colors, fonts } from '@/theme/tokens';
 
 type Pair = [string, string];
 
 const URL = `${site.url}${content.path}`;
-const CTA = 'Criar o grupo da equipe';
-const MICROCOPY = 'Grátis · sem instalar nada · quem participa não se cadastra';
+// tudo nesta página leva à criação da empresa (/empresas/importar): lista de
+// pessoas por planilha ou digitada, um grupo por área e o painel do RH
+const CTA = 'Criar o amigo secreto da empresa';
+const START = '/empresas/importar';
+const MICROCOPY = 'Grátis · planilha ou lista de nomes · um grupo por área · quem participa não se cadastra';
+
+/** Início do fluxo da empresa: o nome dela já vira o nome dos grupos na importação. */
+function CompanyStart({ origin }: { origin: string }) {
+  const width = useViewportWidth();
+  const row = width >= 600;
+  const [name, setName] = useState('');
+  const go = () => {
+    const empresa = name.trim().replace(/\s+/g, ' ').slice(0, 30);
+    track('create_started', { origem: origin, com_nome: empresa.length > 0 });
+    router.push(empresa ? { pathname: START, params: { empresa } } : START);
+  };
+  return (
+    <View style={{ gap: 8 }}>
+      <View style={{ flexDirection: row ? 'row' : 'column', gap: 10, alignItems: row ? 'flex-end' : 'stretch' }}>
+        <View style={{ flex: row ? 1 : undefined, gap: 4 }}>
+          <T size={13} weight="semibold" color={colors.textSecondary} nativeID={`lbl-${origin}`}>
+            Nome da empresa
+          </T>
+          <UnderlineInput
+            value={name}
+            onChangeText={setName}
+            placeholder="ACME Logística"
+            maxLength={30}
+            returnKeyType="go"
+            onSubmitEditing={go}
+            accessibilityLabelledBy={`lbl-${origin}`}
+            style={{ fontSize: 20, fontFamily: fonts.semibold, height: 48 }}
+          />
+        </View>
+        <Button label="Começar" variant="biz" onPress={go} style={{ width: row ? 200 : '100%' }} />
+      </View>
+      <T size={13} color={colors.textSecondary}>
+        {MICROCOPY}
+      </T>
+    </View>
+  );
+}
 const CONTACT = `mailto:${site.email}?subject=${encodeURIComponent('Amigo secreto da empresa')}&body=${encodeURIComponent(
   'Olá! Somos da empresa ____, com cerca de ___ pessoas. Queremos organizar o amigo secreto e gostaríamos de saber sobre: ',
 )}`;
@@ -91,7 +131,7 @@ export function EmpresasPage() {
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad }}>
-          <Nav empresas cta={CTA} ctaOrigin="empresas_nav" />
+          <Nav empresas cta="Criar para a empresa" ctaShort="Começar" ctaHref={START} ctaOrigin="empresas_nav" />
 
           {/* HERO */}
           <View style={{ flexDirection: wide ? 'row' : 'column', alignItems: wide ? 'center' : 'stretch', gap: wide ? 56 : 32, paddingTop: wide ? 48 : 20, paddingBottom: wide ? 72 : 40 }}>
@@ -108,15 +148,8 @@ export function EmpresasPage() {
               <T size={wide ? 20 : 17} color={colors.textSecondary} lineHeight={wide ? 30 : 26}>
                 Um link no WhatsApp, no Slack, no Teams ou no e-mail. Cada pessoa descobre quem tirou e já deixa a lista de presentes. Ninguém se cadastra, ninguém instala nada e nem o RH vê quem tirou quem.
               </T>
-              <HeroForm origin="empresas_hero" placeholder="Amigo secreto do time" cta={CTA} microcopy={MICROCOPY} empresas />
+              <CompanyStart origin="empresas_hero" />
               <View style={{ gap: 6 }}>
-                <Link href="/empresas/importar" asChild>
-                  <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: 'empresas_importar_hero' })} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
-                    <T size={16} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
-                      Vários times? Importe uma planilha e crie um grupo por área
-                    </T>
-                  </Pressable>
-                </Link>
                 <Pressable accessibilityRole="link" onPress={() => contact('empresas_hero')} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
                   <T size={14} weight="semibold" color={colors.textSecondary} style={{ textDecorationLine: 'underline' }}>
                     Mais de 50 pessoas num sorteio só? Fale com a gente
@@ -172,14 +205,9 @@ export function EmpresasPage() {
               ]}
             />
             <View style={{ alignItems: wide ? 'flex-start' : 'stretch', gap: 8, paddingTop: 8 }}>
-              <View style={{ flexDirection: wide ? 'row' : 'column', gap: 10 }}>
-                <Link href="/criar/nome" asChild>
-                  <Button label={CTA} variant="biz" onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 320 : '100%' }} />
-                </Link>
-                <Link href="/empresas/importar" asChild>
-                  <Button label="Importar planilha da empresa" variant="outline" onPress={() => track('create_started', { origem: 'empresas_importar_passos' })} style={{ width: wide ? 300 : '100%' }} />
-                </Link>
-              </View>
+              <Link href={START} asChild>
+                <Button label={CTA} variant="biz" onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 360 : '100%' }} />
+              </Link>
               <T size={13} color={colors.textSecondary}>
                 {MICROCOPY}
               </T>
@@ -232,10 +260,10 @@ export function EmpresasPage() {
               Quem será do time?
             </T>
             <T size={wide ? 24 : 19} weight="medium" color="#FFFFFF" lineHeight={wide ? 32 : 26} style={{ maxWidth: 520 }}>
-              Crie o grupo agora e mande o link no canal da equipe.
+              Suba a lista da equipe e mande o link de cada time no canal dele.
             </T>
             <View style={{ paddingTop: 10, flexDirection: wide ? 'row' : 'column', gap: 12, alignItems: wide ? 'center' : 'flex-start' }}>
-              <Link href="/criar/nome" asChild>
+              <Link href={START} asChild>
                 <Pressable
                   accessibilityRole="link"
                   onPress={() => track('create_started', { origem: 'empresas_fechamento' })}

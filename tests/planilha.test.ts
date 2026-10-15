@@ -18,6 +18,19 @@ describe('parseDelimited', () => {
   });
 });
 
+describe('nomes digitados na caixa de texto', () => {
+  it('um nome por linha, sem área', () => {
+    expect(readPeople(parseDelimited('Ana Souza\nBruno Lima\n\nCarla Dias\n')).people.map((p) => p.name)).toEqual(['Ana Souza', 'Bruno Lima', 'Carla Dias']);
+  });
+  it('nome; área, com espaços soltos', () => {
+    expect(readPeople(parseDelimited('Ana Souza; Financeiro\nBruno Lima ;Financeiro\nDiego Rocha;  Marketing')).people).toEqual([
+      { name: 'Ana Souza', area: 'Financeiro' },
+      { name: 'Bruno Lima', area: 'Financeiro' },
+      { name: 'Diego Rocha', area: 'Marketing' },
+    ]);
+  });
+});
+
 describe('readPeople', () => {
   it('acha as colunas pelo cabeçalho, em qualquer ordem e com sinônimos', () => {
     const { people } = readPeople([
