@@ -83,6 +83,30 @@ Como foi feito:
 - **Logo pelo app:** só se envia o logo pelo site (computador ou navegador do celular). No app dá para trocar as cores; o envio do logo pelo app ficaria para depois, porque exige biblioteca nativa nova.
 - **Medição:** `group_branded` (catálogo + migração 0010), o sinal de uso corporativo.
 
+## 4c. Planilha da empresa e painel do RH (15/10/2026)
+
+**Onde:** `/empresas/importar`, só no site.
+
+Passo a passo:
+1. A empresa baixa o modelo (`public/modelos/amigo-secreto-empresa.xlsx` ou `.csv`, gerados por `scripts/modelo-planilha.py`). As colunas são Nome (obrigatória) e Área (opcional).
+2. Envia o arquivo ou cola direto do Excel.
+3. Confere a prévia:
+   - áreas com menos de 3 pessoas entram juntas em "Outras áreas";
+   - áreas com mais de 50 são divididas em blocos seguidos;
+   - nomes repetidos são apontados, com a opção de manter só um.
+4. Escolhe o nome dos grupos, o valor e a data.
+5. O site cria e sorteia um grupo por área. A regra de leitura e divisão está em `src/lib/planilha.ts` (testes em `tests/planilha.test.ts`).
+
+**Onde a planilha é lida:** no navegador. O arquivo não sobe; só os nomes vão para os grupos.
+
+**Lote:** os grupos de uma importação ficam num lote (`organizations`, migração 0011), ligado à conta de quem importou.
+
+**Painel do RH:** `/empresas/lote/[id]` mostra o andamento geral e por grupo e os links de cada grupo (copiar, WhatsApp, baixar planilha com todos). Permite aplicar a marca da empresa em todos os grupos de uma vez.
+
+**Medição:**
+- `template_downloaded`: modelo baixado;
+- `batch_imported`: importação concluída, com quantos grupos e pessoas.
+
 ## 5. Próximos passos de aquisição
 
 ### Pessoa física: páginas por intenção de busca

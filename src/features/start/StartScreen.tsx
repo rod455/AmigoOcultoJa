@@ -1,10 +1,10 @@
 import { Link, router, useFocusEffect, usePathname } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { ChevronRight } from '@/components/icons';
 import { BrandSymbol, Button, Logo, Row, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
-import { myGroups, type MyGroup } from '@/lib/api';
+import { myBatches, type MyBatch, myGroups, type MyGroup } from '@/lib/api';
 import { getProfile, type Profile } from '@/lib/auth';
 import { isConfigured } from '@/lib/supabase';
 import { groupMeta } from '@/lib/format';
@@ -13,6 +13,7 @@ import { colors } from '@/theme/tokens';
 /** Tela 1 — Início (SInicio) */
 export function StartScreen() {
   const [groups, setGroups] = useState<MyGroup[]>([]);
+  const [batches, setBatches] = useState<MyBatch[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [checked, setChecked] = useState(false);
   const pathname = usePathname();
@@ -28,6 +29,12 @@ export function StartScreen() {
           if (!alive) return;
           setProfile(p);
           setChecked(true);
+          // importações de planilha (painel do RH): só no site, onde o painel do lote existe
+          if (p && Platform.OS === 'web') {
+            myBatches()
+              .then((b) => alive && setBatches(b))
+              .catch(() => undefined);
+          }
         });
       }
       return () => {
@@ -82,6 +89,30 @@ export function StartScreen() {
         <Title size={36}>Bora organizar o amigo oculto?</Title>
         <Sub>A surpresa fica. A complicação sai. Você monta o grupo e cada um descobre quem tirou por um link no WhatsApp.</Sub>
       </View>
+      {batches.length > 0 ? (
+        <View style={{ paddingBottom: 8 }}>
+          <T size={14} weight="bold" color={colors.textSecondary} style={{ paddingBottom: 4 }}>
+            DA EMPRESA
+          </T>
+          {batches.map((b) => (
+            <Link key={b.id} href={{ pathname: '/empresas/lote/[id]', params: { id: b.id } }} asChild>
+              <Pressable accessibilityRole="link">
+                <Row>
+                  <View style={{ flexGrow: 1 }}>
+                    <T size={17} weight="semibold">
+                      {b.name}
+                    </T>
+                    <T size={13} color={colors.textSecondary}>
+                      {b.groups} {b.groups === 1 ? 'grupo' : 'grupos'} · {b.viewed} de {b.people} viram
+                    </T>
+                  </View>
+                  <ChevronRight />
+                </Row>
+              </Pressable>
+            </Link>
+          ))}
+        </View>
+      ) : null}
       {groups.length > 0 ? (
         <View style={{ paddingBottom: 8 }}>
           <T size={14} weight="bold" color={colors.textSecondary} style={{ paddingBottom: 4 }}>

@@ -22,6 +22,10 @@
     {
       "source": "/r/:id",
       "destination": "/r"
+    },
+    {
+      "source": "/empresas/lote/:id",
+      "destination": "/empresas/lote"
     }
   ],
   "headers": [

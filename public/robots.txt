@@ -31,6 +31,8 @@ Disallow: /entrar
 Disallow: /app
 Disallow: /minha-conta
 Disallow: /auth
+Disallow: /empresas/importar
+Disallow: /empresas/lote/
 
 # Buscadores e todos os outros
 User-agent: *
@@ -45,5 +47,7 @@ Disallow: /entrar
 Disallow: /app
 Disallow: /minha-conta
 Disallow: /auth
+Disallow: /empresas/importar
+Disallow: /empresas/lote/
 
 Sitemap: https://amigoocultoja.com.br/sitemap.xml

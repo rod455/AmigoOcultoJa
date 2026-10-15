@@ -28,7 +28,7 @@ Idioma: português do Brasil. Público: famílias, amigos e equipes de trabalho 
 O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.
 
 - Preço: Grátis para a empresa e para quem participa, sem limite de grupos.
-- Tamanho: Até 50 pessoas por grupo. Equipes maiores criam um grupo por área ou time, sem limite de grupos.
+- Tamanho: Até 50 pessoas por grupo. Para a empresa toda, importe uma planilha (Nome e Área) e o site cria um grupo por área de uma vez, com um painel para acompanhar todos.
 - Onde o convite vai: É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet.
 - Instalação: Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional.
 - Dados da equipe: Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail.
@@ -109,7 +109,11 @@ Nada. Criar grupos, sortear, mandar o link, acompanhar o painel e montar a lista
 
 ### Quantas pessoas podem participar?
 
-Até 50 pessoas por grupo. Para equipes maiores, crie um grupo por área ou time; não há limite de grupos. Se vocês precisam de um único sorteio com mais de 50 pessoas, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+Até 50 pessoas por grupo. Para equipes maiores, baixe o modelo de planilha em amigoocultoja.com.br/empresas/importar, preencha com o nome e a área de cada pessoa e envie: o site cria um grupo por área (áreas acima de 50 são divididas) e mostra todos num painel só. Se vocês precisam de um único sorteio com mais de 50 pessoas, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+
+### Dá para importar a lista de funcionários de uma planilha?
+
+Dá. Em amigoocultoja.com.br/empresas/importar, baixe o modelo (Excel ou CSV), preencha as colunas Nome e Área e envie o arquivo, ou cole direto do Excel. Antes de criar, você vê a prévia de cada grupo: áreas com menos de 3 pessoas entram juntas em "Outras áreas", áreas com mais de 50 são divididas e nomes repetidos são apontados. Depois, um painel mostra o andamento de todos os grupos e os links para mandar a cada time.
 
 ### Funciona no Slack, no Teams ou por e-mail?
 

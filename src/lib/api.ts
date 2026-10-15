@@ -76,6 +76,8 @@ export type Panel = {
     max_version: number;
     /** marca da empresa (groups.theme); ler com parseBrand */
     brand?: unknown;
+    /** lote da empresa (importação de planilha) a que o grupo pertence */
+    batch_id?: string | null;
   };
   participants: Array<{
     id: string;
@@ -254,6 +256,49 @@ export async function removeGroupLogo(path: string): Promise<void> {
   await supabase().storage.from('group-logos').remove([path]).catch(() => undefined);
 }
 
+/* ---------------------------------------------------------------- */
+/* Lote da empresa (importação de planilha, migração 0011)           */
+/* ---------------------------------------------------------------- */
+
+export type BatchGroup = {
+  id: string;
+  code: string;
+  name: string;
+  budget_cents: number | null;
+  exchange_at: string | null;
+  brand?: unknown;
+  total: number;
+  opened: number;
+  viewed: number;
+  list_ready: number;
+};
+export type BatchPanel = { batch: { id: string; name: string; created_at: string }; groups: BatchGroup[] };
+export type MyBatch = { id: string; name: string; created_at: string; groups: number; people: number; viewed: number };
+
+/** Cria o lote (precisa de conta logada) e devolve o id. */
+export async function createBatch(name: string): Promise<string> {
+  return rpc<string>('rpc_create_batch', { p_name: name });
+}
+
+/** Liga um grupo recém-criado ao lote. */
+export async function attachGroup(batchId: string, code: string): Promise<void> {
+  const key = await getDeviceKey();
+  await rpc<null>('rpc_attach_group', { p_batch: batchId, p_code: code, p_key: key });
+}
+
+export async function getBatchPanel(batchId: string): Promise<BatchPanel> {
+  return rpc<BatchPanel>('rpc_batch_panel', { p_batch: batchId });
+}
+
+export async function myBatches(): Promise<MyBatch[]> {
+  return (await rpc<MyBatch[] | null>('rpc_my_batches', {})) ?? [];
+}
+
+/** Marca da empresa em todos os grupos do lote. `null` volta ao visual padrão. */
+export async function setBatchBrand(batchId: string, brand: { name?: string; logo?: string; primary: string; secondary?: string } | null): Promise<unknown> {
+  return rpc<unknown>('rpc_batch_set_brand', { p_batch: batchId, p_brand: brand });
+}
+
 export async function getGroup(code: string): Promise<PublicGroup> {
   return rpc<PublicGroup>('rpc_get_group', { p_code: code });
 }
@@ -348,6 +393,12 @@ export function friendlyError(e: unknown): string {
         return 'O máximo é 50 pessoas.';
       case 'DUPLICATE':
         return e.message || 'Tem nome repetido. Inclua o sobrenome.';
+      case 'LOGIN_REQUIRED':
+        return 'Entre na sua conta para continuar.';
+      case 'NOT_BATCH_MEMBER':
+        return 'Esses grupos são de outra conta. Entre com a conta que fez a importação.';
+      case 'TOO_MANY_BATCHES':
+        return 'Muitas importações hoje. Tente de novo amanhã ou fale com a gente.';
       case 'LOGO_NOT_ALLOWED':
         return 'Para enviar o logo, entre com a mesma conta que criou o grupo.';
       case 'LOGO_UPLOAD_FAILED':

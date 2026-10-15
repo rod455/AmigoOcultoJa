@@ -109,11 +109,20 @@ export function EmpresasPage() {
                 Um link no WhatsApp, no Slack, no Teams ou no e-mail. Cada pessoa descobre quem tirou e já deixa a lista de presentes. Ninguém se cadastra, ninguém instala nada e nem o RH vê quem tirou quem.
               </T>
               <HeroForm origin="empresas_hero" placeholder="Amigo secreto do time" cta={CTA} microcopy={MICROCOPY} empresas />
-              <Pressable accessibilityRole="link" onPress={() => contact('empresas_hero')} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
-                <T size={15} weight="semibold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
-                  Mais de 50 pessoas num sorteio só? Fale com a gente
-                </T>
-              </Pressable>
+              <View style={{ gap: 6 }}>
+                <Link href="/empresas/importar" asChild>
+                  <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: 'empresas_importar_hero' })} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
+                    <T size={16} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
+                      Vários times? Importe uma planilha e crie um grupo por área
+                    </T>
+                  </Pressable>
+                </Link>
+                <Pressable accessibilityRole="link" onPress={() => contact('empresas_hero')} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
+                  <T size={14} weight="semibold" color={colors.textSecondary} style={{ textDecorationLine: 'underline' }}>
+                    Mais de 50 pessoas num sorteio só? Fale com a gente
+                  </T>
+                </Pressable>
+              </View>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: wide ? 36 : 24, paddingHorizontal: wide ? 36 : 16, borderRadius: 32, backgroundColor: biz.tint }}>
               <PanelMock scale={wide ? 1 : 0.92} />
@@ -163,9 +172,14 @@ export function EmpresasPage() {
               ]}
             />
             <View style={{ alignItems: wide ? 'flex-start' : 'stretch', gap: 8, paddingTop: 8 }}>
-              <Link href="/criar/nome" asChild>
-                <Button label={CTA} variant="biz" onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 320 : '100%' }} />
-              </Link>
+              <View style={{ flexDirection: wide ? 'row' : 'column', gap: 10 }}>
+                <Link href="/criar/nome" asChild>
+                  <Button label={CTA} variant="biz" onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 320 : '100%' }} />
+                </Link>
+                <Link href="/empresas/importar" asChild>
+                  <Button label="Importar planilha da empresa" variant="outline" onPress={() => track('create_started', { origem: 'empresas_importar_passos' })} style={{ width: wide ? 300 : '100%' }} />
+                </Link>
+              </View>
               <T size={13} color={colors.textSecondary}>
                 {MICROCOPY}
               </T>

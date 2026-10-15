@@ -5,7 +5,7 @@ import { Sheet } from '@/components/Sheet';
 import { Button, ErrorText, T, UnderlineInput } from '@/components/ui';
 import { BrandLogo, GroupBrandHeader, GroupBrandProvider } from '@/features/brand/GroupBrand';
 import { track } from '@/lib/analytics';
-import { friendlyError, removeGroupLogo, setGroupBrand, uploadGroupLogo } from '@/lib/api';
+import { friendlyError, removeGroupLogo, setBatchBrand, setGroupBrand, uploadGroupLogo } from '@/lib/api';
 import { accentFrom, brandLogoUrl, contrast, dominantColor, type GroupBrand, normalizeHex, parseBrand } from '@/lib/brand';
 import { supabaseUrl } from '@/lib/supabase';
 import { colors, fonts } from '@/theme/tokens';
@@ -180,25 +180,36 @@ function Preview({ brand }: { brand: GroupBrand }) {
   );
 }
 
+/** Onde a marca é gravada: num grupo (painel do grupo) ou em todos os grupos de um lote (painel do RH). */
+export type BrandTarget = { kind: 'group'; code: string } | { kind: 'batch'; batchId: string };
+
 /**
- * Folha "Marca da empresa" do painel: logo, nome e cores. O que é salvo vale
- * para todas as telas do grupo (quem é você, você tirou, lista e painel).
+ * Folha "Marca da empresa": logo, nome e cores. O que é salvo vale para todas
+ * as telas do grupo (quem é você, você tirou, lista e painel), ou de todos os
+ * grupos do lote. `logoFolder` é o id do grupo em cuja pasta o logo é enviado;
+ * `shared` = o logo atual pode estar em uso por outros grupos (lote), então
+ * não é apagado ao trocar.
  */
 export function BrandEditor({
-  code,
-  groupId,
+  target,
+  logoFolder,
+  shared = false,
   current: rawCurrent,
   visible,
   onClose,
   onSaved,
 }: {
-  code: string;
-  groupId: string;
+  target: BrandTarget;
+  logoFolder: string;
+  shared?: boolean;
   current: unknown;
   visible: boolean;
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const code = target.kind === 'group' ? target.code : undefined;
+  const persist = (b: { name?: string; logo?: string; primary: string; secondary?: string } | null) =>
+    target.kind === 'group' ? setGroupBrand(target.code, b) : setBatchBrand(target.batchId, b);
   const current = parseBrand(rawCurrent);
   const [name, setName] = useState(current?.name ?? '');
   const [logo, setLogo] = useState<string | null>(current?.logo ?? null);
@@ -236,7 +247,7 @@ export function BrandEditor({
     setUploading(true);
     try {
       const prepared = await prepareLogo(file);
-      const path = await uploadGroupLogo(groupId, prepared.blob, prepared.ext);
+      const path = await uploadGroupLogo(logoFolder, prepared.blob, prepared.ext);
       orphans.current.push(path);
       setLogo(path);
       setSuggested(prepared.suggested);
@@ -258,11 +269,11 @@ export function BrandEditor({
     setSaving(true);
     setError('');
     try {
-      await setGroupBrand(code, { name: name.trim() || undefined, logo: logo ?? undefined, primary, secondary: secondary ?? undefined });
-      track('group_branded', { logo: !!logo, nome: !!name.trim(), secundaria: !!secondary }, { code });
+      await persist({ name: name.trim() || undefined, logo: logo ?? undefined, primary, secondary: secondary ?? undefined });
+      track('group_branded', { logo: !!logo, nome: !!name.trim(), secundaria: !!secondary, lote: target.kind === 'batch' }, { code });
       // o logo salvo deixa de ser órfão; os outros enviados agora e o antigo saem
       orphans.current.filter((p) => p !== logo).forEach((p) => void removeGroupLogo(p));
-      if (current?.logo && current.logo !== logo) void removeGroupLogo(current.logo);
+      if (!shared && current?.logo && current.logo !== logo) void removeGroupLogo(current.logo);
       orphans.current = [];
       onSaved();
       onClose();
@@ -277,10 +288,10 @@ export function BrandEditor({
     setSaving(true);
     setError('');
     try {
-      await setGroupBrand(code, null);
-      track('group_branded', { removida: true }, { code });
+      await persist(null);
+      track('group_branded', { removida: true, lote: target.kind === 'batch' }, { code });
       orphans.current.forEach((p) => void removeGroupLogo(p));
-      if (current?.logo) void removeGroupLogo(current.logo);
+      if (!shared && current?.logo) void removeGroupLogo(current.logo);
       orphans.current = [];
       onSaved();
       onClose();
@@ -309,7 +320,9 @@ export function BrandEditor({
     >
       <View style={{ gap: 22 }}>
         <T size={15} color={colors.textSecondary} lineHeight={21}>
-          O logo e as cores aparecem para todo mundo do grupo: na escolha do nome, no "você tirou", na lista de presentes e neste painel.
+          {target.kind === 'batch'
+            ? 'O logo e as cores valem para todos os grupos desta importação: na escolha do nome, no "você tirou", na lista de presentes e nos painéis.'
+            : 'O logo e as cores aparecem para todo mundo do grupo: na escolha do nome, no "você tirou", na lista de presentes e neste painel.'}
         </T>
 
         {/* logo */}

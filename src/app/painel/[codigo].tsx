@@ -281,7 +281,7 @@ export default function Painel() {
           </Link>
         </View>
 
-        <BrandEditor code={code} groupId={g.id} current={g.brand} visible={branding} onClose={() => setBranding(false)} onSaved={load} />
+        <BrandEditor target={{ kind: 'group', code }} logoFolder={g.id} shared={!!g.batch_id} current={g.brand} visible={branding} onClose={() => setBranding(false)} onSaved={load} />
 
         {/* Folha: ações por pessoa */}
         <Sheet

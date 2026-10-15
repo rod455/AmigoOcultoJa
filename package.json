@@ -26,7 +26,8 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
     "react-native-svg": "^15.15.4",
-    "react-native-web": "^0.21.3"
+    "react-native-web": "^0.21.3",
+    "read-excel-file": "9.3.10"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
