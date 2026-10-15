@@ -9,7 +9,7 @@ import { track } from '@/lib/analytics';
 import { useViewportWidth } from '@/lib/useViewportWidth';
 import content from '@/content/empresas.json';
 import site from '@/content/site.json';
-import { colors } from '@/theme/tokens';
+import { biz, colors } from '@/theme/tokens';
 
 type Pair = [string, string];
 
@@ -91,13 +91,13 @@ export function EmpresasPage() {
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
         <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad }}>
-          <Nav />
+          <Nav empresas cta={CTA} ctaOrigin="empresas_nav" />
 
           {/* HERO */}
           <View style={{ flexDirection: wide ? 'row' : 'column', alignItems: wide ? 'center' : 'stretch', gap: wide ? 56 : 32, paddingTop: wide ? 48 : 20, paddingBottom: wide ? 72 : 40 }}>
             <View style={{ flex: 1, gap: 20 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', height: 36, paddingLeft: 6, paddingRight: 14, borderRadius: 18, backgroundColor: colors.peach }}>
-                <BrandSymbol size={26} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', height: 36, paddingLeft: 6, paddingRight: 14, borderRadius: 18, backgroundColor: biz.tint }}>
+                <BrandSymbol size={26} empresas />
                 <T size={14} weight="bold" color={colors.text}>
                   Para empresas e equipes
                 </T>
@@ -108,20 +108,20 @@ export function EmpresasPage() {
               <T size={wide ? 20 : 17} color={colors.textSecondary} lineHeight={wide ? 30 : 26}>
                 Um link no WhatsApp, no Slack, no Teams ou no e-mail. Cada pessoa descobre quem tirou e já deixa a lista de presentes. Ninguém se cadastra, ninguém instala nada e nem o RH vê quem tirou quem.
               </T>
-              <HeroForm origin="empresas_hero" placeholder="Amigo secreto do time" cta={CTA} microcopy={MICROCOPY} />
+              <HeroForm origin="empresas_hero" placeholder="Amigo secreto do time" cta={CTA} microcopy={MICROCOPY} empresas />
               <Pressable accessibilityRole="link" onPress={() => contact('empresas_hero')} style={{ alignSelf: 'flex-start', paddingVertical: 4 }}>
-                <T size={15} weight="semibold" color={colors.accentDark} style={{ textDecorationLine: 'underline' }}>
+                <T size={15} weight="semibold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
                   Mais de 50 pessoas num sorteio só? Fale com a gente
                 </T>
               </Pressable>
             </View>
-            <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: wide ? 36 : 24, paddingHorizontal: wide ? 36 : 16, borderRadius: 32, backgroundColor: colors.peach }}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: wide ? 36 : 24, paddingHorizontal: wide ? 36 : 16, borderRadius: 32, backgroundColor: biz.tint }}>
               <PanelMock scale={wide ? 1 : 0.92} />
             </View>
           </View>
 
           {/* EM RESUMO (resposta direta para buscadores e assistentes de IA) */}
-          <Section eyebrow="Em resumo" title="Amigo secreto corporativo online, grátis e secreto">
+          <Section eyebrowColor={biz.accentDark} eyebrow="Em resumo" title="Amigo secreto corporativo online, grátis e secreto">
             <View style={{ gap: 20 }}>
               <T size={wide ? 19 : 17} lineHeight={wide ? 29 : 26} style={{ maxWidth: 760 }}>
                 {content.summary}
@@ -142,7 +142,7 @@ export function EmpresasPage() {
           </Section>
 
           {/* DORES DO RH */}
-          <Section eyebrow="O que costuma dar errado" title="Tudo que dá trabalho no amigo secreto da firma, resolvido.">
+          <Section eyebrowColor={biz.accentDark} eyebrow="O que costuma dar errado" title="Tudo que dá trabalho no amigo secreto da firma, resolvido.">
             <View style={{ flexDirection: wide ? 'row' : 'column', flexWrap: 'wrap', columnGap: 32, rowGap: wide ? 32 : 0 }}>
               {(content.pains as Pair[]).map(([t, d], i) => (
                 <View key={t} style={{ width: wide ? '30%' : '100%', flexGrow: 1 }}>
@@ -153,7 +153,7 @@ export function EmpresasPage() {
           </Section>
 
           {/* COMO FUNCIONA */}
-          <Section eyebrow="Como funciona" title="Três passos. O resto acontece sozinho.">
+          <Section eyebrowColor={biz.accentDark} eyebrow="Como funciona" title="Três passos. O resto acontece sozinho.">
             <Steps
               wide={wide}
               items={[
@@ -164,7 +164,7 @@ export function EmpresasPage() {
             />
             <View style={{ alignItems: wide ? 'flex-start' : 'stretch', gap: 8, paddingTop: 8 }}>
               <Link href="/criar/nome" asChild>
-                <Button label={CTA} onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 320 : '100%' }} />
+                <Button label={CTA} variant="biz" onPress={() => track('create_started', { origem: 'empresas_passos' })} style={{ width: wide ? 320 : '100%' }} />
               </Link>
               <T size={13} color={colors.textSecondary}>
                 {MICROCOPY}
@@ -173,20 +173,20 @@ export function EmpresasPage() {
           </Section>
 
           {/* PARA QUEM */}
-          <Section eyebrow="Quem organiza" title="Do RH ao líder do time.">
+          <Section eyebrowColor={biz.accentDark} eyebrow="Quem organiza" title="Do RH ao líder do time.">
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }}>
               {(content.roles as Pair[]).map(([t, d]) => (
-                <Audience key={t} title={t} text={d} />
+                <Audience key={t} title={t} text={d} bg={biz.tint} />
               ))}
             </View>
           </Section>
 
           {/* DICAS (conteúdo útil: buscas "como organizar amigo secreto na empresa") */}
-          <Section eyebrow="Guia rápido" title="Como organizar o amigo secreto da empresa">
+          <Section eyebrowColor={biz.accentDark} eyebrow="Guia rápido" title="Como organizar o amigo secreto da empresa">
             <View style={{ gap: 0 }}>
               {(content.tips as Pair[]).map(([t, d], i) => (
                 <View key={t} style={{ flexDirection: 'row', gap: 16, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.line }}>
-                  <T size={28} weight="extrabold" lineHeight={32} color={colors.accentDark} style={{ width: 36, letterSpacing: -0.6 }}>
+                  <T size={28} weight="extrabold" lineHeight={32} color={biz.accent} style={{ width: 36, letterSpacing: -0.6 }}>
                     {i + 1}
                   </T>
                   <View style={{ flex: 1, gap: 4 }}>
@@ -203,15 +203,15 @@ export function EmpresasPage() {
           </Section>
 
           {/* FAQ */}
-          <Section eyebrow="Dúvidas de RH, TI e jurídico" title="Perguntas frequentes">
+          <Section eyebrowColor={biz.accentDark} eyebrow="Dúvidas de RH, TI e jurídico" title="Perguntas frequentes">
             <Faq items={content.faq as Pair[]} page="empresas" />
           </Section>
         </View>
 
         {/* FECHAMENTO */}
-        <View style={{ width: '100%', backgroundColor: colors.accent, overflow: 'hidden', alignItems: 'center' }}>
+        <View style={{ width: '100%', backgroundColor: biz.accent, overflow: 'hidden', alignItems: 'center' }}>
           <View style={{ position: 'absolute', right: wide ? -40 : -48, bottom: wide ? -150 : -110 }}>
-            <BrandSymbol size={wide ? 420 : 260} big />
+            <BrandSymbol size={wide ? 420 : 260} big empresas />
           </View>
           <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad, paddingTop: wide ? 88 : 56, paddingBottom: wide ? 96 : 190, gap: 16 }}>
             <T size={wide ? 60 : 40} weight="extrabold" color="#FFFFFF" lineHeight={wide ? 64 : 44} style={{ letterSpacing: wide ? -2 : -1.2, maxWidth: 620 }} accessibilityRole="header" aria-level={2}>
@@ -225,7 +225,7 @@ export function EmpresasPage() {
                 <Pressable
                   accessibilityRole="link"
                   onPress={() => track('create_started', { origem: 'empresas_fechamento' })}
-                  style={{ height: 58, paddingHorizontal: 34, borderRadius: 29, backgroundColor: colors.peach, justifyContent: 'center' }}
+                  style={{ height: 58, paddingHorizontal: 34, borderRadius: 29, backgroundColor: biz.tint, justifyContent: 'center' }}
                 >
                   <T size={18} weight="bold" color={colors.text}>
                     {CTA}
@@ -270,7 +270,7 @@ function PanelMock({ scale = 1 }: { scale?: number }) {
   const chip = {
     lista: { label: 'Lista pronta', bg: '#E2F0EA', fg: colors.successText },
     viu: { label: 'Já viu', bg: colors.surfaceAlt, fg: colors.text },
-    falta: { label: 'Não abriu', bg: '#FBE9E4', fg: colors.accentDark },
+    falta: { label: 'Não abriu', bg: '#FBF1E1', fg: colors.warningText },
   } as const;
   const w = Math.round(340 * scale);
   return (
@@ -300,7 +300,7 @@ function PanelMock({ scale = 1 }: { scale?: number }) {
           </T>
         </View>
         <View style={{ height: 8 * scale, borderRadius: 4 * scale, backgroundColor: colors.surfaceAlt, overflow: 'hidden' }}>
-          <View style={{ width: '75%', height: '100%', backgroundColor: colors.accent }} />
+          <View style={{ width: '75%', height: '100%', backgroundColor: biz.accent }} />
         </View>
       </View>
       <View>

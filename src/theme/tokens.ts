@@ -19,6 +19,20 @@ export const colors = {
   hover: '#3A3F47',
 } as const;
 
+/**
+ * Submarca "Amigo Oculto Já! Empresas" (página /empresas): o azul da paleta
+ * de apoio no lugar do vermelho. Mesmo símbolo, mesma tipografia; só a cor
+ * muda, para a empresa reconhecer que a página é para ela.
+ */
+export const biz = {
+  accent: '#1F4BB8',
+  accentDark: '#183B91',
+  /** azul claro: faz o papel do pêssego (fundos de apoio) */
+  tint: '#E3E9F6',
+  /** azul bem claro para chips e realces */
+  tintSoft: '#EEF2FA',
+} as const;
+
 export const fonts = {
   regular: 'Figtree_400Regular',
   medium: 'Figtree_500Medium',

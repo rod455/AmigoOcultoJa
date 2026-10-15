@@ -36,3 +36,13 @@ Os arquivos em `assets/` e `public/` são derivados dos PNGs do kit, só recorta
 - **Logo:** use a imagem. Não redigite o nome em Figtree para imitar o logotipo.
 - **Vocabulário:** grupo, lista de presentes, quem você tirou, quem organiza, enviar convite. Evite wishlist, match, admin, host.
 - **Promessas:** só divulgue o que o código faz. Quem organiza cria conta na hora de sortear, então "sem cadastro" vale apenas para quem participa.
+
+## Submarca "Amigo Oculto Já! Empresas" (15/10/2026)
+
+Usada só na página `/empresas`, para a empresa reconhecer de cara que a página é para ela. É a mesma marca com outra cor, não outro produto: o símbolo, a tipografia e o tom de voz não mudam.
+
+- **Cor:** o azul da paleta de apoio (`tints`) vira a cor principal. Os valores estão em `biz` (`src/theme/tokens.ts`): `#1F4BB8` (botões e destaques), `#183B91` (pressionado e textos de destaque) e `#E3E9F6` (fundo de apoio, no lugar do pêssego). Texto branco sobre `#1F4BB8` tem contraste de cerca de 7,5:1 (AA).
+- **Artes:** `assets/brand/logo-empresas.png`, `simbolo-empresas.png` e `simbolo-grande-empresas.png`. São as artes oficiais com o vermelho trocado pelo azul, mantendo luz e sombra. Não redesenhe: se a arte oficial mudar, gere de novo pela mesma troca de cor.
+- **Assinatura:** no topo da página, o logo azul com o selo "Empresas" (retângulo azul, texto branco).
+- **O rodapé continua com a marca-mãe** (logo vermelho), para dizer que é o mesmo Amigo Oculto Já!.
+- **O fluxo de criar o grupo continua vermelho**, porque é o mesmo produto para todo mundo.

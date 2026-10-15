@@ -19,7 +19,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from './icons';
-import { colors, fonts, layout } from '@/theme/tokens';
+import { biz, colors, fonts, layout } from '@/theme/tokens';
 
 /* ---------------------------------------------------------------- */
 /* Tipografia                                                        */
@@ -179,8 +179,8 @@ export function BackButton({ to }: { to?: string }) {
 
 type ButtonProps = PressableProps & {
   label: string;
-  /** primary = vermelho da marca (ação principal); dark = carvão (secundária) */
-  variant?: 'primary' | 'accent' | 'dark' | 'whatsapp' | 'ghost' | 'outline';
+  /** primary = vermelho da marca (ação principal); dark = carvão (secundária); biz = azul da submarca Empresas */
+  variant?: 'primary' | 'accent' | 'dark' | 'whatsapp' | 'ghost' | 'outline' | 'biz';
   loading?: boolean;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -194,8 +194,10 @@ export function Button({ label, variant = 'primary', loading, icon, disabled, st
         ? colors.text
         : variant === 'whatsapp'
           ? colors.whatsapp
-          : 'transparent';
-  const pressedBg = variant === 'primary' || variant === 'accent' ? colors.accentDark : undefined;
+          : variant === 'biz'
+            ? biz.accent
+            : 'transparent';
+  const pressedBg = variant === 'primary' || variant === 'accent' ? colors.accentDark : variant === 'biz' ? biz.accentDark : undefined;
   const fg = variant === 'ghost' || variant === 'outline' ? colors.text : '#FFFFFF';
   const isDisabled = disabled || loading;
   return (
@@ -355,6 +357,10 @@ const LOGO = require('../../assets/brand/logo.png');
 const LOGO_MONO = require('../../assets/brand/logo-mono.png');
 const SYMBOL = require('../../assets/brand/simbolo.png');
 const SYMBOL_BIG = require('../../assets/brand/simbolo-grande.png');
+// submarca Empresas: as mesmas artes com o vermelho trocado pelo azul (biz.accent)
+const LOGO_BIZ = require('../../assets/brand/logo-empresas.png');
+const SYMBOL_BIZ = require('../../assets/brand/simbolo-empresas.png');
+const SYMBOL_BIG_BIZ = require('../../assets/brand/simbolo-grande-empresas.png');
 const LOGO_RATIO = 960 / 299;
 const SYMBOL_RATIO = 512 / 495;
 
@@ -362,23 +368,23 @@ const SYMBOL_RATIO = 512 / 495;
  * Logotipo oficial (arte do kit, nunca redigitado).
  * `height` define o tamanho; a largura segue a proporção do arquivo.
  */
-export function Logo({ height = 40, mono = false }: { height?: number; mono?: boolean }) {
+export function Logo({ height = 40, mono = false, empresas = false }: { height?: number; mono?: boolean; empresas?: boolean }) {
   return (
     <Image
-      source={mono ? LOGO_MONO : LOGO}
+      source={empresas ? LOGO_BIZ : mono ? LOGO_MONO : LOGO}
       style={{ height, width: Math.round(height * LOGO_RATIO) }}
       resizeMode="contain"
       accessibilityRole="image"
-      accessibilityLabel="Amigo Oculto Já!"
+      accessibilityLabel={empresas ? 'Amigo Oculto Já! Empresas' : 'Amigo Oculto Já!'}
     />
   );
 }
 
 /** Símbolo: os dois papelzinhos com a faixa de olhos e a piscadinha. */
-export function BrandSymbol({ size = 72, big = false, label }: { size?: number; big?: boolean; label?: string }) {
+export function BrandSymbol({ size = 72, big = false, label, empresas = false }: { size?: number; big?: boolean; label?: string; empresas?: boolean }) {
   return (
     <Image
-      source={big ? SYMBOL_BIG : SYMBOL}
+      source={empresas ? (big ? SYMBOL_BIG_BIZ : SYMBOL_BIZ) : big ? SYMBOL_BIG : SYMBOL}
       style={{ width: size, height: Math.round(size / SYMBOL_RATIO) }}
       resizeMode="contain"
       accessibilityRole={label ? 'image' : undefined}

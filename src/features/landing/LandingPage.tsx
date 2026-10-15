@@ -7,7 +7,7 @@ import { Check, Close, EyeOff, WhatsApp } from '@/components/icons';
 import { BrandSymbol, Button, Logo, T, UnderlineInput } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { loadDraft, saveDraft } from '@/lib/device';
-import { colors, fonts } from '@/theme/tokens';
+import { biz, colors, fonts } from '@/theme/tokens';
 import site from '@/content/site.json';
 
 export const MAX_W = 1040;
@@ -289,17 +289,34 @@ function Campaign({ wide, pad, daysToXmas }: { wide: boolean; pad: number; daysT
   );
 }
 
-export function Nav() {
+/** Topo das páginas. `empresas`: logo azul com o selo "Empresas" (submarca) e botão azul. */
+export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { empresas?: boolean; cta?: string; ctaOrigin?: string }) {
   const wide = useViewportWidth() >= 860;
   return (
     <View style={{ height: wide ? 100 : 76, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Link href="/" asChild>
-        <Pressable accessibilityRole="link" accessibilityLabel="Amigo Oculto Já!, início">
-          <Logo height={wide ? 68 : 46} />
+      <Link href={empresas ? '/empresas' : '/'} asChild>
+        <Pressable accessibilityRole="link" accessibilityLabel={empresas ? 'Amigo Oculto Já! Empresas, início' : 'Amigo Oculto Já!, início'} style={{ flexDirection: 'row', alignItems: 'center', gap: wide ? 12 : 8 }}>
+          <Logo height={wide ? 68 : 46} empresas={empresas} />
+          {empresas ? (
+            <View style={{ height: wide ? 30 : 24, paddingHorizontal: wide ? 12 : 8, borderRadius: 8, backgroundColor: biz.accent, justifyContent: 'center' }}>
+              <T size={wide ? 15 : 12} weight="extrabold" color="#FFFFFF" style={{ letterSpacing: 0.2 }}>
+                Empresas
+              </T>
+            </View>
+          ) : null}
         </Pressable>
       </Link>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        {wide ? (
+        {wide && empresas ? (
+          <Link href="/" asChild>
+            <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
+              <T size={15} weight="semibold">
+                Para família e amigos
+              </T>
+            </Pressable>
+          </Link>
+        ) : null}
+        {wide && !empresas ? (
           <Link href="/empresas" asChild>
             <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
               <T size={15} weight="semibold">
@@ -318,9 +335,9 @@ export function Nav() {
           </Link>
         ) : null}
         <Link href="/criar/nome" asChild>
-          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: 'lp_nav' })} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: colors.accent, justifyContent: 'center' }}>
+          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: ctaOrigin })} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: empresas ? biz.accent : colors.accent, justifyContent: 'center' }}>
             <T size={15} weight="bold" color="#FFFFFF">
-              {CTA}
+              {wide || !empresas ? cta : 'Criar grupo'}
             </T>
           </Pressable>
         </Link>
@@ -330,7 +347,7 @@ export function Nav() {
 }
 
 /** Formulário inline: nome do grupo → já entra no passo 2 (pessoas). */
-export function HeroForm({ origin, placeholder = 'Natal da Família', cta = CTA, microcopy = MICROCOPY }: { origin: string; placeholder?: string; cta?: string; microcopy?: string }) {
+export function HeroForm({ origin, placeholder = 'Natal da Família', cta = CTA, microcopy = MICROCOPY, empresas = false }: { origin: string; placeholder?: string; cta?: string; microcopy?: string; empresas?: boolean }) {
   const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   const ref = useRef<TextInput>(null);
@@ -374,7 +391,7 @@ export function HeroForm({ origin, placeholder = 'Natal da Família', cta = CTA,
             style={{ fontSize: 20, fontFamily: fonts.semibold, height: 48 }}
           />
         </View>
-        <Button label={cta} onPress={go} loading={busy} style={{ width: row ? 260 : '100%' }} />
+        <Button label={cta} variant={empresas ? 'biz' : 'primary'} onPress={go} loading={busy} style={{ width: row ? 260 : '100%' }} />
       </View>
       <T size={13} color={colors.textSecondary}>
         {microcopy}
@@ -439,13 +456,13 @@ function WhatsAppBubble() {
   );
 }
 
-export function Section({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
+export function Section({ title, eyebrow, children, eyebrowColor = colors.accentDark }: { title: string; eyebrow: string; children: React.ReactNode; eyebrowColor?: string }) {
   const width = useViewportWidth();
   const wide = width >= 860;
   return (
     <View style={{ paddingVertical: wide ? 56 : 40, gap: 28, borderTopWidth: 1, borderTopColor: colors.line }}>
       <View style={{ gap: 8, maxWidth: 720 }}>
-        <T size={13} weight="bold" color={colors.accentDark} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
+        <T size={13} weight="bold" color={eyebrowColor} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
           {eyebrow}
         </T>
         <T size={wide ? 34 : 28} weight="extrabold" lineHeight={wide ? 40 : 33} style={{ letterSpacing: -0.6 }} accessibilityRole="header" aria-level={2}>
@@ -549,9 +566,9 @@ export function Feature({ icon, title, text, wide }: { icon: React.ReactNode; ti
   );
 }
 
-export function Audience({ title, text, link }: { title: string; text: string; link?: { href: '/empresas'; label: string } }) {
+export function Audience({ title, text, link, bg = colors.peach }: { title: string; text: string; link?: { href: '/empresas'; label: string }; bg?: string }) {
   return (
-    <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: colors.peach, gap: 8 }}>
+    <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: bg, gap: 8 }}>
       <T size={20} weight="bold" accessibilityRole="header" aria-level={3}>
         {title}
       </T>
@@ -561,7 +578,7 @@ export function Audience({ title, text, link }: { title: string; text: string; l
       {link ? (
         <Link href={link.href} asChild>
           <Pressable accessibilityRole="link" style={{ paddingTop: 4 }}>
-            <T size={15} weight="bold" color={colors.accentDark} style={{ textDecorationLine: 'underline' }}>
+            <T size={15} weight="bold" color={biz.accent} style={{ textDecorationLine: 'underline' }}>
               {link.label}
             </T>
           </Pressable>
