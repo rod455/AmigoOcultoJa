@@ -107,6 +107,23 @@ Passo a passo:
 - `template_downloaded`: modelo baixado;
 - `batch_imported`: importação concluída, com quantos grupos e pessoas.
 
+## 4d. Convite individual, vale-presente e entrega (15/10/2026)
+
+**Convite individual** (migração 0013):
+- Opcional por grupo. Cada pessoa recebe `/g/CODIGO?c=<código>`, e sem o código não dá para escolher o nome.
+- O painel do grupo tem copiar, WhatsApp e planilha por pessoa.
+- O painel da empresa liga em todos os grupos e baixa a planilha Nome; Grupo; Link.
+- Testado no banco, onde pegou e corrigiu um furo de lógica com NULL.
+
+**Vale-presente:** um toque adiciona "Vale-presente Amazon de R$ X" à lista, como busca na Amazon com o nosso ID. Atenção: a Amazon costuma não pagar comissão de associado em vale-presente. Confira a tabela de taxas antes de contar com receita daqui.
+
+**Entrega** (migração 0015):
+- **Endereço:** o participante informa, se quiser. Só quem o tirou vê; nem o grupo nem quem organiza.
+- **Prazo:** o endereço é apagado 30 dias depois da troca.
+- **Recebimento:** cada um marca "recebi meu presente", e os painéis contam quantos receberam.
+
+**Medição:** `personal_invites_set`, `delivery_address_set` e `gift_received`.
+
 ## 5. Próximos passos de aquisição
 
 ### Pessoa física: páginas por intenção de busca

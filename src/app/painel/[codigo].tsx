@@ -241,6 +241,11 @@ export default function Painel() {
                         {'  '}você
                       </T>
                     ) : null}
+                    {p.received ? (
+                      <T size={13} color={colors.successText}>
+                        {'  '}recebeu o presente
+                      </T>
+                    ) : null}
                   </T>
                   <StatusBadge status={p.status} />
                   <ChevronRight size={16} />

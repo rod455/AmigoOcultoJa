@@ -150,7 +150,7 @@ Quem organiza inclui ou remove a pessoa no painel. O sorteio é refeito com a me
 
 ### Como funciona para equipes remotas?
 
-Cada pessoa descobre quem tirou pelo link, de onde estiver, e a lista de presentes tem links para comprar online. A equipe combina se a entrega é no escritório ou na casa de cada um.
+Cada pessoa descobre quem tirou pelo link, de onde estiver. Quem vai receber à distância deixa o endereço de entrega na própria tela: só quem a tirou vê, nem o RH, e ele é apagado 30 dias depois da troca. A lista tem links para comprar online e mandar entregar, e cada participante marca quando recebeu; o painel mostra quantos já receberam.
 
 ### A empresa pode pagar os presentes ou dar vale-presente?
 

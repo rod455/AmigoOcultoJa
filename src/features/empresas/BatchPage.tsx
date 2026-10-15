@@ -60,7 +60,7 @@ function GroupRow({ g, wide, onCopied }: { g: BatchGroup; wide: boolean; onCopie
           {g.name}
         </T>
         <T size={13} color={colors.textSecondary}>
-          {g.total} pessoas · {g.opened} abriram · {g.viewed} viram · {g.list_ready} com lista
+          {g.total} pessoas · {g.opened} abriram · {g.viewed} viram · {g.list_ready} com lista{g.received ? ` · ${g.received} receberam` : ''}
         </T>
         <View style={{ maxWidth: 360, paddingTop: 4 }}>
           <Bar value={pct(g.viewed, g.total)} />

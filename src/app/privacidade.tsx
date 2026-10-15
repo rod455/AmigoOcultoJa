@@ -24,6 +24,8 @@ const sections: LegalSection[] = [
           ['Sorteio:', 'quem tirou quem. Esse resultado fica no servidor e cada pessoa só consegue ver o próprio. Nem quem organiza vê os resultados dos outros.'],
           ['Participação:', 'quando alguém escolhe o próprio nome, ligamos esse nome a um código aleatório criado no aparelho da pessoa. Guardamos só uma versão cifrada desse código, além do momento em que a pessoa entrou e viu o resultado.'],
           ['Lista de presentes:', 'até 3 itens escolhidos por cada participante.'],
+          ['Endereço de entrega:', 'se o participante quiser, ele informa onde prefere receber o presente. Só quem o tirou vê esse endereço; ninguém mais do grupo, nem quem organiza. O endereço é apagado 30 dias depois da data da troca (ou 60 dias depois de informado, se o grupo não tiver data), e o participante pode apagar antes.'],
+          ['Presente recebido:', 'quando o participante marca que recebeu o presente, guardamos a data. Quem organiza vê só quem já recebeu.'],
           ['Convite individual:', 'se quem organiza ligar essa opção, cada participante ganha um código aleatório no próprio link. Só quem organiza vê esses códigos, para enviar a cada pessoa.'],
           ['Planilha da empresa:', 'quando quem organiza importa uma planilha, o arquivo é lido no próprio navegador e não é enviado para nós. Guardamos só os nomes de cada grupo e o nome da área, que vira parte do nome do grupo.'],
           ['Marca da empresa:', 'se quem organiza quiser, o logo, o nome e as cores da empresa, que aparecem nas telas do grupo para quem tem o link. O logo fica guardado como imagem pública e é apagado quando trocado ou removido.'],

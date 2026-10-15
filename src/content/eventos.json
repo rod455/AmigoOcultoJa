@@ -51,6 +51,20 @@
       "desde": "2026-10-15",
       "fonte": "app"
     },
+    "delivery_address_set": {
+      "pergunta": "Quantos participantes deixam endereço de entrega (troca à distância)?",
+      "natureza": "ato",
+      "unidade": "participante",
+      "desde": "2026-10-15",
+      "fonte": "app"
+    },
+    "gift_received": {
+      "pergunta": "Quantos participantes marcam que receberam o presente? A troca de fato aconteceu?",
+      "natureza": "ato",
+      "unidade": "participante",
+      "desde": "2026-10-15",
+      "fonte": "app"
+    },
     "create_started": {
       "pergunta": "Quem chega começa a montar um grupo? Por qual botão?",
       "natureza": "ato",

@@ -1,13 +1,15 @@
+import * as Clipboard from 'expo-clipboard';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
-import { Bell, Check, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
+import { Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Bell, Check, ChevronRight, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
+import { Sheet } from '@/components/Sheet';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput, useAccent } from '@/components/ui';
 import { GroupBrandHeader, PoweredBy, useGroupBrand } from '@/features/brand/GroupBrand';
 import { track } from '@/lib/analytics';
-import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveAmazonLink, resolveLink, setWishItems, suggestions, type WishItem, type WishKind, wishKind } from '@/lib/api';
+import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveAmazonLink, resolveLink, setDelivery, setReceived, setWishItems, suggestions, type WishItem, type WishKind, wishKind } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
 import { firstName, formatBRL, groupMeta, priceBand, storeLabel } from '@/lib/format';
-import { colors, tints } from '@/theme/tokens';
+import { colors, fonts, tints } from '@/theme/tokens';
 import { openExternalAfter } from '@/lib/open';
 
 type Pick = { key: string; title: string; product_id: string | null; price_cents: number | null; store: string | null; kind: WishKind; asin: string | null };
@@ -36,6 +38,11 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   const [nudging, setNudging] = useState(false);
   const [nudgedAt, setNudgedAt] = useState<string | null>(null);
   const claimedAt = useRef(Date.now());
+  // entrega: endereço (só quem me tirou vê) e "recebi meu presente"
+  const [addrSheet, setAddrSheet] = useState(false);
+  const [addrDraft, setAddrDraft] = useState('');
+  const [savingAddr, setSavingAddr] = useState(false);
+  const [addrCopied, setAddrCopied] = useState(false);
   const accent = useAccent();
   // seleção (presente marcado, aba ativa): carvão no visual padrão, cor da empresa no grupo com marca
   const { brand } = useGroupBrand();
@@ -223,6 +230,41 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
       setNudging(false);
     }
   };
+  const saveAddress = async (value: string) => {
+    if (!data) return;
+    setSavingAddr(true);
+    setError('');
+    try {
+      const r = await setDelivery(code, participantId, value);
+      setData({ ...data, me: { ...data.me, delivery_address: r.address } });
+      track('delivery_address_set', { tem_endereco: !!r.address }, { code, participantId });
+      setAddrSheet(false);
+    } catch (e) {
+      setError(friendlyError(e));
+    } finally {
+      setSavingAddr(false);
+    }
+  };
+
+  const toggleReceived = async () => {
+    if (!data) return;
+    const next = !data.me.received_at;
+    try {
+      const r = await setReceived(code, participantId, next);
+      setData({ ...data, me: { ...data.me, received_at: r.received_at } });
+      track('gift_received', { recebido: next }, { code, participantId });
+    } catch (e) {
+      setError(friendlyError(e));
+    }
+  };
+
+  const copyAddress = async () => {
+    if (!friend?.delivery_address) return;
+    await Clipboard.setStringAsync(friend.delivery_address);
+    setAddrCopied(true);
+    setTimeout(() => setAddrCopied(false), 2000);
+  };
+
   const nudgedRecently = !!nudgedAt && Date.now() - new Date(nudgedAt).getTime() < 12 * 3600 * 1000;
 
   if (!data) {
@@ -385,6 +427,29 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             ) : null}
           </>
         )}
+        {friend?.delivery_address ? (
+          <View style={{ marginTop: 12, padding: 14, paddingHorizontal: 16, borderRadius: 16, borderWidth: 1, borderColor: colors.line, gap: 6 }}>
+            <T size={12} weight="bold" color={colors.textSecondary} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
+              Entregar para {friendFirst}
+            </T>
+            <T size={16} lineHeight={22} selectable>
+              {friend.delivery_address}
+            </T>
+            <Pressable accessibilityRole="button" onPress={copyAddress} style={{ alignSelf: 'flex-start', paddingVertical: 2 }}>
+              <T size={14} weight="semibold" color={addrCopied ? colors.successText : colors.textSecondary} style={{ textDecorationLine: addrCopied ? 'none' : 'underline' }}>
+                {addrCopied ? 'Endereço copiado' : 'Copiar endereço'}
+              </T>
+            </Pressable>
+          </View>
+        ) : null}
+        {friend?.received_at ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingTop: 10 }}>
+            <Check size={16} color={colors.successText} />
+            <T size={15} weight="semibold" color={colors.successText}>
+              {friendFirst} já recebeu o presente
+            </T>
+          </View>
+        ) : null}
         <T size={12} color={colors.textSecondary} lineHeight={17} style={{ paddingTop: 8 }}>
           As lojas pagam comissão ao Amigo Oculto Já! pelos links. O preço para você é o mesmo. Como Associado da Amazon, recebemos por compras qualificadas.
         </T>
@@ -623,7 +688,65 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           ) : null}
         </View>
       )}
+      {/* entrega: para quem não vai encontrar o grupo pessoalmente */}
+      <Divider />
+      <View style={{ gap: 12 }}>
+        <Overline>Entrega</Overline>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => {
+            setAddrDraft(data.me.delivery_address ?? '');
+            setAddrSheet(true);
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, paddingHorizontal: 16, borderRadius: 16, borderWidth: 1, borderColor: colors.line }}>
+            <View style={{ flex: 1, gap: 2 }}>
+              <T size={16} weight="bold">
+                {data.me.delivery_address ? 'Onde você quer receber' : 'Vai receber o presente à distância?'}
+              </T>
+              <T size={14} color={colors.textSecondary} lineHeight={20} numberOfLines={3}>
+                {data.me.delivery_address ?? 'Deixe o endereço para entrega. Só quem te tirou vê.'}
+              </T>
+            </View>
+            <ChevronRight size={16} />
+          </View>
+        </Pressable>
+        <Button
+          label={data.me.received_at ? 'Presente recebido ✓ (desfazer)' : 'Recebi meu presente'}
+          variant="outline"
+          onPress={toggleReceived}
+          style={{ height: 50 }}
+        />
+      </View>
       <PoweredBy />
+
+      <Sheet
+        visible={addrSheet}
+        onClose={() => setAddrSheet(false)}
+        title="Onde você quer receber"
+        footer={
+          <View style={{ gap: 6 }}>
+            <Button label="Salvar endereço" onPress={() => saveAddress(addrDraft)} loading={savingAddr} disabled={!addrDraft.trim()} />
+            {data.me.delivery_address ? <Button label="Apagar endereço" variant="ghost" onPress={() => saveAddress('')} disabled={savingAddr} /> : null}
+          </View>
+        }
+      >
+        <View style={{ gap: 12 }}>
+          <TextInput
+            value={addrDraft}
+            onChangeText={setAddrDraft}
+            multiline
+            maxLength={300}
+            placeholder={'Rua, número, complemento\nBairro, cidade, CEP'}
+            placeholderTextColor={colors.textMuted}
+            accessibilityLabel="Endereço para entrega"
+            style={{ minHeight: 110, borderWidth: 1.5, borderColor: colors.lineStrong, borderRadius: 14, padding: 14, fontFamily: fonts.regular, fontSize: 16, color: colors.text, textAlignVertical: 'top' }}
+          />
+          <T size={13} color={colors.textSecondary} lineHeight={19}>
+            Só quem te tirou vê este endereço. Ninguém mais do grupo vê, nem quem organiza. Ele é apagado 30 dias depois da data da troca.
+          </T>
+        </View>
+      </Sheet>
     </Screen>
   );
 }

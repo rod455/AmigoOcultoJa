@@ -53,8 +53,10 @@ export type PublicGroup = {
 
 export type MyResult = {
   group: { id: string; code: string; name: string; budget_cents: number | null; exchange_at: string | null };
-  me: { id: string; display_name: string };
-  friend: { id: string; display_name: string; items: WishItem[] };
+  /** delivery_address: onde eu quero receber (só quem me tirou vê); received_at: marquei que recebi */
+  me: { id: string; display_name: string; delivery_address?: string | null; received_at?: string | null };
+  /** delivery_address do amigo: só para mim, que o tirei (some 30 dias depois da troca) */
+  friend: { id: string; display_name: string; items: WishItem[]; delivery_address?: string | null; received_at?: string | null };
   version: number;
   my_items: WishItem[];
   /** lembretes anônimos recebidos e ainda não atendidos (minha lista vazia) */
@@ -90,6 +92,8 @@ export type Panel = {
     items_count: number;
     /** código do link pessoal (só quem organiza recebe) */
     invite_token?: string | null;
+    /** a pessoa marcou que recebeu o presente */
+    received?: boolean;
   }>;
   exclusions: Array<[string, string]>;
 };
@@ -276,6 +280,7 @@ export type BatchGroup = {
   opened: number;
   viewed: number;
   list_ready: number;
+  received?: number;
 };
 export type BatchPanel = { batch: { id: string; name: string; created_at: string }; groups: BatchGroup[] };
 export type MyBatch = { id: string; name: string; created_at: string; groups: number; people: number; viewed: number };
@@ -311,6 +316,18 @@ export async function getGroup(code: string): Promise<PublicGroup> {
 export async function claim(code: string, participantId: string, token?: string | null): Promise<{ participant_id: string; display_name: string }> {
   const key = await getDeviceKey();
   return rpc('rpc_claim', { p_code: code, p_participant_id: participantId, p_key: key, ...(token ? { p_token: token } : {}) });
+}
+
+/** Onde quero receber o presente (só quem me tirou vê). Vazio apaga. */
+export async function setDelivery(code: string, participantId: string, address: string): Promise<{ address: string | null }> {
+  const key = await getDeviceKey();
+  return rpc('rpc_set_delivery', { p_code: code, p_participant_id: participantId, p_key: key, p_address: address });
+}
+
+/** Marca (ou desmarca) que recebi o presente. */
+export async function setReceived(code: string, participantId: string, received: boolean): Promise<{ received_at: string | null }> {
+  const key = await getDeviceKey();
+  return rpc('rpc_set_received', { p_code: code, p_participant_id: participantId, p_key: key, p_received: received });
 }
 
 export type InvitePerson = { participant_id: string; display_name: string; claimed: boolean };
@@ -413,6 +430,8 @@ export function friendlyError(e: unknown): string {
         return 'O máximo é 50 pessoas.';
       case 'DUPLICATE':
         return e.message || 'Tem nome repetido. Inclua o sobrenome.';
+      case 'ADDRESS_TOO_LONG':
+        return 'O endereço pode ter até 300 letras.';
       case 'INVITE_REQUIRED':
         return 'Este grupo usa convite individual: abra o link que chegou só para você.';
       case 'INVITE_NOT_FOUND':
