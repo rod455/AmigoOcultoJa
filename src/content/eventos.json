@@ -37,6 +37,13 @@
       "desde": "2026-10-15",
       "fonte": "app"
     },
+    "import_step": {
+      "pergunta": "Em qual passo do cadastro da empresa as pessoas param (início, participantes, dinâmica, valor, revisão)? Qual dinâmica escolhem?",
+      "natureza": "sessao",
+      "unidade": "aparelho",
+      "desde": "2026-10-15",
+      "fonte": "app"
+    },
     "batch_imported": {
       "pergunta": "Quantas empresas importam a planilha até o fim, com quantos grupos e pessoas?",
       "natureza": "ato",

@@ -87,15 +87,17 @@ Como foi feito:
 
 **Onde:** `/empresas/importar`, só no site.
 
-Passo a passo:
-1. A empresa baixa o modelo (`public/modelos/amigo-secreto-empresa.xlsx` ou `.csv`, gerados por `scripts/modelo-planilha.py`). As colunas são Nome (obrigatória) e Área (opcional).
-2. Envia o arquivo ou cola direto do Excel.
-3. Confere a prévia:
-   - áreas com menos de 3 pessoas entram juntas em "Outras áreas";
-   - áreas com mais de 50 são divididas em blocos seguidos;
-   - nomes repetidos são apontados, com a opção de manter só um.
-4. Escolhe o nome dos grupos, o valor e a data.
-5. O site cria e sorteia um grupo por área. A regra de leitura e divisão está em `src/lib/planilha.ts` (testes em `tests/planilha.test.ts`).
+O cadastro da empresa abre com o passo a passo e o botão "Começar o preenchimento". Depois, um passo por vez, com Voltar e Continuar (o preenchimento fica salvo no navegador):
+1. **Quem participa.** Baixa o modelo (`public/modelos/amigo-secreto-empresa.xlsx` ou `.csv`, gerados por `scripts/modelo-planilha.py`), com Nome (obrigatória) e Área (opcional). Envia o arquivo ou digita e cola os nomes.
+2. **Dinâmica do jogo.**
+   - Um grupo por área: áreas com menos de 3 pessoas entram juntas em "Outras áreas"; áreas com mais de 50 são divididas em blocos seguidos.
+   - Integração entre áreas: um grupo só (até 50), e ninguém tira alguém da própria área. Vira uma exclusão entre cada par da mesma área. Não dá se uma área tem mais da metade das pessoas; a tela explica.
+   - Todos num grupo só: até 50, sem regra de área.
+   - Também aqui: nome do amigo secreto, convite individual (liga em cada grupo criado) e a opção de manter só uma linha de cada nome repetido.
+3. **Valor e presentes.** Valor (R$ 50, 80, 100, sem valor ou outro) e dia da troca.
+4. **Revisar e sortear.** Resumo com "Alterar" em cada linha; o login vem só aqui. O site cria e sorteia os grupos e abre o painel do lote.
+
+A regra de leitura e divisão está em `src/lib/planilha.ts` (testes em `tests/planilha.test.ts`). O sorteio com áreas usa a corrente montada por times de `supabase/functions/_shared/draw.ts`: com exclusões em forma de times, a corrente sai sem busca, e o caso impossível (um time com mais da metade) é recusado na hora.
 
 **Onde a planilha é lida:** no navegador. O arquivo não sobe; só os nomes vão para os grupos.
 
@@ -106,6 +108,8 @@ Passo a passo:
 **Medição:**
 - `template_downloaded`: modelo baixado;
 - `batch_imported`: importação concluída, com quantos grupos e pessoas.
+- `import_step`: cada passo do cadastro aberto (inicio, participantes, dinamica, valor, revisao) e a dinâmica escolhida, para ver onde as pessoas param (catálogo + migração 0017);
+- `batch_imported` também leva `dinamica` e `convite_individual`.
 
 ## 4d. Convite individual, vale-presente e entrega (15/10/2026)
 

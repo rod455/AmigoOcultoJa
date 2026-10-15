@@ -177,7 +177,16 @@ export function draw(input: DrawInput): DrawResult {
     }
   }
 
-  const result = singleCycle ? drawCycle(ids, forbidden, rng, maxTries) : drawDerangement(ids, forbidden, rng, maxTries);
+  // Restrições em forma de "times" (ex.: cada um tira alguém de outra área):
+  // impossível se um time tem mais da metade das pessoas; possível, a corrente
+  // é montada sem busca (ver cycleFromTeams).
+  const teams = teamsOf(ids, forbidden);
+  if (teams) {
+    const biggest = teams.reduce((a, b) => (b.length > a.length ? b : a));
+    if (biggest.length > Math.floor(ids.length / 2)) return impossible(biggest[0], exclusions, ids);
+  }
+
+  const result = singleCycle ? drawCycle(ids, forbidden, rng, maxTries, teams) : drawDerangement(ids, forbidden, rng, maxTries, teams);
 
   if (!result) {
     // Nenhum ciclo/desarranjo válido existe. Aponta quem está mais travado.
@@ -213,8 +222,76 @@ function impossible(id: string, exclusions: Array<[string, string]>, _ids: strin
   };
 }
 
-/** Corrente única: embaralha e testa; depois backtracking de ciclo hamiltoniano. */
-function drawCycle(ids: string[], forbidden: Set<string>, rng: (n: number) => number, maxTries: number): Pair[] | null {
+/**
+ * Se as exclusões dividem as pessoas em "times" (cada componente das
+ * exclusões é completo: ninguém do time pode tirar ninguém do mesmo time),
+ * devolve os times, incluindo quem não tem exclusão como time de uma pessoa.
+ * Fora desse formato (ex.: A–B e B–C sem A–C), devolve null.
+ */
+function teamsOf(ids: string[], forbidden: Set<string>): string[][] | null {
+  const parent = new Map(ids.map((id) => [id, id]));
+  const find = (x: string): string => {
+    let r = x;
+    while (parent.get(r) !== r) r = parent.get(r)!;
+    parent.set(x, r);
+    return r;
+  };
+  let any = false;
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      if (!allowed(forbidden, ids[i], ids[j])) {
+        any = true;
+        parent.set(find(ids[i]), find(ids[j]));
+      }
+    }
+  }
+  if (!any) return null;
+  const groups = new Map<string, string[]>();
+  for (const id of ids) {
+    const r = find(id);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r)!.push(id);
+  }
+  const teams = [...groups.values()];
+  for (const t of teams) {
+    for (let i = 0; i < t.length; i++) for (let j = i + 1; j < t.length; j++) if (allowed(forbidden, t[i], t[j])) return null;
+  }
+  return teams;
+}
+
+/**
+ * Corrente única em que vizinhos são sempre de times diferentes, montada em
+ * vez de buscada: membros embaralhados, maior time primeiro (os outros em
+ * ordem aleatória), a lista vai para as posições pares e depois para as
+ * ímpares; no fim, rotação e sentido aleatórios. Funciona sempre que o maior
+ * time tem no máximo metade das pessoas.
+ */
+function cycleFromTeams(teams: string[][], rng: (n: number) => number): string[] | null {
+  const n = teams.reduce((s, t) => s + t.length, 0);
+  const mixed = shuffle(teams, rng).map((t) => shuffle(t, rng));
+  const big = mixed.reduce((bi, t, i) => (t.length > mixed[bi].length ? i : bi), 0);
+  if (mixed[big].length > Math.floor(n / 2)) return null;
+  const list = [mixed[big], ...mixed.filter((_, i) => i !== big)].flat();
+  const evens = Math.ceil(n / 2);
+  const seq: string[] = new Array(n);
+  list.forEach((id, i) => {
+    seq[i < evens ? 2 * i : 2 * (i - evens) + 1] = id;
+  });
+  const rot = rng(n);
+  const out = [...seq.slice(rot), ...seq.slice(0, rot)];
+  return rng(2) ? out.reverse() : out;
+}
+
+function teamCycle(ids: string[], forbidden: Set<string>, teams: string[][] | null, rng: (n: number) => number): Pair[] | null {
+  if (!teams) return null;
+  const order = cycleFromTeams(teams, rng);
+  if (!order || order.length !== ids.length) return null;
+  for (let i = 0; i < order.length; i++) if (!allowed(forbidden, order[i], order[(i + 1) % order.length])) return null;
+  return order.map((g, i) => ({ giver: g, receiver: order[(i + 1) % order.length] }));
+}
+
+/** Corrente única: embaralha e testa; com times, monta a corrente; depois backtracking de ciclo hamiltoniano. */
+function drawCycle(ids: string[], forbidden: Set<string>, rng: (n: number) => number, maxTries: number, teams: string[][] | null = null): Pair[] | null {
   const n = ids.length;
   for (let t = 0; t < maxTries; t++) {
     const order = shuffle(ids, rng);
@@ -227,6 +304,8 @@ function drawCycle(ids: string[], forbidden: Set<string>, rng: (n: number) => nu
     }
     if (ok) return order.map((g, i) => ({ giver: g, receiver: order[(i + 1) % n] }));
   }
+  const built = teamCycle(ids, forbidden, teams, rng);
+  if (built) return built;
   // Backtracking (ordem dos vizinhos aleatória para manter o sorteio imprevisível)
   const start = ids[rng(n)];
   const path: string[] = [start];
@@ -251,8 +330,8 @@ function drawCycle(ids: string[], forbidden: Set<string>, rng: (n: number) => nu
   return path.map((g, i) => ({ giver: g, receiver: path[(i + 1) % n] }));
 }
 
-/** Desarranjo aleatório que respeita exclusões; depois backtracking. */
-function drawDerangement(ids: string[], forbidden: Set<string>, rng: (n: number) => number, maxTries: number): Pair[] | null {
+/** Desarranjo aleatório que respeita exclusões; com times, a corrente montada também serve; depois backtracking. */
+function drawDerangement(ids: string[], forbidden: Set<string>, rng: (n: number) => number, maxTries: number, teams: string[][] | null = null): Pair[] | null {
   const n = ids.length;
   for (let t = 0; t < maxTries; t++) {
     const recv = shuffle(ids, rng);
@@ -265,6 +344,8 @@ function drawDerangement(ids: string[], forbidden: Set<string>, rng: (n: number)
     }
     if (ok) return ids.map((g, i) => ({ giver: g, receiver: recv[i] }));
   }
+  const built = teamCycle(ids, forbidden, teams, rng);
+  if (built) return built;
   // Backtracking: atribui receptores em ordem aleatória de doadores
   const givers = shuffle(ids, rng);
   const assigned = new Map<string, string>();

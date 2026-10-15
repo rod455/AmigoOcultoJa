@@ -260,3 +260,54 @@ describe('reparo — adicionar participante', () => {
     }
   });
 });
+
+/** Dinâmica "integração entre áreas": todos num grupo, ninguém tira alguém da própria área. */
+describe('draw com times (cada um tira alguém de outra área)', () => {
+  const build = (sizes: number[]) => {
+    const ids: string[] = [];
+    const area = new Map<string, number>();
+    sizes.forEach((n, a) => {
+      for (let i = 0; i < n; i++) {
+        const id = `p${ids.length}`;
+        ids.push(id);
+        area.set(id, a);
+      }
+    });
+    const exclusions: Array<[string, string]> = [];
+    for (let i = 0; i < ids.length; i++) for (let j = i + 1; j < ids.length; j++) if (area.get(ids[i]) === area.get(ids[j])) exclusions.push([ids[i], ids[j]]);
+    return { ids, area, exclusions };
+  };
+
+  it.each([[[25, 25]], [[10, 10, 10]], [[17, 17, 16]], [[20, 15, 15]], [[5, 5, 5, 5, 5, 5, 5, 5, 5, 5]], [[2, 1, 1]]])('áreas %j: corrente única, sempre outra área, rápido', (sizes) => {
+    const { ids, area, exclusions } = build(sizes);
+    for (const singleCycle of [true, false]) {
+      const t = Date.now();
+      const r = draw({ ids, exclusions, singleCycle });
+      expect(Date.now() - t).toBeLessThan(1500);
+      expect(r.ok).toBe(true);
+      if (!r.ok) continue;
+      expect(r.pairs).toHaveLength(ids.length);
+      for (const p of r.pairs) expect(area.get(p.giver)).not.toBe(area.get(p.receiver));
+      expect(new Set(r.pairs.map((p) => p.receiver)).size).toBe(ids.length);
+    }
+  });
+
+  it('área com mais da metade: impossível na hora, sem busca longa', () => {
+    const { ids, exclusions } = build([26, 24]);
+    const t = Date.now();
+    const r = draw({ ids, exclusions, singleCycle: true });
+    expect(Date.now() - t).toBeLessThan(500);
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.code).toBe('DRAW_IMPOSSIBLE');
+  });
+
+  it('continua aleatório: sorteios repetidos dão resultados diferentes', () => {
+    const { ids, exclusions } = build([10, 10, 10]);
+    const seen = new Set<string>();
+    for (let i = 0; i < 20; i++) {
+      const r = draw({ ids, exclusions, singleCycle: true });
+      if (r.ok) seen.add(JSON.stringify(r.pairs.map((p) => [p.giver, p.receiver]).sort()));
+    }
+    expect(seen.size).toBeGreaterThan(15);
+  });
+});

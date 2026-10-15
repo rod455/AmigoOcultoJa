@@ -28,7 +28,8 @@ Idioma: português do Brasil. Público: famílias, amigos e equipes de trabalho 
 O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.
 
 - Preço: Grátis para a empresa e para quem participa, sem limite de grupos.
-- Tamanho: Até 50 pessoas por grupo. Para a empresa toda, importe uma planilha (Nome e Área) e o site cria um grupo por área de uma vez, com um painel para acompanhar todos.
+- Tamanho: Até 50 pessoas por grupo. Para a empresa toda, o cadastro da empresa (amigoocultoja.com.br/empresas/importar) recebe a planilha (Nome e Área) e cria um grupo por área de uma vez, com um painel para acompanhar todos.
+- Dinâmicas: Um grupo por área (cada área com o próprio sorteio), todos num grupo só, ou integração entre áreas: um sorteio só, em que cada pessoa tira alguém de outra área (até 50 pessoas, nenhuma área com mais da metade).
 - Onde o convite vai: É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet.
 - Instalação: Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional.
 - Dados da equipe: Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail.

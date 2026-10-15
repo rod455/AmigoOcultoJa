@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { describe, expect, it } from 'vitest';
 import { groupName, OTHER_AREAS, parseDelimited, pickSheet, planGroups, readPeople } from '../src/lib/planilha';
+import { draw, validatePairs } from '../supabase/functions/_shared/draw';
 
 describe('parseDelimited', () => {
   it('lê o CSV do Excel em português (ponto e vírgula, BOM, CRLF)', () => {
@@ -168,5 +169,54 @@ describe('modelo para baixar (public/modelos)', () => {
     const path = await import('node:path');
     const csv = fs.readFileSync(path.resolve(__dirname, '../public/modelos/amigo-secreto-empresa.csv'), 'utf8');
     expect(parseDelimited(csv)[0]).toEqual(['Nome', 'Área']);
+  });
+});
+
+describe('planGroups — integração entre áreas', () => {
+  it('um grupo só, com exclusão entre cada par da mesma área, e o sorteio sai', () => {
+    const p = planGroups(people({ Financeiro: 6, Marketing: 5, TI: 4 }), 'mixed');
+    expect(p.errors).toEqual([]);
+    expect(p.groups).toHaveLength(1);
+    const g = p.groups[0];
+    expect(g.people).toHaveLength(15);
+    // C(6,2) + C(5,2) + C(4,2)
+    expect(g.exclusions).toHaveLength(15 + 10 + 6);
+    for (const [i, j] of g.exclusions!) expect(g.people[i].split(' ')[0]).toBe(g.people[j].split(' ')[0]);
+    const ids = g.people.map((_, i) => String(i));
+    const ex = g.exclusions!.map(([i, j]) => [String(i), String(j)] as [string, string]);
+    for (let k = 0; k < 50; k++) {
+      const r = draw({ ids, exclusions: ex, maxTries: 50 });
+      expect(r.ok).toBe(true);
+      if (r.ok) expect(validatePairs(r.pairs, ids, ex, true)).toBeNull();
+    }
+  });
+  it('área com mais da metade das pessoas trava, com o motivo', () => {
+    const p = planGroups(people({ Vendas: 6, RH: 3, TI: 2 }), 'mixed');
+    expect(p.groups).toEqual([]);
+    expect(p.errors[0]).toContain('Vendas tem 6 de 11');
+  });
+  it('exatamente metade funciona', () => {
+    expect(planGroups(people({ Vendas: 5, RH: 3, TI: 2 }), 'mixed').errors).toEqual([]);
+  });
+  it('sem coluna Área, pede a área', () => {
+    const p = planGroups([{ name: 'A', area: '' }, { name: 'B', area: '' }, { name: 'C', area: '' }], 'mixed');
+    expect(p.errors.join(' ')).toContain('coluna Área');
+  });
+  it('acima de 50 pessoas sugere um grupo por área', () => {
+    const p = planGroups(people({ A: 20, B: 20, C: 20 }), 'mixed');
+    expect(p.errors[0]).toContain('um grupo por área');
+  });
+  it('quem está sem área pode tirar qualquer um', () => {
+    const p = planGroups([...people({ RH: 2, TI: 2 }), { name: 'Zé', area: '' }], 'mixed');
+    expect(p.errors).toEqual([]);
+    expect(p.groups[0].exclusions).toEqual([[0, 1], [2, 3]]);
+    expect(p.notices.join(' ')).toContain('sem área');
+  });
+  it('nome repetido: erro, ou uma linha só com dedupe', () => {
+    const rows = [...people({ RH: 3, TI: 3 }), { name: 'RH pessoa 1', area: 'TI' }];
+    expect(planGroups(rows, 'mixed').errors[0]).toContain('RH pessoa 1');
+    const fixed = planGroups(rows, 'mixed', { dedupe: true });
+    expect(fixed.errors).toEqual([]);
+    expect(fixed.groups[0].people).toHaveLength(6);
   });
 });

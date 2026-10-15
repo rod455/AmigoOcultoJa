@@ -11,7 +11,11 @@
     ],
     [
       "Tamanho",
-      "Até 50 pessoas por grupo. Para a empresa toda, importe uma planilha (Nome e Área) e o site cria um grupo por área de uma vez, com um painel para acompanhar todos."
+      "Até 50 pessoas por grupo. Para a empresa toda, o cadastro da empresa (amigoocultoja.com.br/empresas/importar) recebe a planilha (Nome e Área) e cria um grupo por área de uma vez, com um painel para acompanhar todos."
+    ],
+    [
+      "Dinâmicas",
+      "Um grupo por área (cada área com o próprio sorteio), todos num grupo só, ou integração entre áreas: um sorteio só, em que cada pessoa tira alguém de outra área (até 50 pessoas, nenhuma área com mais da metade)."
     ],
     [
       "Onde o convite vai",
@@ -133,7 +137,7 @@
     ],
     [
       "Dá para importar a lista de funcionários de uma planilha?",
-      "Dá. Em amigoocultoja.com.br/empresas/importar, baixe o modelo (Excel ou CSV), preencha as colunas Nome e Área e envie o arquivo, ou cole direto do Excel. Antes de criar, você vê a prévia de cada grupo: áreas com menos de 3 pessoas entram juntas em \"Outras áreas\", áreas com mais de 50 são divididas e nomes repetidos são apontados. Depois, um painel mostra o andamento de todos os grupos e os links para mandar a cada time."
+      "Dá. Em amigoocultoja.com.br/empresas/importar, o cadastro da empresa tem 4 passos: (1) quem participa: baixe o modelo (Excel ou CSV), preencha as colunas Nome e Área e envie, ou digite e cole os nomes; (2) dinâmica do jogo: um grupo por área, todos num grupo só ou integração entre áreas; (3) valor do presente e dia da troca; (4) revisar e sortear. Antes de sortear, você vê a prévia de cada grupo: áreas com menos de 3 pessoas entram juntas em \"Outras áreas\", áreas com mais de 50 são divididas e nomes repetidos são apontados. Depois, um painel mostra o andamento de todos os grupos e os links para mandar a cada time."
     ],
     [
       "Funciona no Slack, no Teams ou por e-mail?",
@@ -161,7 +165,7 @@
     ],
     [
       "Dá para evitar que certas pessoas se tirem?",
-      "Dá. Na hora de sortear, marque quem não pode tirar quem, por exemplo um casal que trabalha na mesma empresa. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava."
+      "Dá. Na hora de sortear, marque quem não pode tirar quem, por exemplo um casal que trabalha na mesma empresa. No cadastro da empresa, a dinâmica \"integração entre áreas\" faz isso por área: ninguém tira alguém da própria área. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava."
     ],
     [
       "E se alguém entrar ou sair da empresa depois do sorteio?",
