@@ -306,7 +306,7 @@ export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { emp
           ) : null}
         </Pressable>
       </Link>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: wide ? 4 : 6 }}>
         {wide && empresas ? (
           <Link href="/" asChild>
             <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
@@ -316,11 +316,16 @@ export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { emp
             </Pressable>
           </Link>
         ) : null}
-        {wide && !empresas ? (
+        {!empresas ? (
+          // entrada da submarca Empresas: já no azul dela, para quem vem pelo trabalho
           <Link href="/empresas" asChild>
-            <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
-              <T size={15} weight="semibold">
-                Para empresas
+            <Pressable
+              accessibilityRole="link"
+              accessibilityLabel="Para empresas"
+              style={{ height: wide ? 44 : 36, paddingHorizontal: wide ? 16 : 10, marginRight: wide ? 8 : 0, borderRadius: 22, backgroundColor: biz.tint, borderWidth: 1.5, borderColor: biz.accent, justifyContent: 'center' }}
+            >
+              <T size={wide ? 15 : 13} weight="bold" color={biz.accent}>
+                {wide ? 'Para empresas' : 'Empresas'}
               </T>
             </Pressable>
           </Link>
@@ -335,9 +340,9 @@ export function Nav({ empresas = false, cta = CTA, ctaOrigin = 'lp_nav' }: { emp
           </Link>
         ) : null}
         <Link href="/criar/nome" asChild>
-          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: ctaOrigin })} style={{ height: 44, paddingHorizontal: 18, borderRadius: 22, backgroundColor: empresas ? biz.accent : colors.accent, justifyContent: 'center' }}>
+          <Pressable accessibilityRole="link" onPress={() => track('create_started', { origem: ctaOrigin })} style={{ height: wide ? 44 : 36, paddingHorizontal: wide ? 18 : 14, borderRadius: 22, backgroundColor: empresas ? biz.accent : colors.accent, justifyContent: 'center' }}>
             <T size={15} weight="bold" color="#FFFFFF">
-              {wide || !empresas ? cta : 'Criar grupo'}
+              {wide ? cta : empresas ? 'Criar grupo' : cta === CTA ? 'Criar grupo' : cta}
             </T>
           </Pressable>
         </Link>
