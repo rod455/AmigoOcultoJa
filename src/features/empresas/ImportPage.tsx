@@ -149,6 +149,191 @@ function Num({ n, done, size = 36 }: { n: number; done?: boolean; size?: number 
   );
 }
 
+/** Planilha de exemplo (o formato do modelo). */
+function ExampleSheet() {
+  return (
+    <View style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 14, overflow: 'hidden', maxWidth: 420 }} accessibilityLabel="Exemplo de planilha">
+      {[
+        ['Nome', 'Área'],
+        ['Ana Souza', 'Financeiro'],
+        ['Bruno Lima', 'Financeiro'],
+        ['Diego Rocha', 'Marketing'],
+      ].map((r, i) => (
+        <View key={r[0]} style={{ flexDirection: 'row', backgroundColor: i === 0 ? biz.accent : i % 2 ? colors.surface : colors.surfaceAlt }}>
+          {r.map((c, j) => (
+            <T key={c} size={14} weight={i === 0 ? 'bold' : 'regular'} color={i === 0 ? '#FFFFFF' : colors.text} style={{ flex: j === 0 ? 1.4 : 1, paddingVertical: 9, paddingHorizontal: 12 }}>
+              {c}
+            </T>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function Pill({ label, on }: { label: string; on?: boolean }) {
+  return (
+    <View style={{ height: 34, paddingHorizontal: 14, borderRadius: 17, justifyContent: 'center', backgroundColor: on ? biz.accent : colors.surface, borderWidth: 1.5, borderColor: on ? biz.accent : colors.lineStrong }}>
+      <T size={13} weight="bold" color={on ? '#FFFFFF' : colors.text}>
+        {label}
+      </T>
+    </View>
+  );
+}
+
+function ExampleCard({ title, children, wide }: { title: string; children: React.ReactNode; wide: boolean }) {
+  return (
+    <View style={{ width: wide ? undefined : '100%', flex: wide ? 1 : undefined, padding: 16, borderRadius: 16, backgroundColor: biz.tintSoft, gap: 10 }}>
+      <T size={15} weight="bold">
+        {title}
+      </T>
+      {children}
+    </View>
+  );
+}
+
+/** As três dinâmicas, desenhadas com nomes de exemplo. */
+function ExampleModes({ wide }: { wide: boolean }) {
+  const line = (a: string, b: string) => (
+    <View key={a} style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+      <T size={13}>{a}</T>
+      <T size={13} weight="bold" color={biz.accent}>
+        →
+      </T>
+      <T size={13}>{b}</T>
+    </View>
+  );
+  return (
+    <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }} accessibilityLabel="Exemplo das dinâmicas">
+      <ExampleCard title="Um grupo por área" wide={wide}>
+        {[
+          ['Financeiro', 12],
+          ['Marketing', 9],
+          ['TI', 8],
+        ].map(([a, n]) => (
+          <View key={a} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, backgroundColor: colors.surface }}>
+            <T size={13} weight="semibold">
+              {a}
+            </T>
+            <T size={13} color={colors.textSecondary}>
+              {n} pessoas · 1 link
+            </T>
+          </View>
+        ))}
+      </ExampleCard>
+      <ExampleCard title="Integração entre áreas" wide={wide}>
+        <View style={{ gap: 8, padding: 12, borderRadius: 10, backgroundColor: colors.surface }}>
+          {line('Ana (Financeiro)', 'Diego (Marketing)')}
+          {line('Diego (Marketing)', 'Carla (TI)')}
+          {line('Carla (TI)', 'Bruno (Financeiro)')}
+        </View>
+        <T size={12} color={colors.textSecondary}>
+          Cada um tira alguém de outra área.
+        </T>
+      </ExampleCard>
+      <ExampleCard title="Todos num grupo só" wide={wide}>
+        <View style={{ padding: 12, borderRadius: 10, backgroundColor: colors.surface, gap: 4 }}>
+          <T size={13} weight="semibold">
+            Amigo secreto do time
+          </T>
+          <T size={13} color={colors.textSecondary}>
+            30 pessoas · 1 link para todo mundo
+          </T>
+        </View>
+        <T size={12} color={colors.textSecondary}>
+          Até 50 pessoas, sem regra de área.
+        </T>
+      </ExampleCard>
+    </View>
+  );
+}
+
+/** Valor, data e a lista de presentes que cada pessoa monta. */
+function ExampleGifts({ wide }: { wide: boolean }) {
+  return (
+    <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }} accessibilityLabel="Exemplo de valor e lista de presentes">
+      <ExampleCard title="Valor e data" wide={wide}>
+        <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
+          <Pill label="R$ 50" />
+          <Pill label="R$ 80" on />
+          <Pill label="R$ 100" />
+          <Pill label="Sem valor" />
+        </View>
+        <T size={13} color={colors.textSecondary}>
+          Troca em 12 de dezembro
+        </T>
+      </ExampleCard>
+      <ExampleCard title="Lista da Ana · até R$ 80" wide={wide}>
+        {['Fone de ouvido bluetooth', 'Vale-presente de livraria', 'Caneca térmica'].map((t, i) => (
+          <View key={t} style={{ flexDirection: 'row', gap: 10, alignItems: 'center', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10, backgroundColor: colors.surface }}>
+            <T size={13} weight="bold" color={biz.accent}>
+              {i + 1}
+            </T>
+            <T size={13} style={{ flex: 1 }}>
+              {t}
+            </T>
+          </View>
+        ))}
+      </ExampleCard>
+    </View>
+  );
+}
+
+/** O que sai no fim: grupos sorteados, cada um com o link para mandar. */
+function ExampleResult({ wide, company }: { wide: boolean; company: string }) {
+  const name = `Amigo secreto ${company || 'ACME'}`;
+  return (
+    <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }} accessibilityLabel="Exemplo do resultado">
+      {[
+        ['Financeiro', 12, '7KQ2MX'],
+        ['Marketing', 9, 'P4HZ8T'],
+      ].map(([a, n, code]) => (
+        <ExampleCard key={a} title={`${name} · ${a}`} wide={wide}>
+          <T size={13} color={colors.textSecondary}>
+            {n} pessoas · até R$ 80 · troca em 12/12
+          </T>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, padding: 10, paddingHorizontal: 12, borderRadius: 10, backgroundColor: colors.surface }}>
+            <T size={13} weight="semibold" color={biz.accentDark} style={{ flex: 1 }} numberOfLines={1}>
+              amigoocultoja.com.br/g/{code}
+            </T>
+            <T size={12} weight="bold" color={colors.textSecondary}>
+              Copiar
+            </T>
+          </View>
+        </ExampleCard>
+      ))}
+    </View>
+  );
+}
+
+function Example({ children }: { children: React.ReactNode }) {
+  return (
+    <View style={{ gap: 8 }}>
+      <T size={12} weight="bold" color={colors.textSecondary} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
+        Exemplo
+      </T>
+      {children}
+    </View>
+  );
+}
+
+function IntroStep({ n, title, text, children }: { n: number; title: string; text: string; children?: React.ReactNode }) {
+  return (
+    <View style={{ flexDirection: 'row', gap: 16, paddingVertical: 24, borderTopWidth: 1, borderTopColor: colors.line }}>
+      <Num n={n} />
+      <View style={{ flex: 1, gap: 14 }}>
+        <T size={21} weight="extrabold" style={{ letterSpacing: -0.3 }} accessibilityRole="header" aria-level={2}>
+          {title}
+        </T>
+        <T size={15} color={colors.textSecondary} lineHeight={22} style={{ maxWidth: 720 }}>
+          {text}
+        </T>
+        {children}
+      </View>
+    </View>
+  );
+}
+
 function Chip({ label, on, onPress }: { label: string; on: boolean; onPress: () => void }) {
   return (
     <Pressable
@@ -378,9 +563,23 @@ export function ImportPage() {
 
   /* ----------------------------- abertura ----------------------------- */
 
+  const startButtons = savedDraft ? (
+    <View style={{ gap: 10 }}>
+      <T size={15} color={colors.textSecondary}>
+        Você tem um preenchimento salvo neste navegador ({savedDraft.people.length} pessoas).
+      </T>
+      <View style={{ flexDirection: wide ? 'row' : 'column', gap: 10 }}>
+        <Button label="Continuar de onde parei" variant="biz" onPress={() => start(true)} style={btnStyle} />
+        <Button label="Começar do zero" variant="outline" onPress={() => start(false)} style={btnStyle} />
+      </View>
+    </View>
+  ) : (
+    <Button label="Começar o preenchimento" variant="biz" onPress={() => start(false)} style={{ ...btnStyle, alignSelf: wide ? 'flex-start' : 'stretch' }} />
+  );
+
   const intro = (
-    <View style={{ gap: 28, paddingTop: wide ? 24 : 8, paddingBottom: 16 }}>
-      <View style={{ gap: 10, maxWidth: 720 }}>
+    <View style={{ paddingBottom: 16 }}>
+      <View style={{ gap: 10, paddingTop: wide ? 24 : 8, paddingBottom: 24, maxWidth: 720 }}>
         <T size={13} weight="bold" color={biz.accentDark} style={{ textTransform: 'uppercase', letterSpacing: 0.4 }}>
           Cadastro da empresa
         </T>
@@ -390,69 +589,42 @@ export function ImportPage() {
         <T size={17} color={colors.textSecondary} lineHeight={26}>
           Leva uns 5 minutos. Nada é sorteado antes do último passo, então dá para voltar e mudar o que quiser.
         </T>
+        <View style={{ paddingTop: 8 }}>{startButtons}</View>
       </View>
 
-      <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }}>
-        {STEPS.map((s, i) => (
-          <View key={s.title} style={{ flex: wide ? 1 : undefined, flexDirection: wide ? 'column' : 'row', gap: 14, padding: 20, borderRadius: 18, backgroundColor: biz.tintSoft }}>
-            <Num n={i + 1} />
-            <View style={{ flex: wide ? undefined : 1, gap: 6 }}>
-              <T size={18} weight="extrabold" style={{ letterSpacing: -0.2 }}>
-                {s.title}
-              </T>
-              <T size={14} color={colors.textSecondary} lineHeight={21}>
-                {s.text}
-              </T>
-              {i === 0 ? (
-                <Pressable accessibilityRole="link" onPress={() => { track('template_downloaded', { formato: 'xlsx', origem: 'abertura' }); window.open(TEMPLATE_XLSX, '_blank'); }} style={{ alignSelf: 'flex-start', paddingTop: 2 }}>
-                  <T size={14} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
-                    Baixar o modelo da planilha
-                  </T>
-                </Pressable>
-              ) : null}
-            </View>
-          </View>
-        ))}
-      </View>
+      <IntroStep n={1} title="Quem participa" text="Suba a planilha ou digite os nomes. O modelo tem duas colunas: Nome (obrigatória) e Área (opcional). Não precisa de e-mail, telefone nem CPF.">
+        <Example>
+          <ExampleSheet />
+        </Example>
+        <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
+          <Button label="Baixar modelo (Excel)" variant="outline" onPress={() => { track('template_downloaded', { formato: 'xlsx', origem: 'abertura' }); window.open(TEMPLATE_XLSX, '_blank'); }} style={{ width: 'auto', paddingHorizontal: 22, height: 46 }} />
+          <Button label="Baixar em CSV" variant="outline" onPress={() => { track('template_downloaded', { formato: 'csv', origem: 'abertura' }); window.open(TEMPLATE_CSV, '_blank'); }} style={{ width: 'auto', paddingHorizontal: 20, height: 46 }} />
+        </View>
+      </IntroStep>
 
-      <View style={{ gap: 12 }}>
-        {savedDraft ? (
-          <>
-            <T size={15} color={colors.textSecondary}>
-              Você tem um preenchimento salvo neste navegador ({savedDraft.people.length} pessoas).
-            </T>
-            <View style={{ flexDirection: wide ? 'row' : 'column', gap: 10 }}>
-              <Button label="Continuar de onde parei" variant="biz" onPress={() => start(true)} style={btnStyle} />
-              <Button label="Começar do zero" variant="outline" onPress={() => start(false)} style={btnStyle} />
-            </View>
-          </>
-        ) : (
-          <Button label="Começar o preenchimento" variant="biz" onPress={() => start(false)} style={{ ...btnStyle, alignSelf: wide ? 'flex-start' : 'stretch' }} />
-        )}
+      <IntroStep n={2} title="Dinâmica do jogo" text="Escolha como o sorteio funciona: um grupo por área, integração entre áreas (cada pessoa tira alguém de outra área) ou todos num grupo só.">
+        <Example>
+          <ExampleModes wide={wide} />
+        </Example>
+      </IntroStep>
+
+      <IntroStep n={3} title="Valor e presentes" text="Defina o valor do presente e o dia da troca. Ao descobrir quem tirou, cada pessoa monta uma lista com até 3 ideias dentro do valor.">
+        <Example>
+          <ExampleGifts wide={wide} />
+        </Example>
+      </IntroStep>
+
+      <IntroStep n={4} title="Revisar e sortear" text="Confira tudo, entre com Google ou e-mail e sorteie. Cada grupo sai com o próprio link para mandar no canal da equipe, e o painel da empresa mostra quem já viu.">
+        <Example>
+          <ExampleResult wide={wide} company={company} />
+        </Example>
+      </IntroStep>
+
+      <View style={{ gap: 12, paddingTop: 24, borderTopWidth: 1, borderTopColor: colors.line }}>
+        {startButtons}
         <T size={13} color={colors.textSecondary} lineHeight={19}>
           Grátis. Quem participa não precisa criar conta; só quem organiza entra com Google ou e-mail, no último passo.
         </T>
-      </View>
-
-      <View style={{ gap: 10, padding: 20, borderRadius: 18, borderWidth: 1, borderColor: colors.line, maxWidth: 720 }}>
-        <T size={16} weight="extrabold">
-          Depois do sorteio
-        </T>
-        {[
-          'Painel da empresa com o andamento de todos os grupos: quem abriu o link, quem viu, quem montou a lista.',
-          'Logo e cores da empresa nas telas do grupo.',
-          'Convite individual: um link por pessoa, em planilha, para mandar por e-mail, Slack ou Teams.',
-          'Endereço de entrega para quem é remoto e "recebi meu presente".',
-        ].map((t) => (
-          <View key={t} style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-start' }}>
-            <View style={{ marginTop: 3 }}>
-              <Check size={14} color={biz.accent} />
-            </View>
-            <T size={14} color={colors.textSecondary} lineHeight={20} style={{ flex: 1 }}>
-              {t}
-            </T>
-          </View>
-        ))}
       </View>
     </View>
   );
@@ -501,22 +673,7 @@ export function ImportPage() {
         <T size={16} color={colors.textSecondary} lineHeight={24}>
           Use o nosso modelo: duas colunas, <T size={16} weight="bold">Nome</T> (obrigatória) e <T size={16} weight="bold">Área</T> (opcional). Não precisa de e-mail, telefone nem CPF.
         </T>
-        <View style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 14, overflow: 'hidden', maxWidth: 420 }} accessibilityLabel="Exemplo de planilha">
-          {[
-            ['Nome', 'Área'],
-            ['Ana Souza', 'Financeiro'],
-            ['Bruno Lima', 'Financeiro'],
-            ['Diego Rocha', 'Marketing'],
-          ].map((r, i) => (
-            <View key={r[0]} style={{ flexDirection: 'row', backgroundColor: i === 0 ? biz.accent : i % 2 ? colors.surface : colors.surfaceAlt }}>
-              {r.map((c, j) => (
-                <T key={c} size={14} weight={i === 0 ? 'bold' : 'regular'} color={i === 0 ? '#FFFFFF' : colors.text} style={{ flex: j === 0 ? 1.4 : 1, paddingVertical: 9, paddingHorizontal: 12 }}>
-                  {c}
-                </T>
-              ))}
-            </View>
-          ))}
-        </View>
+        <ExampleSheet />
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
           <Pressable accessibilityRole="link" onPress={() => { track('template_downloaded', { formato: 'xlsx' }); window.open(TEMPLATE_XLSX, '_blank'); }}>
             <T size={15} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
