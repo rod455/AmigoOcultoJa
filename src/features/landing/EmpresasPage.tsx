@@ -64,6 +64,39 @@ const CONTACT = `mailto:${site.email}?subject=${encodeURIComponent('Amigo secret
 const JSON_LD = JSON.stringify({
   '@context': 'https://schema.org',
   '@graph': [
+    // repetidos da página inicial (mesmos @id), para esta página se explicar sozinha
+    {
+      '@type': 'Organization',
+      '@id': `${site.url}/#org`,
+      name: site.name,
+      url: site.url,
+      logo: `${site.url}/icon-512.png`,
+      email: site.email,
+      slogan: site.tagline,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${site.url}/#site`,
+      name: site.name,
+      alternateName: ['Amigo Oculto Já', 'amigoocultoja.com.br'],
+      url: site.url,
+      inLanguage: 'pt-BR',
+      publisher: { '@id': `${site.url}/#org` },
+    },
+    {
+      '@type': 'Service',
+      '@id': `${URL}#servico`,
+      name: 'Amigo secreto corporativo online',
+      alternateName: ['Amigo oculto da empresa', 'Amigo secreto no trabalho', 'Sorteio de amigo secreto para empresas'],
+      serviceType: 'Sorteio online de amigo secreto para empresas e equipes',
+      description: content.summary,
+      url: URL,
+      provider: { '@id': `${site.url}/#org` },
+      areaServed: { '@type': 'Country', name: 'Brasil' },
+      availableLanguage: 'pt-BR',
+      audience: { '@type': 'BusinessAudience', name: 'Empresas, RH e líderes de equipe no Brasil' },
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL', url: `${site.url}/empresas/importar` },
+    },
     {
       '@type': 'WebPage',
       '@id': `${URL}#page`,
@@ -72,8 +105,9 @@ const JSON_LD = JSON.stringify({
       description: content.metaDescription,
       inLanguage: 'pt-BR',
       isPartOf: { '@id': `${site.url}/#site` },
-      about: { '@id': `${site.url}/#app` },
-      audience: { '@type': 'BusinessAudience', name: 'Empresas, RH e líderes de equipe no Brasil' },
+      about: { '@id': `${URL}#servico` },
+      mainEntity: { '@id': `${URL}#servico` },
+      dateModified: content.updated,
       breadcrumb: {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -122,8 +156,12 @@ export function EmpresasPage() {
         <meta property="og:title" content={content.metaTitle} />
         <meta property="og:description" content={content.metaDescription} />
         <meta property="og:image" content={`${site.url}/brand/og.jpg`} />
+        <meta property="og:image:alt" content="Amigo Oculto Já! Empresas: amigo secreto da empresa online" />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={content.metaTitle} />
+        <meta name="twitter:description" content={content.metaDescription} />
         <meta property="og:url" content={URL} />
+        <link rel="alternate" type="text/markdown" href="/empresas.md" title="Esta página em Markdown (para assistentes de IA)" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
         <link rel="canonical" href={URL} />
         <script type="application/ld+json">{JSON_LD}</script>

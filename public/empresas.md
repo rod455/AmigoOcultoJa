@@ -1,0 +1,120 @@
+# Amigo Secreto na Empresa: Sorteio Online Grátis
+
+> O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.
+
+Página: https://amigoocultoja.com.br/empresas · Atualizada em 15/10/2026 · Criar o amigo secreto da empresa: https://amigoocultoja.com.br/empresas/importar
+
+## Em resumo
+
+- **Preço:** Grátis para a empresa e para quem participa, sem limite de grupos.
+- **Tamanho:** Até 50 pessoas por grupo. Para a empresa toda, o cadastro da empresa (amigoocultoja.com.br/empresas/importar) recebe a planilha (Nome e Área) e cria um grupo por área de uma vez, com um painel para acompanhar todos.
+- **Dinâmicas:** Um grupo por área (cada área com o próprio sorteio), todos num grupo só, ou integração entre áreas: um sorteio só, em que cada pessoa tira alguém de outra área (até 50 pessoas, nenhuma área com mais da metade).
+- **Onde o convite vai:** É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet.
+- **Instalação:** Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional.
+- **Dados da equipe:** Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail.
+- **Sigilo:** O sorteio é feito no servidor e cada pessoa só vê o próprio resultado. Nem o RH, nem quem organiza, vê quem tirou quem.
+- **Acompanhamento:** Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta.
+- **Regras:** Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto).
+- **Marca da empresa:** Quem organiza coloca o logo, o nome e as cores da empresa: as telas do grupo (escolha do nome, resultado, lista de presentes e painel) ficam com a cara da empresa.
+- **Convite individual:** Opcional: cada pessoa recebe um link só dela, e ninguém consegue escolher o nome de outra. Os links saem numa planilha (Nome, Grupo, Link) para mandar por e-mail, Slack ou Teams.
+
+## Como funciona
+
+1. **Cadastre a empresa.** Suba a planilha com os colaboradores (modelo com Nome e Área) ou digite os nomes, escolha a dinâmica (um grupo por área, integração entre áreas ou todos juntos) e o valor do presente.
+2. **Sorteie e mande os links.** Entre com Google ou e-mail e toque em Sortear. Cada grupo sai com o próprio link para colar no WhatsApp, no Slack, no Teams ou no e-mail, e o painel da empresa reúne todos.
+3. **Cada um descobre e escolhe.** Cada pessoa abre o link, toca no próprio nome, vê quem tirou e deixa até 3 ideias de presente dentro do valor.
+
+## O que costuma dar errado, e como o site resolve
+
+- **Parece ferramenta de fora, não da empresa:** Suba o logo e escolha as cores da empresa no painel. Quem abre o convite vê a marca de vocês em todas as telas do grupo.
+- **Ninguém quer ser o dono do papelzinho:** O sorteio é automático e secreto. Quem organiza não precisa sortear, guardar segredo nem refazer tudo quando alguém tira o próprio nome.
+- **Metade da equipe é remota ou híbrida:** Cada pessoa descobre quem tirou de onde estiver, pelo link, e pode deixar o endereço de entrega, que só quem a tirou vê. A lista de presentes já tem link para comprar, e cada um marca quando recebeu.
+- **"O que eu dou para alguém que mal conheço?":** Cada participante deixa até 3 ideias dentro do valor combinado. Quem tirou vê a lista na hora e acerta o presente.
+- **Gente que entra e sai no meio do caminho:** Contratou ou alguém saiu depois do sorteio? Inclua ou remova no painel: o sorteio se ajusta com a menor troca possível e só quem foi afetado recebe aviso.
+- **TI e jurídico perguntam sobre dados:** Quem participa não cria conta nem informa e-mail, telefone ou CPF. Os nomes são usados só para o sorteio, conforme a LGPD, e o grupo pode ser excluído a pedido.
+
+## Quem organiza
+
+- **RH e Pessoas & Cultura:** Organize a confraternização de fim de ano sem planilha nem papelzinho: um grupo por área, todos no mesmo padrão de valor e data.
+- **Líder de time:** Crie o amigo secreto do seu time em 2 minutos e mande no canal da equipe. Você também participa e não vê o resultado de ninguém.
+- **Comitê da festa:** Acompanhe no painel quem já entrou e quem já escolheu presente, e use os lembretes para fechar todo mundo antes da troca.
+
+## Guia rápido: como organizar o amigo secreto da empresa
+
+1. **Defina o valor com antecedência.** Entre R$ 50 e R$ 100 costuma funcionar bem no trabalho. Um valor fixo evita que alguém gaste muito mais que os outros.
+2. **Sorteie 2 a 3 semanas antes da troca.** Dá tempo de a lista de presentes ser montada e de as compras online chegarem, inclusive para quem é remoto.
+3. **Separe por áreas quando a empresa for grande.** Em grupos menores, de gente que convive no dia a dia, fica mais fácil acertar o presente. Crie um grupo por time e mantenha a mesma data para todos.
+4. **Combine a entrega dos remotos.** Decida antes se os presentes vão para o escritório, para a casa de cada um ou se a troca é por videochamada.
+5. **Deixe a lista de presentes obrigatória no convite.** Peça a todos para escolher até 3 ideias ao descobrir quem tiraram. É o que mais reduz presente errado.
+
+## Perguntas frequentes
+
+### Como fazer o amigo secreto da empresa online?
+
+Em amigoocultoja.com.br/empresas/importar: (1) envie a planilha com os nomes dos colaboradores (o modelo tem as colunas Nome e Área) ou digite os nomes; (2) escolha a dinâmica: um grupo por área, integração entre áreas ou todos num grupo só; (3) defina o valor do presente e o dia da troca; (4) entre com Google ou e-mail e sorteie. Cada grupo recebe um link para mandar à equipe, e cada pessoa descobre quem tirou no próprio celular. É grátis e ninguém, nem o RH, vê quem tirou quem.
+
+### Quanto custa para a empresa?
+
+Nada. Criar grupos, sortear, mandar o link, acompanhar o painel e montar a lista de presentes é grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente, sem custo a mais para quem compra.
+
+### Quantas pessoas podem participar?
+
+Até 50 pessoas por grupo. Para equipes maiores, baixe o modelo de planilha em amigoocultoja.com.br/empresas/importar, preencha com o nome e a área de cada pessoa e envie: o site cria um grupo por área (áreas acima de 50 são divididas) e mostra todos num painel só. Se vocês precisam de um único sorteio com mais de 50 pessoas, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+
+### Dá para importar a lista de funcionários de uma planilha?
+
+Dá. Em amigoocultoja.com.br/empresas/importar, o cadastro da empresa tem 4 passos: (1) quem participa: baixe o modelo (Excel ou CSV), preencha as colunas Nome e Área e envie, ou digite e cole os nomes; (2) dinâmica do jogo: um grupo por área, todos num grupo só ou integração entre áreas; (3) valor do presente e dia da troca; (4) revisar e sortear. Antes de sortear, você vê a prévia de cada grupo: áreas com menos de 3 pessoas entram juntas em "Outras áreas", áreas com mais de 50 são divididas e nomes repetidos são apontados. Depois, um painel mostra o andamento de todos os grupos e os links para mandar a cada time.
+
+### Funciona no Slack, no Teams ou por e-mail?
+
+Funciona. O convite é um link comum (amigoocultoja.com.br/g/ seguido de um código) que pode ser colado em qualquer canal: Slack, Microsoft Teams, e-mail, intranet ou WhatsApp. Não há integração instalada nessas ferramentas.
+
+### Dá para colocar o logo e as cores da empresa?
+
+Dá. No painel do grupo, toque em "É o amigo secreto da empresa?", envie o logo (PNG, JPG ou WebP) e escolha a cor principal; o site já sugere a cor a partir do logo. A escolha do nome, o resultado, a lista de presentes e o painel passam a usar a marca da empresa. O logo é enviado pelo computador; as cores dá para trocar também no celular.
+
+### Precisa instalar alguma coisa no computador da empresa?
+
+Não. Tudo funciona no navegador do celular ou do computador. Quem preferir pode usar o app para iPhone e Android, mas não é necessário.
+
+### Dá para garantir que ninguém escolha o nome de outra pessoa?
+
+Dá. No painel do grupo, ligue o "Convite individual": cada pessoa recebe um link só dela, e o link geral do grupo passa a pedir o link pessoal. Pelo painel da empresa, um botão liga o convite individual em todos os grupos e baixa uma planilha com o link de cada pessoa, pronta para mala direta.
+
+### Quais dados dos funcionários vocês coletam?
+
+Só os nomes digitados por quem organiza, usados apenas para o sorteio. Quem participa não cria conta e não informa e-mail, telefone ou CPF. Quem organiza informa nome e e-mail. Os dados são tratados conforme a LGPD e a Política de Privacidade em amigoocultoja.com.br/privacidade.
+
+### O RH ou quem organiza consegue ver quem tirou quem?
+
+Não. O resultado é gerado no servidor e cada pessoa só consegue ver o próprio. O painel mostra apenas quem já abriu o link, quem já viu o resultado e quem já montou a lista.
+
+### Dá para evitar que certas pessoas se tirem?
+
+Dá. Na hora de sortear, marque quem não pode tirar quem, por exemplo um casal que trabalha na mesma empresa. No cadastro da empresa, a dinâmica "integração entre áreas" faz isso por área: ninguém tira alguém da própria área. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava.
+
+### Dá para fazer o amigo secreto entre setores diferentes?
+
+Dá. No cadastro da empresa, escolha a dinâmica "integração entre áreas": todo mundo entra num sorteio só e cada pessoa tira alguém de outro setor ou departamento, para aproximar os times. Funciona com até 50 pessoas, desde que nenhuma área tenha mais da metade do grupo. Para empresas maiores, a dinâmica "um grupo por área" cria um sorteio para cada setor.
+
+### Qual o valor ideal do amigo secreto da empresa?
+
+Entre R$ 50 e R$ 100 costuma funcionar bem no trabalho. O valor fica no convite e na lista de presentes de cada pessoa, e é o mesmo para todos os grupos da empresa, o que evita que alguém gaste muito mais que os outros.
+
+### Com quanta antecedência sortear o amigo secreto da confraternização de fim de ano?
+
+De 2 a 3 semanas antes da troca. Dá tempo de todo mundo montar a lista de presentes e de as compras online chegarem, inclusive para quem está em home office. Para uma confraternização de Natal no meio de dezembro, sorteie até o fim de novembro.
+
+### E se alguém entrar ou sair da empresa depois do sorteio?
+
+Quem organiza inclui ou remove a pessoa no painel. O sorteio é refeito com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link.
+
+### Como funciona para equipes remotas ou em home office?
+
+Cada pessoa descobre quem tirou pelo link, de onde estiver. Quem vai receber à distância deixa o endereço de entrega na própria tela: só quem a tirou vê, nem o RH, e ele é apagado 30 dias depois da troca. A lista tem links para comprar online e mandar entregar, e cada participante marca quando recebeu; o painel mostra quantos já receberam.
+
+### A empresa pode pagar os presentes ou dar vale-presente?
+
+Hoje cada participante compra o próprio presente, pelos links da lista ou onde preferir. Se a empresa quer bancar os presentes ou usar vale-presente, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+
+Contato para empresas: amigoocultoja@gmail.com

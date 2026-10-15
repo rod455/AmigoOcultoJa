@@ -2,6 +2,7 @@
 # públicas (início, /empresas, privacidade, termos, suporte).
 # Resumo para IAs: https://amigoocultoja.com.br/llms.txt
 # Versão completa:  https://amigoocultoja.com.br/llms-full.txt
+# Página de empresas em Markdown: https://amigoocultoja.com.br/empresas.md
 # Convites, painéis e telas de criação são privados e ficam de fora.
 
 # Assistentes de IA, nomeados um a um (busca e treino)

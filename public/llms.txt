@@ -39,10 +39,18 @@ O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela inte
 - Marca da empresa: Quem organiza coloca o logo, o nome e as cores da empresa: as telas do grupo (escolha do nome, resultado, lista de presentes e painel) ficam com a cara da empresa.
 - Convite individual: Opcional: cada pessoa recebe um link só dela, e ninguém consegue escolher o nome de outra. Os links saem numa planilha (Nome, Grupo, Link) para mandar por e-mail, Slack ou Teams.
 
+Como a empresa organiza:
+
+1. Cadastre a empresa: Suba a planilha com os colaboradores (modelo com Nome e Área) ou digite os nomes, escolha a dinâmica (um grupo por área, integração entre áreas ou todos juntos) e o valor do presente.
+2. Sorteie e mande os links: Entre com Google ou e-mail e toque em Sortear. Cada grupo sai com o próprio link para colar no WhatsApp, no Slack, no Teams ou no e-mail, e o painel da empresa reúne todos.
+3. Cada um descobre e escolhe: Cada pessoa abre o link, toca no próprio nome, vê quem tirou e deixa até 3 ideias de presente dentro do valor.
+
 ## Páginas
 
 - [Início](https://amigoocultoja.com.br/): O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.
 - [Amigo secreto na empresa](https://amigoocultoja.com.br/empresas): Para RH, líderes de time e comitês de confraternização: como organizar o amigo secreto corporativo, equipes remotas, dados (LGPD) e perguntas de empresas.
+- [Amigo secreto na empresa (Markdown)](https://amigoocultoja.com.br/empresas.md): A mesma página de empresas em texto puro, com todas as perguntas frequentes.
+- [Cadastro da empresa](https://amigoocultoja.com.br/empresas/importar): Onde a empresa cria o amigo secreto: planilha ou nomes digitados, dinâmica (um grupo por área, integração entre áreas ou todos juntos), valor e sorteio.
 - [Política de Privacidade](https://amigoocultoja.com.br/privacidade): Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).
 - [Termos de Uso](https://amigoocultoja.com.br/termos): Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.
 - [Ajuda e suporte](https://amigoocultoja.com.br/suporte): Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.

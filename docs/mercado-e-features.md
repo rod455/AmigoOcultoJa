@@ -64,7 +64,10 @@ Brecha de mercado: não achamos nenhum serviço brasileiro que junte sorteio, va
 
 **Para as IAs:**
 - `llms.txt` e `llms-full.txt` ganharam a seção de empresas e o FAQ de empresas.
-- `/empresas` tem dados estruturados: WebPage, BreadcrumbList, HowTo e FAQPage.
+- `/empresas` tem dados estruturados: Organization, WebSite, Service (amigo secreto corporativo, grátis), WebPage, BreadcrumbList, HowTo e FAQPage. A página se explica sozinha, sem depender do JSON-LD da página inicial.
+- `/empresas.md`: a mesma página em Markdown, gerada por `scripts/llms.mjs` a partir de `empresas.json`. É servida com `text/markdown` e cabeçalho `Link: rel="canonical"` apontando para `/empresas`, para o Google não tratar como cópia. A página aponta para ela com `<link rel="alternate" type="text/markdown">`.
+- Título com até 66 letras e descrição com até 150, para não serem cortados no Google. O FAQ responde às perguntas que as pessoas fazem às IAs: "como fazer o amigo secreto da empresa online", setores diferentes, valor ideal, quando sortear e home office.
+- **IndexNow** (`scripts/indexnow.mjs`, chave em `public/<chave>.txt`): no fim de cada build de produção da Vercel, avisa Bing e Yandex das páginas do sitemap. O Google não usa IndexNow; para ele, vale o Search Console.
 - O `robots.txt` cita um por um os robôs das IAs (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended e outros), liberando as páginas públicas e mantendo os convites de fora.
 - `/empresas` entrou no sitemap.
 

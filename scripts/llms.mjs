@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Gera public/llms.txt e public/llms-full.txt a partir de src/content/site.json
+// Gera public/llms.txt, public/llms-full.txt e public/empresas.md a partir de
+// src/content/site.json e src/content/empresas.json
 // (formato https://llmstxt.org). Roda antes do export no `npm run build`.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,6 +13,8 @@ const empresas = JSON.parse(fs.readFileSync(path.join(root, 'src/content/empresa
 const pages = [
   [`${site.url}/`, 'Início', 'O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.'],
   [`${site.url}${empresas.path}`, 'Amigo secreto na empresa', 'Para RH, líderes de time e comitês de confraternização: como organizar o amigo secreto corporativo, equipes remotas, dados (LGPD) e perguntas de empresas.'],
+  [`${site.url}${empresas.path}.md`, 'Amigo secreto na empresa (Markdown)', 'A mesma página de empresas em texto puro, com todas as perguntas frequentes.'],
+  [`${site.url}${empresas.path}/importar`, 'Cadastro da empresa', 'Onde a empresa cria o amigo secreto: planilha ou nomes digitados, dinâmica (um grupo por área, integração entre áreas ou todos juntos), valor e sorteio.'],
   [`${site.url}/privacidade`, 'Política de Privacidade', 'Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).'],
   [`${site.url}/termos`, 'Termos de Uso', 'Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.'],
   [`${site.url}/suporte`, 'Ajuda e suporte', 'Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.'],
@@ -41,6 +44,10 @@ ${steps}
 ${empresas.summary}
 
 ${empresas.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}
+
+Como a empresa organiza:
+
+${empresas.steps.map(([t, d], i) => `${i + 1}. ${t}: ${d}`).join('\n')}
 
 ## Páginas
 
@@ -77,6 +84,42 @@ ${tips}
 - Não é preciso instalar aplicativo para participar.
 `;
 
+// a página /empresas em Markdown (link rel="alternate" na própria página)
+const md = (pairs) => pairs.map(([t, d]) => `- **${t}:** ${d}`).join('\n');
+const empresasMd = `# ${empresas.metaTitle.replace(/ \| .*$/, '')}
+
+> ${empresas.summary}
+
+Página: ${site.url}${empresas.path} · Atualizada em ${empresas.updated.split('-').reverse().join('/')} · Criar o amigo secreto da empresa: ${site.url}${empresas.path}/importar
+
+## Em resumo
+
+${md(empresas.facts)}
+
+## Como funciona
+
+${empresas.steps.map(([t, d], i) => `${i + 1}. **${t}.** ${d}`).join('\n')}
+
+## O que costuma dar errado, e como o site resolve
+
+${md(empresas.pains)}
+
+## Quem organiza
+
+${md(empresas.roles)}
+
+## Guia rápido: como organizar o amigo secreto da empresa
+
+${empresas.tips.map(([t, d], i) => `${i + 1}. **${t}.** ${d}`).join('\n')}
+
+## Perguntas frequentes
+
+${faqEmpresas}
+
+Contato para empresas: ${site.email}
+`;
+
 fs.writeFileSync(path.join(root, 'public/llms.txt'), short);
+fs.writeFileSync(path.join(root, 'public/empresas.md'), empresasMd);
 fs.writeFileSync(path.join(root, 'public/llms-full.txt'), full);
-console.log('llms: public/llms.txt e public/llms-full.txt gerados');
+console.log('llms: public/llms.txt, public/llms-full.txt e public/empresas.md gerados');
