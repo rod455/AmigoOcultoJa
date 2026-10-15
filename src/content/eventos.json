@@ -23,6 +23,13 @@
       "desde": "2026-10-15",
       "fonte": "app"
     },
+    "group_branded": {
+      "pergunta": "Quantos grupos colocam a marca da empresa (logo e cores)? É o sinal de uso corporativo.",
+      "natureza": "ato",
+      "unidade": "grupo",
+      "desde": "2026-10-15",
+      "fonte": "app"
+    },
     "create_started": {
       "pergunta": "Quem chega começa a montar um grupo? Por qual botão?",
       "natureza": "ato",

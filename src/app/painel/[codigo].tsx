@@ -5,6 +5,9 @@ import { Pressable, View } from 'react-native';
 import { Check, ChevronRight, Plus, WhatsApp } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
 import { Button, ErrorText, Loading, Row, Screen, T, Title, TopBar, UnderlineInput } from '@/components/ui';
+import { BrandEditor } from '@/features/brand/BrandEditor';
+import { GroupBrandHeader, GroupBrandProvider } from '@/features/brand/GroupBrand';
+import { parseBrand } from '@/lib/brand';
 import { track } from '@/lib/analytics';
 import { addParticipant, friendlyError, getPanel, nudge, type Panel, releaseParticipant, removeParticipant } from '@/lib/api';
 import { firstName, groupMeta, joinNames } from '@/lib/format';
@@ -60,6 +63,7 @@ export default function Painel() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
   const [confirmRemove, setConfirmRemove] = useState(false);
+  const [branding, setBranding] = useState(false);
 
   const load = useCallback(() => {
     getPanel(code)
@@ -175,146 +179,168 @@ export default function Painel() {
     }
   };
 
+  const brand = parseBrand(g.brand);
+
   return (
-    <Screen
-      top={<TopBar backTo="/" />}
-      footer={
-        <View style={{ gap: 6 }}>
-          {notice ? (
-            <T size={14} color={colors.successText} align="center">
-              {notice}
-            </T>
-          ) : null}
-          <ErrorText>{error}</ErrorText>
-          {pending.length > 0 ? (
-            <Button label={`Lembrar ${joinNames(pendingNames.slice(0, 3))}${pendingNames.length > 3 ? ` e mais ${pendingNames.length - 3}` : ''}`} variant="whatsapp" icon={<WhatsApp />} onPress={remind} />
-          ) : (
-            <Button label="Enviar o link de novo" variant="whatsapp" icon={<WhatsApp />} onPress={shareAgain} />
-          )}
-          <Button label="Copiar link do grupo" variant="ghost" onPress={copy} />
-        </View>
-      }
-    >
-      <View style={{ gap: 24, paddingTop: 12 }}>
-        <View style={{ gap: 6 }}>
-          <Title size={28}>{g.name}</Title>
-          <T size={16} color={colors.textSecondary}>
-            {groupMeta(g.budget_cents, g.exchange_at)}
-          </T>
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
-          <T size={56} weight="extrabold" lineHeight={58} style={{ letterSpacing: -1.5 }}>
-            {viewed} de {parts.length}
-          </T>
-          <T size={16} color={colors.textSecondary}>
-            já viram quem tiraram
-          </T>
-        </View>
-
-        {g.max_version > 1 ? (
-          <View style={{ padding: 14, borderRadius: 16, backgroundColor: colors.surfaceAlt }}>
-            <T size={14} lineHeight={20}>
-              O sorteio foi atualizado depois de uma troca. Quem teve o resultado alterado vê um aviso ao abrir o link.
+    <GroupBrandProvider brand={g.brand}>
+      <Screen
+        top={<TopBar backTo="/" />}
+        footer={
+          <View style={{ gap: 6 }}>
+            {notice ? (
+              <T size={14} color={colors.successText} align="center">
+                {notice}
+              </T>
+            ) : null}
+            <ErrorText>{error}</ErrorText>
+            {pending.length > 0 ? (
+              <Button label={`Lembrar ${joinNames(pendingNames.slice(0, 3))}${pendingNames.length > 3 ? ` e mais ${pendingNames.length - 3}` : ''}`} variant="whatsapp" icon={<WhatsApp />} onPress={remind} />
+            ) : (
+              <Button label="Enviar o link de novo" variant="whatsapp" icon={<WhatsApp />} onPress={shareAgain} />
+            )}
+            <Button label="Copiar link do grupo" variant="ghost" onPress={copy} />
+          </View>
+        }
+      >
+        <View style={{ gap: 24, paddingTop: 12 }}>
+          <GroupBrandHeader />
+          <View style={{ gap: 6 }}>
+            <Title size={28}>{g.name}</Title>
+            <T size={16} color={colors.textSecondary}>
+              {groupMeta(g.budget_cents, g.exchange_at)}
             </T>
           </View>
-        ) : null}
 
-        <View>
-          {parts.map((p) => (
-            <Pressable key={p.id} accessibilityRole="button" accessibilityLabel={`${p.display_name}, opções`} onPress={() => setSelected(p)}>
+          <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+            <T size={56} weight="extrabold" lineHeight={58} style={{ letterSpacing: -1.5 }}>
+              {viewed} de {parts.length}
+            </T>
+            <T size={16} color={colors.textSecondary}>
+              já viram quem tiraram
+            </T>
+          </View>
+
+          {g.max_version > 1 ? (
+            <View style={{ padding: 14, borderRadius: 16, backgroundColor: colors.surfaceAlt }}>
+              <T size={14} lineHeight={20}>
+                O sorteio foi atualizado depois de uma troca. Quem teve o resultado alterado vê um aviso ao abrir o link.
+              </T>
+            </View>
+          ) : null}
+
+          <View>
+            {parts.map((p) => (
+              <Pressable key={p.id} accessibilityRole="button" accessibilityLabel={`${p.display_name}, opções`} onPress={() => setSelected(p)}>
+                <Row>
+                  <T size={17} style={{ flexGrow: 1 }}>
+                    {p.display_name}
+                    {p.is_organizer ? (
+                      <T size={14} color={colors.textSecondary}>
+                        {'  '}você
+                      </T>
+                    ) : null}
+                  </T>
+                  <StatusBadge status={p.status} />
+                  <ChevronRight size={16} />
+                </Row>
+              </Pressable>
+            ))}
+            <Pressable accessibilityRole="button" onPress={() => setAdding(true)}>
               <Row>
-                <T size={17} style={{ flexGrow: 1 }}>
-                  {p.display_name}
-                  {p.is_organizer ? (
-                    <T size={14} color={colors.textSecondary}>
-                      {'  '}você
-                    </T>
-                  ) : null}
+                <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' }}>
+                  <Plus size={16} color={colors.text} />
+                </View>
+                <T size={16} weight="semibold" style={{ flexGrow: 1 }}>
+                  Adicionar pessoa
                 </T>
-                <StatusBadge status={p.status} />
-                <ChevronRight size={16} />
               </Row>
             </Pressable>
-          ))}
-          <Pressable accessibilityRole="button" onPress={() => setAdding(true)}>
-            <Row>
-              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' }}>
-                <Plus size={16} color={colors.text} />
-              </View>
-              <T size={16} weight="semibold" style={{ flexGrow: 1 }}>
-                Adicionar pessoa
-              </T>
-            </Row>
-          </Pressable>
-        </View>
-
-        <Link href={{ pathname: '/g/[codigo]', params: { codigo: code } }} asChild>
-          <Pressable accessibilityRole="link">
-            <T size={15} weight="semibold" color={colors.textSecondary}>
-              Ver quem eu tirei →
-            </T>
-          </Pressable>
-        </Link>
-      </View>
-
-      {/* Folha: ações por pessoa */}
-      <Sheet
-        visible={!!selected}
-        onClose={() => {
-          setSelected(null);
-          setConfirmRemove(false);
-        }}
-        title={selected?.display_name}
-      >
-        {selected ? (
-          <View style={{ gap: 6 }}>
-            <T size={15} color={colors.textSecondary} style={{ paddingBottom: 10 }}>
-              {selected.status === 'not_opened'
-                ? 'Ainda não abriu o link.'
-                : selected.status === 'entered'
-                  ? 'Escolheu o nome, mas ainda não viu o resultado.'
-                  : selected.status === 'viewed'
-                    ? 'Já viu quem tirou. Ainda não montou a lista.'
-                    : `Já viu quem tirou e montou a lista (${selected.items_count} ${selected.items_count === 1 ? 'item' : 'itens'}).`}
-            </T>
-            {selected.status !== 'not_opened' && !selected.is_organizer ? (
-              <Button label="Liberar o nome para outro aparelho" variant="outline" onPress={doRelease} loading={busy} />
-            ) : null}
-            {!selected.is_organizer ? (
-              confirmRemove ? (
-                <Button label={`Confirmar: remover ${firstName(selected.display_name)}`} variant="accent" onPress={doRemove} loading={busy} />
-              ) : (
-                <Button label="Remover do grupo" variant="ghost" onPress={() => setConfirmRemove(true)} disabled={parts.length <= 3} />
-              )
-            ) : (
-              <T size={14} color={colors.textSecondary}>
-                Você organiza este grupo.
-              </T>
-            )}
-            {parts.length <= 3 && !selected.is_organizer ? (
-              <T size={13} color={colors.textSecondary} align="center">
-                O grupo precisa ter pelo menos 3 pessoas.
-              </T>
-            ) : null}
           </View>
-        ) : null}
-      </Sheet>
 
-      {/* Folha: adicionar pessoa */}
-      <Sheet
-        visible={adding}
-        onClose={() => setAdding(false)}
-        title="Adicionar pessoa"
-        footer={<Button label="Adicionar e sortear para ela" onPress={doAdd} loading={busy} disabled={newName.trim().length < 2} />}
-      >
-        <View style={{ gap: 10 }}>
-          <UnderlineInput value={newName} onChangeText={setNewName} placeholder="Nome e sobrenome" autoCapitalize="words" autoFocus onSubmitEditing={doAdd} />
-          <T size={14} color={colors.textSecondary} lineHeight={20}>
-            Só uma pessoa do grupo terá o resultado alterado, e ela verá o aviso ao abrir o link. Ninguém mais precisa fazer nada.
-          </T>
+          {/* marca da empresa: logo e cores nas telas do grupo */}
+          <Pressable accessibilityRole="button" onPress={() => setBranding(true)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderColor: colors.line }}>
+              <View style={{ flex: 1, gap: 2 }}>
+                <T size={16} weight="bold">
+                  {brand ? 'Marca da empresa' : 'É o amigo secreto da empresa?'}
+                </T>
+                <T size={14} color={colors.textSecondary} lineHeight={20}>
+                  {brand ? 'Trocar o logo ou as cores do grupo.' : 'Coloque o logo e as cores da empresa nas telas do grupo.'}
+                </T>
+              </View>
+              <ChevronRight size={16} />
+            </View>
+          </Pressable>
+
+          <Link href={{ pathname: '/g/[codigo]', params: { codigo: code } }} asChild>
+            <Pressable accessibilityRole="link">
+              <T size={15} weight="semibold" color={colors.textSecondary}>
+                Ver quem eu tirei →
+              </T>
+            </Pressable>
+          </Link>
         </View>
-      </Sheet>
-    </Screen>
+
+        <BrandEditor code={code} groupId={g.id} current={g.brand} visible={branding} onClose={() => setBranding(false)} onSaved={load} />
+
+        {/* Folha: ações por pessoa */}
+        <Sheet
+          visible={!!selected}
+          onClose={() => {
+            setSelected(null);
+            setConfirmRemove(false);
+          }}
+          title={selected?.display_name}
+        >
+          {selected ? (
+            <View style={{ gap: 6 }}>
+              <T size={15} color={colors.textSecondary} style={{ paddingBottom: 10 }}>
+                {selected.status === 'not_opened'
+                  ? 'Ainda não abriu o link.'
+                  : selected.status === 'entered'
+                    ? 'Escolheu o nome, mas ainda não viu o resultado.'
+                    : selected.status === 'viewed'
+                      ? 'Já viu quem tirou. Ainda não montou a lista.'
+                      : `Já viu quem tirou e montou a lista (${selected.items_count} ${selected.items_count === 1 ? 'item' : 'itens'}).`}
+              </T>
+              {selected.status !== 'not_opened' && !selected.is_organizer ? (
+                <Button label="Liberar o nome para outro aparelho" variant="outline" onPress={doRelease} loading={busy} />
+              ) : null}
+              {!selected.is_organizer ? (
+                confirmRemove ? (
+                  <Button label={`Confirmar: remover ${firstName(selected.display_name)}`} variant="accent" onPress={doRemove} loading={busy} />
+                ) : (
+                  <Button label="Remover do grupo" variant="ghost" onPress={() => setConfirmRemove(true)} disabled={parts.length <= 3} />
+                )
+              ) : (
+                <T size={14} color={colors.textSecondary}>
+                  Você organiza este grupo.
+                </T>
+              )}
+              {parts.length <= 3 && !selected.is_organizer ? (
+                <T size={13} color={colors.textSecondary} align="center">
+                  O grupo precisa ter pelo menos 3 pessoas.
+                </T>
+              ) : null}
+            </View>
+          ) : null}
+        </Sheet>
+
+        {/* Folha: adicionar pessoa */}
+        <Sheet
+          visible={adding}
+          onClose={() => setAdding(false)}
+          title="Adicionar pessoa"
+          footer={<Button label="Adicionar e sortear para ela" onPress={doAdd} loading={busy} disabled={newName.trim().length < 2} />}
+        >
+          <View style={{ gap: 10 }}>
+            <UnderlineInput value={newName} onChangeText={setNewName} placeholder="Nome e sobrenome" autoCapitalize="words" autoFocus onSubmitEditing={doAdd} />
+            <T size={14} color={colors.textSecondary} lineHeight={20}>
+              Só uma pessoa do grupo terá o resultado alterado, e ela verá o aviso ao abrir o link. Ninguém mais precisa fazer nada.
+            </T>
+          </View>
+        </Sheet>
+      </Screen>
+    </GroupBrandProvider>
   );
 }

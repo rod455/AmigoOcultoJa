@@ -70,6 +70,19 @@ Brecha de mercado: não achamos nenhum serviço brasileiro que junte sorteio, va
 
 **Ligações:** a página inicial agora aponta para `/empresas` no topo, no cartão "Trabalho" e no rodapé.
 
+## 4b. Marca da empresa no grupo (15/10/2026)
+
+**O que faz:** quem organiza abre o painel, toca em "É o amigo secreto da empresa?", sobe o logo e escolhe a cor principal (o site sugere a cor a partir do logo), a secundária (opcional) e o nome da empresa. A partir daí, a escolha do nome, o "você tirou", a lista de presentes e o painel mostram o logo e usam a cor da empresa. No pé dessas telas fica o crédito "Sorteio feito com Amigo Oculto Já!".
+
+Como foi feito:
+- **Banco:** migração 0009. A marca fica em `groups.theme`, e só a função `rpc_set_group_brand` grava nela. Ela valida as cores e aceita apenas logo dentro da pasta do próprio grupo.
+- **Logos:** ficam no bucket público `group-logos`. Só a conta de quem criou o grupo, logada, envia e apaga, e só na pasta daquele grupo. Isso foi testado no banco: dono, outra conta, anônimo e caminho fora da pasta.
+- **Arquivo:** o logo é reduzido no navegador para 512 px e convertido para WebP antes de subir.
+- **Contraste:** com qualquer cor escolhida, o texto do botão vira branco ou carvão, e os textos na cor da marca são escurecidos até passar no AA (testes em `tests/brand.test.ts`).
+- **Grupos sem marca** continuam exatamente iguais.
+- **Logo pelo app:** só se envia o logo pelo site (computador ou navegador do celular). No app dá para trocar as cores; o envio do logo pelo app ficaria para depois, porque exige biblioteca nativa nova.
+- **Medição:** `group_branded` (catálogo + migração 0010), o sinal de uso corporativo.
+
 ## 5. Próximos passos de aquisição
 
 ### Pessoa física: páginas por intenção de busca

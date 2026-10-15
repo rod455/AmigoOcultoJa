@@ -44,6 +44,8 @@ export type PublicGroup = {
   exchange_at: string | null;
   status: string;
   organizer_name: string | null;
+  /** marca da empresa (groups.theme); ler com parseBrand */
+  brand?: unknown;
   participants: Array<{ id: string; display_name: string; claimed: boolean }>;
 };
 
@@ -72,6 +74,8 @@ export type Panel = {
     status: string;
     created_at: string;
     max_version: number;
+    /** marca da empresa (groups.theme); ler com parseBrand */
+    brand?: unknown;
   };
   participants: Array<{
     id: string;
@@ -228,6 +232,28 @@ export async function nudge(code: string, kind: 'organizador' | 'anonimo', parti
 /* Participante                                                      */
 /* ---------------------------------------------------------------- */
 
+/**
+ * Marca da empresa no grupo (logo, cores e nome). `null` volta ao visual
+ * padrão. O logo precisa já estar no bucket group-logos (uploadGroupLogo).
+ */
+export async function setGroupBrand(code: string, brand: { name?: string; logo?: string; primary: string; secondary?: string } | null): Promise<unknown> {
+  const key = await getDeviceKey();
+  return rpc<unknown>('rpc_set_group_brand', { p_code: code, p_key: key, p_brand: brand });
+}
+
+/** Envia o logo já preparado para a pasta do grupo. Só funciona com a conta de quem organiza logada. */
+export async function uploadGroupLogo(groupId: string, file: Blob, ext: 'webp' | 'png'): Promise<string> {
+  const path = `${groupId}/logo-${Date.now().toString(36)}.${ext}`;
+  const { error } = await supabase().storage.from('group-logos').upload(path, file, { contentType: `image/${ext}`, upsert: false, cacheControl: '31536000' });
+  if (error) throw new ApiError(/row-level security|unauthorized|jwt/i.test(error.message) ? 'LOGO_NOT_ALLOWED' : 'LOGO_UPLOAD_FAILED', error.message);
+  return path;
+}
+
+/** Apaga um logo que não é mais usado (melhor esforço). */
+export async function removeGroupLogo(path: string): Promise<void> {
+  await supabase().storage.from('group-logos').remove([path]).catch(() => undefined);
+}
+
 export async function getGroup(code: string): Promise<PublicGroup> {
   return rpc<PublicGroup>('rpc_get_group', { p_code: code });
 }
@@ -322,6 +348,17 @@ export function friendlyError(e: unknown): string {
         return 'O máximo é 50 pessoas.';
       case 'DUPLICATE':
         return e.message || 'Tem nome repetido. Inclua o sobrenome.';
+      case 'LOGO_NOT_ALLOWED':
+        return 'Para enviar o logo, entre com a mesma conta que criou o grupo.';
+      case 'LOGO_UPLOAD_FAILED':
+        return 'Não deu para enviar o logo. Tente um PNG ou JPG menor.';
+      case 'INVALID_BRAND_COLOR':
+        return 'Essa cor não é válida. Use o formato #1F4BB8.';
+      case 'INVALID_BRAND_NAME':
+        return 'O nome da empresa pode ter até 60 letras.';
+      case 'INVALID_BRAND_LOGO':
+      case 'INVALID_BRAND':
+        return 'Não deu para salvar a marca. Envie o logo de novo.';
       case 'TOO_MANY_ITEMS':
         return 'Escolha até 3 presentes.';
       case 'NOT_AMAZON':

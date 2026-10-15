@@ -19,7 +19,18 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from './icons';
+import { type Accent, DEFAULT_ACCENT } from '@/lib/brand';
 import { biz, colors, fonts, layout } from '@/theme/tokens';
+
+/**
+ * Cor de destaque das telas. Padrão: o vermelho da marca. Dentro de um grupo
+ * com a marca da empresa (GroupBrandProvider), vira a cor da empresa.
+ */
+const AccentContext = React.createContext<Accent>(DEFAULT_ACCENT);
+export const AccentProvider = AccentContext.Provider;
+export function useAccent(): Accent {
+  return React.useContext(AccentContext);
+}
 
 /* ---------------------------------------------------------------- */
 /* Tipografia                                                        */
@@ -187,9 +198,10 @@ type ButtonProps = PressableProps & {
 };
 
 export function Button({ label, variant = 'primary', loading, icon, disabled, style, ...rest }: ButtonProps) {
+  const accent = useAccent();
   const bg =
     variant === 'primary' || variant === 'accent'
-      ? colors.accent
+      ? accent.accent
       : variant === 'dark'
         ? colors.text
         : variant === 'whatsapp'
@@ -197,8 +209,8 @@ export function Button({ label, variant = 'primary', loading, icon, disabled, st
           : variant === 'biz'
             ? biz.accent
             : 'transparent';
-  const pressedBg = variant === 'primary' || variant === 'accent' ? colors.accentDark : variant === 'biz' ? biz.accentDark : undefined;
-  const fg = variant === 'ghost' || variant === 'outline' ? colors.text : '#FFFFFF';
+  const pressedBg = variant === 'primary' || variant === 'accent' ? accent.accentDark : variant === 'biz' ? biz.accentDark : undefined;
+  const fg = variant === 'ghost' || variant === 'outline' ? colors.text : variant === 'primary' || variant === 'accent' ? accent.onAccent : '#FFFFFF';
   const isDisabled = disabled || loading;
   return (
     <Pressable
@@ -241,6 +253,7 @@ export function Pill({
   small?: boolean;
 }) {
   const filled = variant === 'accent' || variant === 'dark';
+  const accent = useAccent();
   return (
     <Pressable
       accessibilityRole="button"
@@ -252,14 +265,14 @@ export function Pill({
           borderRadius: 20,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: variant === 'accent' ? colors.accent : variant === 'dark' ? colors.text : 'transparent',
+          backgroundColor: variant === 'accent' ? accent.accent : variant === 'dark' ? colors.text : 'transparent',
           borderWidth: variant === 'outline' ? 1.5 : 0,
-          borderColor: colors.accent,
+          borderColor: accent.accent,
           opacity: pressed ? 0.88 : 1,
         },
       ]}
     >
-      <T size={14} weight="bold" color={filled ? '#FFFFFF' : colors.accentDark}>
+      <T size={14} weight="bold" color={variant === 'accent' ? accent.onAccent : filled ? '#FFFFFF' : accent.accentText}>
         {label}
       </T>
     </Pressable>

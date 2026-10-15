@@ -6,6 +6,7 @@ import { RevealScreen } from './RevealScreen';
 import { Button, Loading, Screen, Sub, Title, TopBar } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { friendlyError, getGroup, type PublicGroup } from '@/lib/api';
+import { GroupBrandProvider } from '@/features/brand/GroupBrand';
 import { getClaim, setClaim } from '@/lib/device';
 
 type State =
@@ -61,24 +62,28 @@ export function ParticipantFlow({ code }: { code: string }) {
 
   if (state.kind === 'enter') {
     return (
-      <EnterScreen
-        group={state.group}
-        onClaimed={async (participantId) => {
-          await setClaim(code, participantId);
-          setState({ kind: 'reveal', group: state.group, participantId });
-        }}
-      />
+      <GroupBrandProvider brand={state.group.brand}>
+        <EnterScreen
+          group={state.group}
+          onClaimed={async (participantId) => {
+            await setClaim(code, participantId);
+            setState({ kind: 'reveal', group: state.group, participantId });
+          }}
+        />
+      </GroupBrandProvider>
     );
   }
 
   return (
-    <RevealScreen
-      code={code}
-      participantId={state.participantId}
-      onSwitch={async () => {
-        await setClaim(code, null);
-        void load();
-      }}
-    />
+    <GroupBrandProvider brand={state.group.brand}>
+      <RevealScreen
+        code={code}
+        participantId={state.participantId}
+        onSwitch={async () => {
+          await setClaim(code, null);
+          void load();
+        }}
+      />
+    </GroupBrandProvider>
   );
 }

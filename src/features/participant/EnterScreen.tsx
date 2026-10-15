@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { Check } from '@/components/icons';
 import { Button, ErrorText, Logo, Screen, T, Title } from '@/components/ui';
+import { GroupBrandHeader, PoweredBy, useGroupBrand } from '@/features/brand/GroupBrand';
 import { track } from '@/lib/analytics';
 import { claim, friendlyError, type PublicGroup } from '@/lib/api';
 import { firstName, groupMeta } from '@/lib/format';
@@ -14,6 +15,7 @@ export function EnterScreen({ group, onClaimed }: { group: PublicGroup; onClaime
   const [error, setError] = useState('');
 
   const chosen = group.participants.find((p) => p.id === selected);
+  const { brand } = useGroupBrand();
 
   const go = async () => {
     if (!chosen) return;
@@ -40,8 +42,9 @@ export function EnterScreen({ group, onClaimed }: { group: PublicGroup; onClaime
         </View>
       }
     >
-      <Logo height={32} />
-      <View style={{ gap: 24, paddingTop: 32 }}>
+      {/* grupo com a marca da empresa: o logo dela no lugar do nosso */}
+      {brand ? <GroupBrandHeader /> : <Logo height={32} />}
+      <View style={{ gap: 24, paddingTop: brand ? 24 : 32 }}>
         <View style={{ gap: 6 }}>
           <T size={16} color={colors.textSecondary}>
             {group.organizer_name ? `${firstName(group.organizer_name)} te chamou para o` : 'Você foi chamado para o'}
@@ -89,6 +92,7 @@ export function EnterScreen({ group, onClaimed }: { group: PublicGroup; onClaime
         <T size={13} color={colors.textSecondary} lineHeight={18}>
           Depois de escolher, seu nome fica ligado a este aparelho e ninguém mais consegue abrir o seu resultado. Se o seu nome aparece como "já entrou" e não foi você, fale com quem organizou.
         </T>
+        <PoweredBy />
       </View>
     </Screen>
   );

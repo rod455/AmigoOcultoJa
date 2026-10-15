@@ -35,6 +35,7 @@ O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela inte
 - Sigilo: O sorteio é feito no servidor e cada pessoa só vê o próprio resultado. Nem o RH, nem quem organiza, vê quem tirou quem.
 - Acompanhamento: Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta.
 - Regras: Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto).
+- Marca da empresa: Quem organiza coloca o logo, o nome e as cores da empresa: as telas do grupo (escolha do nome, resultado, lista de presentes e painel) ficam com a cara da empresa.
 
 ## Páginas
 

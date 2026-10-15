@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Bell, Check, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
-import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput } from '@/components/ui';
+import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput, useAccent } from '@/components/ui';
+import { GroupBrandHeader, PoweredBy, useGroupBrand } from '@/features/brand/GroupBrand';
 import { track } from '@/lib/analytics';
 import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveAmazonLink, resolveLink, setWishItems, suggestions, type WishItem, type WishKind, wishKind } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
@@ -35,6 +36,11 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
   const [nudging, setNudging] = useState(false);
   const [nudgedAt, setNudgedAt] = useState<string | null>(null);
   const claimedAt = useRef(Date.now());
+  const accent = useAccent();
+  // seleção (presente marcado, aba ativa): carvão no visual padrão, cor da empresa no grupo com marca
+  const { brand } = useGroupBrand();
+  const sel = brand ? accent.accent : colors.text;
+  const onSel = brand ? accent.onAccent : '#FFFFFF';
 
   const load = useCallback(async () => {
     try {
@@ -259,6 +265,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
 
   return (
     <Screen padTop={24} footer={footer} gap={28}>
+      <GroupBrandHeader />
       {/* contexto */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <T size={15} color={colors.textSecondary} style={{ flexShrink: 1 }}>
@@ -289,8 +296,8 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
       {/* 1. você tirou */}
       <View style={{ gap: 6 }}>
         {updatedNotice ? (
-          <View style={{ alignSelf: 'flex-start', paddingHorizontal: 10, height: 24, borderRadius: 12, backgroundColor: colors.accent, justifyContent: 'center', marginBottom: 4 }}>
-            <T size={12} weight="bold" color="#FFFFFF">
+          <View style={{ alignSelf: 'flex-start', paddingHorizontal: 10, height: 24, borderRadius: 12, backgroundColor: accent.accent, justifyContent: 'center', marginBottom: 4 }}>
+            <T size={12} weight="bold" color={accent.onAccent}>
               Atualizado · seu amigo oculto mudou
             </T>
           </View>
@@ -391,13 +398,13 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                   accessibilityState={{ selected: on }}
                   accessibilityLabel={`${p.name}, ${priceBand(p.price_cents)}, ${storeLabel(p.store)}`}
                   onPress={() => togglePick(p)}
-                  style={{ width: 136, gap: 8, padding: 8, paddingBottom: 12, borderRadius: 18, borderWidth: 2, borderColor: on ? colors.text : colors.line, backgroundColor: colors.surface }}
+                  style={{ width: 136, gap: 8, padding: 8, paddingBottom: 12, borderRadius: 18, borderWidth: 2, borderColor: on ? sel : colors.line, backgroundColor: colors.surface }}
                 >
                   <View style={{ position: 'relative', height: 88, borderRadius: 12, backgroundColor: tints[i % tints.length], alignItems: 'center', justifyContent: 'center' }}>
                     <Gift />
                     {on ? (
-                      <View style={{ position: 'absolute', top: 6, right: 6, width: 24, height: 24, borderRadius: 12, backgroundColor: colors.text, alignItems: 'center', justifyContent: 'center' }}>
-                        <Check size={13} />
+                      <View style={{ position: 'absolute', top: 6, right: 6, width: 24, height: 24, borderRadius: 12, backgroundColor: sel, alignItems: 'center', justifyContent: 'center' }}>
+                        <Check size={13} color={onSel} />
                       </View>
                     ) : null}
                   </View>
@@ -442,9 +449,9 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
                       setAddTab(k);
                       setError('');
                     }}
-                    style={{ flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? colors.text : 'transparent' }}
+                    style={{ flex: 1, height: 40, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: on ? sel : 'transparent' }}
                   >
-                    <T size={14} weight="bold" color={on ? '#FFFFFF' : colors.textSecondary}>
+                    <T size={14} weight="bold" color={on ? onSel : colors.textSecondary}>
                       {label}
                     </T>
                   </Pressable>
@@ -583,6 +590,7 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           ) : null}
         </View>
       )}
+      <PoweredBy />
     </Screen>
   );
 }
