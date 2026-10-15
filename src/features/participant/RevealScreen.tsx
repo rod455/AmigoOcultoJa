@@ -146,6 +146,20 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
     }
   };
 
+  /**
+   * Vale-presente: entra como busca na Amazon ("Vale-presente Amazon de R$ 80"),
+   * com o nosso ID de associado, como os outros itens de busca. Quem te tirou
+   * abre e escolhe o vale no valor do grupo.
+   */
+  const giftCardTitle = budget ? `Vale-presente Amazon de ${formatBRL(budget)}` : 'Vale-presente Amazon';
+  const hasGiftCard = picks.some((p) => p.title.toLowerCase().startsWith('vale-presente'));
+  const addGiftCard = () => {
+    if (full || hasGiftCard) return;
+    setError('');
+    track('wish_item_added', { origem: 'vale_presente' }, { code, participantId });
+    setPicks((cur) => [...cur, { key: `vale:${giftCardTitle}`, title: giftCardTitle, product_id: null, price_cents: budget ?? null, store: 'amazon', kind: 'search', asin: null }]);
+  };
+
   /** Fora da Amazon: fica salvo só como texto. */
   const addFree = () => {
     const t = freeText.trim().replace(/\s+/g, ' ');
@@ -434,6 +448,25 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
             <T size={17} weight="bold">
               {full ? `Sua lista já tem ${MAX_ITEMS} presentes` : 'Quer outro presente?'}
             </T>
+            {!full && !hasGiftCard ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Pedir ${giftCardTitle}`}
+                onPress={addGiftCard}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, paddingHorizontal: 14, borderRadius: 14, backgroundColor: colors.surface, borderWidth: 1.5, borderColor: colors.line }}
+              >
+                <Gift size={24} color={colors.text} strokeWidth={1.8} />
+                <View style={{ flex: 1 }}>
+                  <T size={15} weight="bold">
+                    Prefere um vale-presente?
+                  </T>
+                  <T size={13} color={colors.textSecondary}>
+                    {giftCardTitle}: quem te tirou escolhe o vale na Amazon.
+                  </T>
+                </View>
+                <Plus size={18} color={colors.text} />
+              </Pressable>
+            ) : null}
             <View style={{ flexDirection: 'row', backgroundColor: colors.surface, borderRadius: 12, padding: 3 }} accessibilityRole="tablist">
               {([
                 ['amazon', 'Na Amazon'],
