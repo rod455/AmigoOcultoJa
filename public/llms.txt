@@ -36,6 +36,7 @@ O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela inte
 - Acompanhamento: Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta.
 - Regras: Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto).
 - Marca da empresa: Quem organiza coloca o logo, o nome e as cores da empresa: as telas do grupo (escolha do nome, resultado, lista de presentes e painel) ficam com a cara da empresa.
+- Convite individual: Opcional: cada pessoa recebe um link só dela, e ninguém consegue escolher o nome de outra. Os links saem numa planilha (Nome, Grupo, Link) para mandar por e-mail, Slack ou Teams.
 
 ## Páginas
 

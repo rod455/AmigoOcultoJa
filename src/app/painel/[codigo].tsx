@@ -7,6 +7,7 @@ import { Sheet } from '@/components/Sheet';
 import { Button, ErrorText, Loading, Row, Screen, T, Title, TopBar, UnderlineInput } from '@/components/ui';
 import { BrandEditor } from '@/features/brand/BrandEditor';
 import { GroupBrandHeader, GroupBrandProvider } from '@/features/brand/GroupBrand';
+import { PersonalInvitesSheet } from '@/features/invites/PersonalInvitesSheet';
 import { parseBrand } from '@/lib/brand';
 import { track } from '@/lib/analytics';
 import { addParticipant, friendlyError, getPanel, nudge, type Panel, releaseParticipant, removeParticipant } from '@/lib/api';
@@ -64,6 +65,7 @@ export default function Painel() {
   const [notice, setNotice] = useState('');
   const [confirmRemove, setConfirmRemove] = useState(false);
   const [branding, setBranding] = useState(false);
+  const [invites, setInvites] = useState(false);
 
   const load = useCallback(() => {
     getPanel(code)
@@ -257,6 +259,21 @@ export default function Painel() {
             </Pressable>
           </View>
 
+          {/* convite individual: um link por pessoa */}
+          <Pressable accessibilityRole="button" onPress={() => setInvites(true)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderColor: colors.line }}>
+              <View style={{ flex: 1, gap: 2 }}>
+                <T size={16} weight="bold">
+                  Convite individual {g.personal_invites ? '· ligado' : ''}
+                </T>
+                <T size={14} color={colors.textSecondary} lineHeight={20}>
+                  {g.personal_invites ? 'Ver e enviar o link de cada pessoa.' : 'Um link para cada pessoa: ninguém escolhe o nome de outra.'}
+                </T>
+              </View>
+              <ChevronRight size={16} />
+            </View>
+          </Pressable>
+
           {/* marca da empresa: logo e cores nas telas do grupo */}
           <Pressable accessibilityRole="button" onPress={() => setBranding(true)}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 16, borderRadius: 18, borderWidth: 1, borderColor: colors.line }}>
@@ -281,6 +298,7 @@ export default function Painel() {
           </Link>
         </View>
 
+        <PersonalInvitesSheet code={code} groupName={g.name} on={!!g.personal_invites} visible={invites} onClose={() => setInvites(false)} onChanged={load} />
         <BrandEditor target={{ kind: 'group', code }} logoFolder={g.id} shared={!!g.batch_id} current={g.brand} visible={branding} onClose={() => setBranding(false)} onSaved={load} />
 
         {/* Folha: ações por pessoa */}

@@ -24,6 +24,7 @@ const sections: LegalSection[] = [
           ['Sorteio:', 'quem tirou quem. Esse resultado fica no servidor e cada pessoa só consegue ver o próprio. Nem quem organiza vê os resultados dos outros.'],
           ['Participação:', 'quando alguém escolhe o próprio nome, ligamos esse nome a um código aleatório criado no aparelho da pessoa. Guardamos só uma versão cifrada desse código, além do momento em que a pessoa entrou e viu o resultado.'],
           ['Lista de presentes:', 'até 3 itens escolhidos por cada participante.'],
+          ['Convite individual:', 'se quem organiza ligar essa opção, cada participante ganha um código aleatório no próprio link. Só quem organiza vê esses códigos, para enviar a cada pessoa.'],
           ['Planilha da empresa:', 'quando quem organiza importa uma planilha, o arquivo é lido no próprio navegador e não é enviado para nós. Guardamos só os nomes de cada grupo e o nome da área, que vira parte do nome do grupo.'],
           ['Marca da empresa:', 'se quem organiza quiser, o logo, o nome e as cores da empresa, que aparecem nas telas do grupo para quem tem o link. O logo fica guardado como imagem pública e é apagado quando trocado ou removido.'],
           ['Lembretes:', 'quando alguém pede um lembrete anônimo, registramos o pedido para mostrar o aviso a quem precisa montar a lista, sem revelar quem pediu.'],

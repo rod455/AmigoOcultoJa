@@ -46,6 +46,8 @@ export type PublicGroup = {
   organizer_name: string | null;
   /** marca da empresa (groups.theme); ler com parseBrand */
   brand?: unknown;
+  /** convite individual ligado: só com o link pessoal dá para escolher o nome */
+  personal_invites?: boolean;
   participants: Array<{ id: string; display_name: string; claimed: boolean }>;
 };
 
@@ -78,6 +80,7 @@ export type Panel = {
     brand?: unknown;
     /** lote da empresa (importação de planilha) a que o grupo pertence */
     batch_id?: string | null;
+    personal_invites?: boolean;
   };
   participants: Array<{
     id: string;
@@ -85,6 +88,8 @@ export type Panel = {
     is_organizer: boolean;
     status: ParticipantStatus;
     items_count: number;
+    /** código do link pessoal (só quem organiza recebe) */
+    invite_token?: string | null;
   }>;
   exclusions: Array<[string, string]>;
 };
@@ -303,9 +308,24 @@ export async function getGroup(code: string): Promise<PublicGroup> {
   return rpc<PublicGroup>('rpc_get_group', { p_code: code });
 }
 
-export async function claim(code: string, participantId: string): Promise<{ participant_id: string; display_name: string }> {
+export async function claim(code: string, participantId: string, token?: string | null): Promise<{ participant_id: string; display_name: string }> {
   const key = await getDeviceKey();
-  return rpc('rpc_claim', { p_code: code, p_participant_id: participantId, p_key: key });
+  return rpc('rpc_claim', { p_code: code, p_participant_id: participantId, p_key: key, ...(token ? { p_token: token } : {}) });
+}
+
+export type InvitePerson = { participant_id: string; display_name: string; claimed: boolean };
+
+/** Link pessoal → de quem é. */
+export async function invitePerson(code: string, token: string): Promise<InvitePerson> {
+  return rpc<InvitePerson>('rpc_invite_person', { p_code: code, p_token: token });
+}
+
+export type PersonalInvites = { on: boolean; people: Array<{ id: string; display_name: string; token: string | null; claimed: boolean }> };
+
+/** Liga/desliga o convite individual. Ligado, gera os códigos que faltam e devolve os links de todos. */
+export async function setPersonalInvites(code: string, on: boolean): Promise<PersonalInvites> {
+  const key = await getDeviceKey();
+  return rpc<PersonalInvites>('rpc_set_personal_invites', { p_code: code, p_key: key, p_on: on });
 }
 
 export async function myResult(code: string, participantId: string): Promise<MyResult> {
@@ -393,6 +413,10 @@ export function friendlyError(e: unknown): string {
         return 'O máximo é 50 pessoas.';
       case 'DUPLICATE':
         return e.message || 'Tem nome repetido. Inclua o sobrenome.';
+      case 'INVITE_REQUIRED':
+        return 'Este grupo usa convite individual: abra o link que chegou só para você.';
+      case 'INVITE_NOT_FOUND':
+        return 'Esse convite não vale mais. Peça um novo link a quem organizou.';
       case 'LOGIN_REQUIRED':
         return 'Entre na sua conta para continuar.';
       case 'NOT_BATCH_MEMBER':

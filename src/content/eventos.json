@@ -44,6 +44,13 @@
       "desde": "2026-10-15",
       "fonte": "app"
     },
+    "personal_invites_set": {
+      "pergunta": "Quantos grupos ligam o convite individual (um link por pessoa)?",
+      "natureza": "ato",
+      "unidade": "grupo",
+      "desde": "2026-10-15",
+      "fonte": "app"
+    },
     "create_started": {
       "pergunta": "Quem chega começa a montar um grupo? Por qual botão?",
       "natureza": "ato",

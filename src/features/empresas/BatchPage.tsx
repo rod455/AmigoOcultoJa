@@ -9,11 +9,12 @@ import { BrandEditor } from '@/features/brand/BrandEditor';
 import { GroupBrandHeader, GroupBrandProvider } from '@/features/brand/GroupBrand';
 import { Footer, MAX_W, Nav } from '@/features/landing/LandingPage';
 import { track } from '@/lib/analytics';
-import { type BatchGroup, type BatchPanel, friendlyError, getBatchPanel } from '@/lib/api';
+import { type BatchGroup, type BatchPanel, friendlyError, getBatchPanel, setPersonalInvites } from '@/lib/api';
+import { downloadPersonalLinks } from '@/features/invites/PersonalInvitesSheet';
 import { getSession } from '@/lib/auth';
 import { parseBrand } from '@/lib/brand';
 import { groupMeta } from '@/lib/format';
-import { inviteMessage, inviteUrl, openWhatsApp } from '@/lib/share';
+import { inviteMessage, inviteUrl, openWhatsApp, personalInviteUrl } from '@/lib/share';
 import { useViewportWidth } from '@/lib/useViewportWidth';
 import { biz, colors } from '@/theme/tokens';
 
@@ -103,6 +104,7 @@ export function BatchPage({ id }: { id: string }) {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [branding, setBranding] = useState(false);
+  const [personalBusy, setPersonalBusy] = useState<string | null>(null);
 
   const load = useCallback(() => {
     getBatchPanel(id)
@@ -141,6 +143,27 @@ export function BatchPage({ id }: { id: string }) {
     await Clipboard.setStringAsync(text);
     track('link_copied', { origem: 'lote_todos', grupos: panel.groups.length });
     flash('Todos os links copiados, um por linha.');
+  };
+
+  /** Liga o convite individual em todos os grupos e baixa uma planilha com o link de cada pessoa. */
+  const personalLinks = async () => {
+    if (!panel) return;
+    const rows: Array<{ name: string; group: string; url: string }> = [];
+    try {
+      for (let i = 0; i < panel.groups.length; i++) {
+        const g = panel.groups[i];
+        setPersonalBusy(`Gerando links: ${i + 1} de ${panel.groups.length} grupos`);
+        const r = await setPersonalInvites(g.code, true);
+        r.people.forEach((p) => p.token && rows.push({ name: p.display_name, group: g.name, url: personalInviteUrl(g.code, p.token) }));
+      }
+      track('personal_invites_set', { ligado: true, pessoas: rows.length, lote: true });
+      downloadPersonalLinks(rows, `links-individuais-${panel.batch.name.replace(/[^\p{L}\p{N}]+/gu, '-').toLowerCase()}.csv`);
+      flash(`Convite individual ligado em todos os grupos. Planilha com ${rows.length} links baixada.`);
+    } catch (e) {
+      setError(friendlyError(e));
+    } finally {
+      setPersonalBusy(null);
+    }
   };
 
   const groups = panel?.groups ?? [];
@@ -202,11 +225,22 @@ export function BatchPage({ id }: { id: string }) {
                 <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
                   <Button label="Copiar todos os links" variant="biz" onPress={copyAll} style={{ width: 'auto', paddingHorizontal: 22, height: 48 }} />
                   <Button label="Baixar planilha com os links" variant="outline" onPress={() => { downloadLinks(panel); track('link_copied', { origem: 'lote_planilha', grupos: groups.length }); }} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
+                  <Button label="Links individuais (planilha)" variant="outline" onPress={personalLinks} loading={!!personalBusy} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
                   <Button label={brand ? 'Trocar a marca da empresa' : 'Colocar a marca da empresa'} variant="outline" onPress={() => setBranding(true)} disabled={!first} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
                 </View>
+                {personalBusy ? (
+                  <T size={14} color={colors.textSecondary}>
+                    {personalBusy}
+                  </T>
+                ) : null}
                 {notice ? (
                   <T size={14} color={colors.successText}>
                     {notice}
+                  </T>
+                ) : null}
+                {error && panel ? (
+                  <T size={14} color={colors.accentDark}>
+                    {error}
                   </T>
                 ) : null}
                 <T size={14} color={colors.textSecondary} lineHeight={20}>

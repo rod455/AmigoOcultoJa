@@ -5,7 +5,8 @@ import { ParticipantFlow } from '@/features/participant/ParticipantFlow';
 
 /** Link do convite: /g/{codigo} — telas 7, 8 e 9 */
 export default function GroupLink() {
-  const { codigo } = useLocalSearchParams<{ codigo: string }>();
+  // c = código do link pessoal (convite individual)
+  const { codigo, c } = useLocalSearchParams<{ codigo: string; c?: string }>();
   return (
     <>
       {/* prévia do link no WhatsApp: convite genérico (nunca nomes do grupo) */}
@@ -15,7 +16,7 @@ export default function GroupLink() {
         <meta property="og:description" content="Toque no link, escolha seu nome e descubra quem você tirou. Depois é só montar sua lista de presentes." />
         <meta name="description" content="Toque no link, escolha seu nome e descubra quem você tirou." />
       </Head>
-      <ParticipantFlow code={String(codigo ?? '').toUpperCase()} />
+      <ParticipantFlow code={String(codigo ?? '').toUpperCase()} token={typeof c === 'string' && c ? c : null} />
     </>
   );
 }

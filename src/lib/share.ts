@@ -14,6 +14,20 @@ export function inviteUrl(code: string): string {
   return `${baseUrl()}/g/${code.toUpperCase()}`;
 }
 
+/** Link pessoal (convite individual ligado): só essa pessoa consegue escolher o próprio nome. */
+export function personalInviteUrl(code: string, token: string): string {
+  return `${inviteUrl(code)}?c=${encodeURIComponent(token)}`;
+}
+
+/** Mensagem do convite individual, para mandar só para a pessoa. */
+export function personalInviteMessage(opts: { name: string; groupName: string; code: string; token: string }): string {
+  return [
+    `Oi, ${opts.name.split(' ')[0]}! Seu convite para o amigo oculto *${opts.groupName}*:`,
+    personalInviteUrl(opts.code, opts.token),
+    'Esse link é só seu: não repasse para ninguém.',
+  ].join('\n');
+}
+
 /** Mensagem da tela 5 (spec §6.1) */
 export function inviteMessage(opts: { groupName: string; code: string; budgetCents: number | null; exchangeAt: string | null }): string {
   const lines = [`Amigo oculto do *${opts.groupName}* tá valendo!`];
