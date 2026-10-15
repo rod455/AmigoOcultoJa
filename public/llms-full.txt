@@ -23,9 +23,23 @@ Idioma: português do Brasil. Público: famílias, amigos e equipes de trabalho 
 2. Sorteie e envie o convite: Toque em Sortear, entre com Google ou e-mail e envie a mensagem pronta para o grupo do WhatsApp.
 3. Cada um descobre e escolhe: Cada pessoa abre o link, toca no próprio nome, vê quem tirou e escolhe até 3 presentes. Quem a tirou vê a lista na hora.
 
+## Para empresas
+
+O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.
+
+- Preço: Grátis para a empresa e para quem participa, sem limite de grupos.
+- Tamanho: Até 50 pessoas por grupo. Equipes maiores criam um grupo por área ou time, sem limite de grupos.
+- Onde o convite vai: É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet.
+- Instalação: Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional.
+- Dados da equipe: Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail.
+- Sigilo: O sorteio é feito no servidor e cada pessoa só vê o próprio resultado. Nem o RH, nem quem organiza, vê quem tirou quem.
+- Acompanhamento: Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta.
+- Regras: Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto).
+
 ## Páginas
 
 - [Início](https://amigoocultoja.com.br/): O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.
+- [Amigo secreto na empresa](https://amigoocultoja.com.br/empresas): Para RH, líderes de time e comitês de confraternização: como organizar o amigo secreto corporativo, equipes remotas, dados (LGPD) e perguntas de empresas.
 - [Política de Privacidade](https://amigoocultoja.com.br/privacidade): Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).
 - [Termos de Uso](https://amigoocultoja.com.br/termos): Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.
 - [Ajuda e suporte](https://amigoocultoja.com.br/suporte): Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.
@@ -85,6 +99,56 @@ Peça para quem organiza: no painel dá para liberar o nome em um toque, e você
 ### Funciona para quem não tem WhatsApp?
 
 Funciona. O link é um endereço normal: pode ir por SMS, e-mail ou qualquer mensageiro. O botão do WhatsApp só deixa a mensagem pronta.
+
+## Perguntas de empresas (RH, TI e jurídico)
+
+### Quanto custa para a empresa?
+
+Nada. Criar grupos, sortear, mandar o link, acompanhar o painel e montar a lista de presentes é grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente, sem custo a mais para quem compra.
+
+### Quantas pessoas podem participar?
+
+Até 50 pessoas por grupo. Para equipes maiores, crie um grupo por área ou time; não há limite de grupos. Se vocês precisam de um único sorteio com mais de 50 pessoas, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+
+### Funciona no Slack, no Teams ou por e-mail?
+
+Funciona. O convite é um link comum (amigoocultoja.com.br/g/ seguido de um código) que pode ser colado em qualquer canal: Slack, Microsoft Teams, e-mail, intranet ou WhatsApp. Não há integração instalada nessas ferramentas.
+
+### Precisa instalar alguma coisa no computador da empresa?
+
+Não. Tudo funciona no navegador do celular ou do computador. Quem preferir pode usar o app para iPhone e Android, mas não é necessário.
+
+### Quais dados dos funcionários vocês coletam?
+
+Só os nomes digitados por quem organiza, usados apenas para o sorteio. Quem participa não cria conta e não informa e-mail, telefone ou CPF. Quem organiza informa nome e e-mail. Os dados são tratados conforme a LGPD e a Política de Privacidade em amigoocultoja.com.br/privacidade.
+
+### O RH ou quem organiza consegue ver quem tirou quem?
+
+Não. O resultado é gerado no servidor e cada pessoa só consegue ver o próprio. O painel mostra apenas quem já abriu o link, quem já viu o resultado e quem já montou a lista.
+
+### Dá para evitar que certas pessoas se tirem?
+
+Dá. Na hora de sortear, marque quem não pode tirar quem, por exemplo um casal que trabalha na mesma empresa. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava.
+
+### E se alguém entrar ou sair da empresa depois do sorteio?
+
+Quem organiza inclui ou remove a pessoa no painel. O sorteio é refeito com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link.
+
+### Como funciona para equipes remotas?
+
+Cada pessoa descobre quem tirou pelo link, de onde estiver, e a lista de presentes tem links para comprar online. A equipe combina se a entrega é no escritório ou na casa de cada um.
+
+### A empresa pode pagar os presentes ou dar vale-presente?
+
+Hoje cada participante compra o próprio presente, pelos links da lista ou onde preferir. Se a empresa quer bancar os presentes ou usar vale-presente, fale com a gente pelo e-mail amigoocultoja@gmail.com.
+
+## Como organizar o amigo secreto da empresa
+
+1. Defina o valor com antecedência: Entre R$ 50 e R$ 100 costuma funcionar bem no trabalho. Um valor fixo evita que alguém gaste muito mais que os outros.
+2. Sorteie 2 a 3 semanas antes da troca: Dá tempo de a lista de presentes ser montada e de as compras online chegarem, inclusive para quem é remoto.
+3. Separe por áreas quando a empresa for grande: Em grupos menores, de gente que convive no dia a dia, fica mais fácil acertar o presente. Crie um grupo por time e mantenha a mesma data para todos.
+4. Combine a entrega dos remotos: Decida antes se os presentes vão para o escritório, para a casa de cada um ou se a troca é por videochamada.
+5. Deixe a lista de presentes obrigatória no convite: Peça a todos para escolher até 3 ideias ao descobrir quem tiraram. É o que mais reduz presente errado.
 
 ## O que o site não faz
 

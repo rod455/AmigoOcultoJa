@@ -9,10 +9,18 @@
       "fonte": "app"
     },
     "faq_opened": {
-      "pergunta": "Quais dúvidas a página inicial deixa sem resposta?",
+      "pergunta": "Quais dúvidas cada página (início, empresas) deixa sem resposta?",
       "natureza": "sessao",
       "unidade": "aparelho",
       "desde": "2026-10-04",
+      "fonte": "app",
+      "ressalva": "15/10/2026: a propriedade pagina começou a ser enviada; antes desse dia, todo faq_opened é da página inicial."
+    },
+    "contact_clicked": {
+      "pergunta": "Quantas empresas pedem contato (sorteio acima de 50 pessoas, empresa pagando os presentes) e por qual botão?",
+      "natureza": "ato",
+      "unidade": "aparelho",
+      "desde": "2026-10-15",
       "fonte": "app"
     },
     "create_started": {

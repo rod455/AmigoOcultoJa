@@ -23,9 +23,23 @@ Idioma: português do Brasil. Público: famílias, amigos e equipes de trabalho 
 2. Sorteie e envie o convite: Toque em Sortear, entre com Google ou e-mail e envie a mensagem pronta para o grupo do WhatsApp.
 3. Cada um descobre e escolhe: Cada pessoa abre o link, toca no próprio nome, vê quem tirou e escolhe até 3 presentes. Quem a tirou vê a lista na hora.
 
+## Para empresas
+
+O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.
+
+- Preço: Grátis para a empresa e para quem participa, sem limite de grupos.
+- Tamanho: Até 50 pessoas por grupo. Equipes maiores criam um grupo por área ou time, sem limite de grupos.
+- Onde o convite vai: É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet.
+- Instalação: Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional.
+- Dados da equipe: Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail.
+- Sigilo: O sorteio é feito no servidor e cada pessoa só vê o próprio resultado. Nem o RH, nem quem organiza, vê quem tirou quem.
+- Acompanhamento: Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta.
+- Regras: Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto).
+
 ## Páginas
 
 - [Início](https://amigoocultoja.com.br/): O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.
+- [Amigo secreto na empresa](https://amigoocultoja.com.br/empresas): Para RH, líderes de time e comitês de confraternização: como organizar o amigo secreto corporativo, equipes remotas, dados (LGPD) e perguntas de empresas.
 - [Política de Privacidade](https://amigoocultoja.com.br/privacidade): Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).
 - [Termos de Uso](https://amigoocultoja.com.br/termos): Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.
 - [Ajuda e suporte](https://amigoocultoja.com.br/suporte): Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.

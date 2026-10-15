@@ -7,9 +7,11 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const site = JSON.parse(fs.readFileSync(path.join(root, 'src/content/site.json'), 'utf8'));
+const empresas = JSON.parse(fs.readFileSync(path.join(root, 'src/content/empresas.json'), 'utf8'));
 
 const pages = [
   [`${site.url}/`, 'Início', 'O que é, como funciona, perguntas frequentes e o formulário para criar um grupo.'],
+  [`${site.url}${empresas.path}`, 'Amigo secreto na empresa', 'Para RH, líderes de time e comitês de confraternização: como organizar o amigo secreto corporativo, equipes remotas, dados (LGPD) e perguntas de empresas.'],
   [`${site.url}/privacidade`, 'Política de Privacidade', 'Quais dados o site guarda, para que usa, com quem compartilha e como pedir exclusão (LGPD).'],
   [`${site.url}/termos`, 'Termos de Uso', 'Regras de uso para quem organiza e para quem participa, presentes e lojas parceiras.'],
   [`${site.url}/suporte`, 'Ajuda e suporte', 'Contato e soluções para os problemas mais comuns: link, nome escolhido por engano, e-mail de confirmação, senha e exclusão da conta.'],
@@ -34,6 +36,12 @@ ${facts}
 
 ${steps}
 
+## Para empresas
+
+${empresas.summary}
+
+${empresas.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}
+
 ## Páginas
 
 ${pages.map(([u, t, d]) => `- [${t}](${u}): ${d}`).join('\n')}
@@ -46,10 +54,20 @@ Contato: ${site.email}
 `;
 
 const faq = site.faq.map(([q, a]) => `### ${q}\n\n${a}`).join('\n\n');
+const faqEmpresas = empresas.faq.map(([q, a]) => `### ${q}\n\n${a}`).join('\n\n');
+const tips = empresas.tips.map(([t, d], i) => `${i + 1}. ${t}: ${d}`).join('\n');
 const full = `${short}
 ## Perguntas frequentes
 
 ${faq}
+
+## Perguntas de empresas (RH, TI e jurídico)
+
+${faqEmpresas}
+
+## Como organizar o amigo secreto da empresa
+
+${tips}
 
 ## O que o site não faz
 

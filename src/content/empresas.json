@@ -1,0 +1,54 @@
+{
+  "_comment": "Conteúdo factual da página /empresas, dos dados estruturados dela e da seção de empresas do /llms-full.txt. Só escreva o que o produto faz hoje; o que ainda não existe vira 'fale com a gente'.",
+  "path": "/empresas",
+  "metaTitle": "Amigo Secreto na Empresa: Sorteio Online Grátis para Equipes | Amigo Oculto Já!",
+  "metaDescription": "Organize o amigo secreto da empresa em minutos: um link no grupo da equipe, no Slack, no Teams ou por e-mail. Sorteio secreto, lista de presentes e painel de quem já viu. Grátis.",
+  "summary": "O Amigo Oculto Já! organiza o amigo secreto (amigo oculto) da empresa pela internet, de graça. Quem organiza cadastra os nomes da equipe e o valor do presente; cada pessoa recebe um link, descobre quem tirou no próprio celular ou computador e monta uma lista com até 3 presentes. Ninguém precisa se cadastrar para participar, e nem quem organiza vê quem tirou quem.",
+  "facts": [
+    ["Preço", "Grátis para a empresa e para quem participa, sem limite de grupos."],
+    ["Tamanho", "Até 50 pessoas por grupo. Equipes maiores criam um grupo por área ou time, sem limite de grupos."],
+    ["Onde o convite vai", "É um link comum: funciona no WhatsApp, no Slack, no Microsoft Teams, no e-mail ou na intranet."],
+    ["Instalação", "Nenhuma. Abre no navegador do celular ou do computador do trabalho. O app para iPhone e Android é opcional."],
+    ["Dados da equipe", "Quem participa não se cadastra: a empresa não precisa coletar e-mail, telefone nem CPF de ninguém. De quem organiza, só nome e e-mail."],
+    ["Sigilo", "O sorteio é feito no servidor e cada pessoa só vê o próprio resultado. Nem o RH, nem quem organiza, vê quem tirou quem."],
+    ["Acompanhamento", "Painel com quem já abriu o link, quem já viu o resultado e quem já montou a lista, com lembrete para quem falta."],
+    ["Regras", "Valor do presente, data da troca e quem não pode tirar quem (por exemplo, quem divide a mesma mesa ou o casal que trabalha junto)."]
+  ],
+  "steps": [
+    ["Monte o grupo da equipe", "Digite o nome do grupo (por exemplo, \"Amigo secreto do Financeiro\"), os nomes de quem participa, o valor do presente e a data da troca."],
+    ["Sorteie e mande o link", "Toque em Sortear e cole o link no canal da equipe: WhatsApp, Slack, Teams ou e-mail."],
+    ["Cada um descobre e escolhe", "Cada pessoa abre o link, toca no próprio nome, vê quem tirou e deixa até 3 ideias de presente dentro do valor."]
+  ],
+  "pains": [
+    ["Ninguém quer ser o dono do papelzinho", "O sorteio é automático e secreto. Quem organiza não precisa sortear, guardar segredo nem refazer tudo quando alguém tira o próprio nome."],
+    ["Metade da equipe é remota ou híbrida", "Cada pessoa descobre quem tirou de onde estiver, pelo link. A lista de presentes já tem link para comprar; vocês só combinam onde entregar."],
+    ["\"O que eu dou para alguém que mal conheço?\"", "Cada participante deixa até 3 ideias dentro do valor combinado. Quem tirou vê a lista na hora e acerta o presente."],
+    ["Gente que entra e sai no meio do caminho", "Contratou ou alguém saiu depois do sorteio? Inclua ou remova no painel: o sorteio se ajusta com a menor troca possível e só quem foi afetado recebe aviso."],
+    ["TI e jurídico perguntam sobre dados", "Quem participa não cria conta nem informa e-mail, telefone ou CPF. Os nomes são usados só para o sorteio, conforme a LGPD, e o grupo pode ser excluído a pedido."],
+    ["Lembrar quem ainda não abriu", "O painel mostra quem falta abrir o link, ver o resultado ou montar a lista. Você lembra só essas pessoas, sem expor ninguém."]
+  ],
+  "roles": [
+    ["RH e Pessoas & Cultura", "Organize a confraternização de fim de ano sem planilha nem papelzinho: um grupo por área, todos no mesmo padrão de valor e data."],
+    ["Líder de time", "Crie o amigo secreto do seu time em 2 minutos e mande no canal da equipe. Você também participa e não vê o resultado de ninguém."],
+    ["Comitê da festa", "Acompanhe no painel quem já entrou e quem já escolheu presente, e use os lembretes para fechar todo mundo antes da troca."]
+  ],
+  "tips": [
+    ["Defina o valor com antecedência", "Entre R$ 50 e R$ 100 costuma funcionar bem no trabalho. Um valor fixo evita que alguém gaste muito mais que os outros."],
+    ["Sorteie 2 a 3 semanas antes da troca", "Dá tempo de a lista de presentes ser montada e de as compras online chegarem, inclusive para quem é remoto."],
+    ["Separe por áreas quando a empresa for grande", "Em grupos menores, de gente que convive no dia a dia, fica mais fácil acertar o presente. Crie um grupo por time e mantenha a mesma data para todos."],
+    ["Combine a entrega dos remotos", "Decida antes se os presentes vão para o escritório, para a casa de cada um ou se a troca é por videochamada."],
+    ["Deixe a lista de presentes obrigatória no convite", "Peça a todos para escolher até 3 ideias ao descobrir quem tiraram. É o que mais reduz presente errado."]
+  ],
+  "faq": [
+    ["Quanto custa para a empresa?", "Nada. Criar grupos, sortear, mandar o link, acompanhar o painel e montar a lista de presentes é grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente, sem custo a mais para quem compra."],
+    ["Quantas pessoas podem participar?", "Até 50 pessoas por grupo. Para equipes maiores, crie um grupo por área ou time; não há limite de grupos. Se vocês precisam de um único sorteio com mais de 50 pessoas, fale com a gente pelo e-mail amigoocultoja@gmail.com."],
+    ["Funciona no Slack, no Teams ou por e-mail?", "Funciona. O convite é um link comum (amigoocultoja.com.br/g/ seguido de um código) que pode ser colado em qualquer canal: Slack, Microsoft Teams, e-mail, intranet ou WhatsApp. Não há integração instalada nessas ferramentas."],
+    ["Precisa instalar alguma coisa no computador da empresa?", "Não. Tudo funciona no navegador do celular ou do computador. Quem preferir pode usar o app para iPhone e Android, mas não é necessário."],
+    ["Quais dados dos funcionários vocês coletam?", "Só os nomes digitados por quem organiza, usados apenas para o sorteio. Quem participa não cria conta e não informa e-mail, telefone ou CPF. Quem organiza informa nome e e-mail. Os dados são tratados conforme a LGPD e a Política de Privacidade em amigoocultoja.com.br/privacidade."],
+    ["O RH ou quem organiza consegue ver quem tirou quem?", "Não. O resultado é gerado no servidor e cada pessoa só consegue ver o próprio. O painel mostra apenas quem já abriu o link, quem já viu o resultado e quem já montou a lista."],
+    ["Dá para evitar que certas pessoas se tirem?", "Dá. Na hora de sortear, marque quem não pode tirar quem, por exemplo um casal que trabalha na mesma empresa. Se as restrições tornarem o sorteio impossível, o site avisa qual delas trava."],
+    ["E se alguém entrar ou sair da empresa depois do sorteio?", "Quem organiza inclui ou remove a pessoa no painel. O sorteio é refeito com a menor troca possível e só quem teve o resultado alterado vê um aviso ao abrir o link."],
+    ["Como funciona para equipes remotas?", "Cada pessoa descobre quem tirou pelo link, de onde estiver, e a lista de presentes tem links para comprar online. A equipe combina se a entrega é no escritório ou na casa de cada um."],
+    ["A empresa pode pagar os presentes ou dar vale-presente?", "Hoje cada participante compra o próprio presente, pelos links da lista ou onde preferir. Se a empresa quer bancar os presentes ou usar vale-presente, fale com a gente pelo e-mail amigoocultoja@gmail.com."]
+  ]
+}

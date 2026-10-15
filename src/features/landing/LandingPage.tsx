@@ -10,7 +10,7 @@ import { loadDraft, saveDraft } from '@/lib/device';
 import { colors, fonts } from '@/theme/tokens';
 import site from '@/content/site.json';
 
-const MAX_W = 1040;
+export const MAX_W = 1040;
 
 const META_TITLE = 'Sorteio de Amigo Oculto Online e Grátis | Amigo Oculto Já!';
 const META_DESC =
@@ -67,7 +67,7 @@ const JSON_LD = JSON.stringify({
     },
   ],
 });
-const CTA = 'Criar meu grupo';
+export const CTA = 'Criar meu grupo';
 const MICROCOPY = 'Grátis · 3 passos · quem participa não se cadastra';
 
 /**
@@ -218,7 +218,7 @@ export function LandingPage() {
             <View style={{ flexDirection: wide ? 'row' : 'column', gap: 12 }}>
               <Audience title="Família" text="Quem organiza todo ano manda um link só. Quem mora longe participa igual. A tia que não entende de app só toca no nome dela." />
               <Audience title="Turma de amigos" text="Casais que não podem se tirar, valor combinado, data marcada. Se alguém furar, você tira a pessoa e o sorteio se ajusta com a menor troca possível." />
-              <Audience title="Trabalho" text="Até 50 pessoas por grupo. O painel mostra quem já viu e quem ainda falta, sem revelar nada a ninguém." />
+              <Audience title="Trabalho" text="Até 50 pessoas por grupo e um grupo por time. O link vai no WhatsApp, no Slack ou no Teams, e o painel mostra quem ainda falta." link={{ href: '/empresas', label: 'Amigo secreto na empresa' }} />
             </View>
           </Section>
 
@@ -289,7 +289,7 @@ function Campaign({ wide, pad, daysToXmas }: { wide: boolean; pad: number; daysT
   );
 }
 
-function Nav() {
+export function Nav() {
   const wide = useViewportWidth() >= 860;
   return (
     <View style={{ height: wide ? 100 : 76, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -299,6 +299,15 @@ function Nav() {
         </Pressable>
       </Link>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        {wide ? (
+          <Link href="/empresas" asChild>
+            <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
+              <T size={15} weight="semibold">
+                Para empresas
+              </T>
+            </Pressable>
+          </Link>
+        ) : null}
         {wide ? (
           <Link href="/entrar" asChild>
             <Pressable accessibilityRole="link" style={{ height: 44, paddingHorizontal: 12, justifyContent: 'center' }}>
@@ -321,7 +330,7 @@ function Nav() {
 }
 
 /** Formulário inline: nome do grupo → já entra no passo 2 (pessoas). */
-function HeroForm({ origin }: { origin: string }) {
+export function HeroForm({ origin, placeholder = 'Natal da Família', cta = CTA, microcopy = MICROCOPY }: { origin: string; placeholder?: string; cta?: string; microcopy?: string }) {
   const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   const ref = useRef<TextInput>(null);
@@ -357,7 +366,7 @@ function HeroForm({ origin }: { origin: string }) {
             ref={ref}
             value={name}
             onChangeText={setName}
-            placeholder="Natal da Família"
+            placeholder={placeholder}
             maxLength={60}
             returnKeyType="go"
             onSubmitEditing={go}
@@ -365,10 +374,10 @@ function HeroForm({ origin }: { origin: string }) {
             style={{ fontSize: 20, fontFamily: fonts.semibold, height: 48 }}
           />
         </View>
-        <Button label={CTA} onPress={go} loading={busy} style={{ width: row ? 260 : '100%' }} />
+        <Button label={cta} onPress={go} loading={busy} style={{ width: row ? 260 : '100%' }} />
       </View>
       <T size={13} color={colors.textSecondary}>
-        {MICROCOPY}
+        {microcopy}
       </T>
     </View>
   );
@@ -430,7 +439,7 @@ function WhatsAppBubble() {
   );
 }
 
-function Section({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
+export function Section({ title, eyebrow, children }: { title: string; eyebrow: string; children: React.ReactNode }) {
   const width = useViewportWidth();
   const wide = width >= 860;
   return (
@@ -448,8 +457,8 @@ function Section({ title, eyebrow, children }: { title: string; eyebrow: string;
   );
 }
 
-function Steps({ wide }: { wide: boolean }) {
-  const steps: Array<[string, string, string]> = [
+export function Steps({ wide, items }: { wide: boolean; items?: Array<[string, string, string]> }) {
+  const steps: Array<[string, string, string]> = items ?? [
     [site.steps[0][0], site.steps[0][1], '3 passos'],
     [site.steps[1][0], site.steps[1][1], '1 mensagem'],
     [site.steps[2][0], site.steps[2][1], 'sem cadastro'],
@@ -526,7 +535,7 @@ function Compare({ wide }: { wide: boolean }) {
   );
 }
 
-function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: string; text: string; wide: boolean }) {
+export function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: string; text: string; wide: boolean }) {
   return (
     <View style={{ flex: wide ? 1 : undefined, gap: 10, paddingVertical: wide ? 0 : 20, borderBottomWidth: wide ? 0 : 1, borderBottomColor: colors.line }}>
       <View style={{ width: 44, height: 44, borderRadius: 14, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center' }}>{icon}</View>
@@ -540,7 +549,7 @@ function Feature({ icon, title, text, wide }: { icon: React.ReactNode; title: st
   );
 }
 
-function Audience({ title, text }: { title: string; text: string }) {
+export function Audience({ title, text, link }: { title: string; text: string; link?: { href: '/empresas'; label: string } }) {
   return (
     <View style={{ flex: 1, padding: 22, borderRadius: 20, backgroundColor: colors.peach, gap: 8 }}>
       <T size={20} weight="bold" accessibilityRole="header" aria-level={3}>
@@ -549,11 +558,20 @@ function Audience({ title, text }: { title: string; text: string }) {
       <T size={15} color={colors.textSecondary} lineHeight={22}>
         {text}
       </T>
+      {link ? (
+        <Link href={link.href} asChild>
+          <Pressable accessibilityRole="link" style={{ paddingTop: 4 }}>
+            <T size={15} weight="bold" color={colors.accentDark} style={{ textDecorationLine: 'underline' }}>
+              {link.label}
+            </T>
+          </Pressable>
+        </Link>
+      ) : null}
     </View>
   );
 }
 
-function Faq({ items }: { items: Array<[string, string]> }) {
+export function Faq({ items, page = 'inicio' }: { items: Array<[string, string]>; page?: string }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
     <View>
@@ -561,7 +579,7 @@ function Faq({ items }: { items: Array<[string, string]> }) {
         const on = open === i;
         return (
           <View key={q} style={{ borderBottomWidth: 1, borderBottomColor: colors.line }}>
-            <Pressable accessibilityRole="button" accessibilityState={{ expanded: on }} onPress={() => { setOpen(on ? null : i); if (!on) track('faq_opened', { pergunta: i }); }} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 14 }}>
+            <Pressable accessibilityRole="button" accessibilityState={{ expanded: on }} onPress={() => { setOpen(on ? null : i); if (!on) track('faq_opened', { pergunta: i, pagina: page }); }} style={{ minHeight: 60, flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 14 }}>
               <T size={18} weight="semibold" style={{ flex: 1 }} accessibilityRole="header" aria-level={3}>
                 {q}
               </T>
@@ -580,7 +598,7 @@ function Faq({ items }: { items: Array<[string, string]> }) {
   );
 }
 
-function Footer() {
+export function Footer() {
   return (
     <View style={{ paddingVertical: 32, gap: 10 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16, flexWrap: 'wrap', paddingBottom: 10 }}>
@@ -607,6 +625,13 @@ function Footer() {
           <Pressable accessibilityRole="link">
             <T size={13} weight="semibold" color={colors.textSecondary}>
               Tenho um convite
+            </T>
+          </Pressable>
+        </Link>
+        <Link href="/empresas" asChild>
+          <Pressable accessibilityRole="link">
+            <T size={13} weight="semibold" color={colors.textSecondary}>
+              Para empresas
             </T>
           </Pressable>
         </Link>
