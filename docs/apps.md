@@ -209,3 +209,20 @@ Antes de cada envio para revisão:
    Information) e criar um grupo de teste.
 3. Com usuários de verdade, o plano Pro do Supabase (sem pausa, com backup
    diário) é o caminho seguro; o ping é a rede de proteção do plano grátis.
+
+### Revogar o "Entrar com a Apple" ao excluir a conta
+
+A diretriz 5.1.1(v) pede que a exclusão de conta revogue o acesso dado pelo
+"Entrar com a Apple". O app faz isso pela Edge Function `apple_conta`
+(migração 0019): guarda o token da Apple no login e revoga antes de apagar a
+conta. Para funcionar, ela precisa de uma chave da Apple, que fica só no
+Supabase (nunca no repositório nem no chat):
+
+1. developer.apple.com › Certificates, Identifiers & Profiles › Keys › "+".
+   Marque **Sign in with Apple**, configure com o App ID
+   `br.com.amigoocultoja.app`, salve e baixe o `.p8` (só baixa uma vez).
+2. Supabase › Edge Functions › Secrets: `APPLE_KEY_ID` (o Key ID de 10
+   letras) e `APPLE_PRIVATE_KEY` (o conteúdo inteiro do `.p8`).
+
+Sem a chave, o login e a exclusão continuam funcionando; só a revogação não
+acontece.
