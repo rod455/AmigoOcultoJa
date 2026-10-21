@@ -1,0 +1,39 @@
+# Mantém o Supabase acordado e avisa se ele cair.
+#
+# No plano grátis o Supabase pausa o projeto depois de alguns dias com pouco
+# uso, e aí o app e o site mostram "Sem conexão" para todo mundo (foi o que
+# a Apple viu na revisão de 20/10/2026). A cada 6 horas este job chama
+# rpc_ping (migração 0018), que passa pelo banco. Se a resposta não for 200,
+# o job falha e o GitHub manda e-mail para o dono do repositório.
+# A URL e a chave anon não são segredo: são as mesmas do app, no .env.
+name: Supabase ativo
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .env
+          sparse-checkout-cone-mode: false
+      - name: Chamar rpc_ping
+        run: |
+          set -a; . ./.env; set +a
+          for tentativa in 1 2 3; do
+            STATUS=$(curl -sS -o resposta.txt -w '%{http_code}' --max-time 30 \
+              -X POST "$EXPO_PUBLIC_SUPABASE_URL/rest/v1/rpc/rpc_ping" \
+              -H "apikey: $EXPO_PUBLIC_SUPABASE_ANON_KEY" \
+              -H "Authorization: Bearer $EXPO_PUBLIC_SUPABASE_ANON_KEY" \
+              -H 'Content-Type: application/json' -d '{}' || echo 000)
+            echo "tentativa $tentativa: HTTP $STATUS $(cat resposta.txt 2>/dev/null)"
+            [ "$STATUS" = "200" ] && exit 0
+            sleep 20
+          done
+          echo "::error::O Supabase não respondeu. Veja se o projeto está pausado em supabase.com/dashboard."
+          exit 1

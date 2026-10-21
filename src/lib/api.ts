@@ -461,10 +461,10 @@ export function friendlyError(e: unknown): string {
       case 'INVALID_LINK':
         return 'Não achamos o produto nesse link. Abra a página do produto na Amazon e copie o link de lá.';
       default:
-        if (/fetch|network|load failed/i.test(e.message)) return 'Sem conexão. Verifique a internet e tente de novo.';
+        if (/fetch|network|load failed/i.test(e.message)) return 'Não conseguimos falar com o servidor. Confira a internet e tente de novo em instantes.';
         return e.message || GENERIC_ERROR;
     }
   }
-  if (e instanceof Error && /fetch|network/i.test(e.message)) return 'Sem conexão. Verifique a internet e tente de novo.';
+  if (e instanceof Error && /fetch|network/i.test(e.message)) return 'Não conseguimos falar com o servidor. Confira a internet e tente de novo em instantes.';
   return GENERIC_ERROR;
 }

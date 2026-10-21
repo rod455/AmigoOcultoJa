@@ -248,6 +248,6 @@ export function authErrorMessage(e: unknown): string {
   if (/Password should be at least/i.test(msg)) return 'A senha precisa ter pelo menos 6 caracteres.';
   if (/rate limit|too many/i.test(msg)) return 'Muitas tentativas. Espere um minuto e tente de novo.';
   if (/provider is not enabled|Unsupported provider/i.test(msg)) return 'Esse login ainda não está ativado. Use e-mail e senha por enquanto.';
-  if (/fetch|network/i.test(msg)) return 'Sem conexão. Verifique a internet e tente de novo.';
+  if (/fetch|network/i.test(msg)) return 'Não conseguimos falar com o servidor. Confira a internet e tente de novo em instantes.';
   return msg || 'Não deu para entrar. Tenta de novo?';
 }

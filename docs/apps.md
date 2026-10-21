@@ -185,3 +185,27 @@ sorteio) mora no servidor.
 5. Sobre um build que nenhum aparelho abriu, a resposta é "sem sinal ainda".
    O segundo sinal é a medição:
    `select app_version, build, platform, count(*) from events where name = 'session_started' group by 1, 2, 3`.
+
+## 9. Antes de mandar para revisão: o servidor tem que estar de pé
+
+A primeira revisão da Apple (1.0.0, build 5, 20/10/2026) foi recusada pela
+diretriz 2.1(a): "apareceu uma mensagem de erro ao entrar". A causa não era o
+app: o projeto do Supabase está no **plano grátis**, que pausa o projeto
+depois de alguns dias com pouco uso. Ele foi pausado às 16:16 UTC e o revisor
+testou às 22:38 UTC; com o servidor parado, toda chamada falha e o app mostrava
+"Sem conexão".
+
+O que existe agora:
+- `.github/workflows/supabase-ativo.yml` chama `rpc_ping` (migração 0018) a
+  cada 6 horas. Isso conta como uso e, se o banco não responder, o job falha
+  e o GitHub manda e-mail ao dono do repositório.
+- A mensagem de erro de rede passou a ser "Não conseguimos falar com o
+  servidor. Confira a internet e tente de novo em instantes.", que serve
+  tanto para o aparelho sem internet quanto para o servidor fora do ar.
+
+Antes de cada envio para revisão:
+1. Em supabase.com/dashboard, o projeto tem que estar "Healthy" (não "Paused").
+2. Entrar no site com a conta de revisão (a mesma informada em App Review
+   Information) e criar um grupo de teste.
+3. Com usuários de verdade, o plano Pro do Supabase (sem pausa, com backup
+   diário) é o caminho seguro; o ping é a rede de proteção do plano grátis.
