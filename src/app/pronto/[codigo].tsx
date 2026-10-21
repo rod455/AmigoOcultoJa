@@ -1,11 +1,11 @@
 import * as Clipboard from 'expo-clipboard';
 import { Link, router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, Pressable, Share, View } from 'react-native';
 import { WhatsApp } from '@/components/icons';
-import { BrandSymbol, Button, Screen, Sub, T, Title } from '@/components/ui';
+import { BrandSymbol, Button, ErrorText, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
-import { getPanel, type Panel } from '@/lib/api';
+import { friendlyError, getPanel, type Panel } from '@/lib/api';
 import { inviteMessage, inviteUrl, openWhatsApp } from '@/lib/share';
 import { colors } from '@/theme/tokens';
 
@@ -15,21 +15,34 @@ export default function Pronto() {
   const code = String(codigo ?? '').toUpperCase();
   const [panel, setPanel] = useState<Panel | null>(null);
   const [copied, setCopied] = useState(false);
-  const [shared, setShared] = useState(false);
+  const [error, setError] = useState('');
+  const [attempt, setAttempt] = useState(0);
+  const isNative = Platform.OS !== 'web';
 
   useEffect(() => {
+    setError('');
     getPanel(code)
       .then(setPanel)
-      .catch(() => router.replace('/'));
-  }, [code]);
+      .catch((e) => setError(friendlyError(e)));
+  }, [code, attempt]);
 
+  const message = () =>
+    panel ? inviteMessage({ groupName: panel.group.name, code, budgetCents: panel.group.budget_cents, exchangeAt: panel.group.exchange_at }) : inviteUrl(code);
+
+  // no app: a folha de compartilhar do sistema (WhatsApp, Mensagens, e-mail...);
+  // no site: WhatsApp direto, que é por onde o convite costuma ir
   const share = async () => {
-    if (!panel) return;
+    if (isNative) {
+      track('link_copied', { via: 'compartilhar' }, { code });
+      try {
+        await Share.share({ message: message() });
+      } catch {
+        // folha fechada ou indisponível: o "Copiar link" continua ali
+      }
+      return;
+    }
     track('share_whatsapp_clicked', undefined, { code });
-    setShared(true);
-    await openWhatsApp(
-      inviteMessage({ groupName: panel.group.name, code, budgetCents: panel.group.budget_cents, exchangeAt: panel.group.exchange_at }),
-    );
+    await openWhatsApp(message());
   };
 
   const copy = async () => {
@@ -44,17 +57,30 @@ export default function Pronto() {
       padTop={28}
       footer={
         <View style={{ gap: 6 }}>
-          <Button label="Enviar convite no WhatsApp" variant="whatsapp" icon={<WhatsApp />} onPress={share} disabled={!panel} />
+          {isNative ? (
+            <Button label="Enviar convite" onPress={share} />
+          ) : (
+            <Button label="Enviar convite no WhatsApp" variant="whatsapp" icon={<WhatsApp />} onPress={share} disabled={!panel} />
+          )}
           <Button label={copied ? 'Link copiado!' : 'Copiar link'} variant="ghost" onPress={copy} />
           {/* quem organiza também participa: neste aparelho o nome já está assumido e o link abre direto no resultado */}
           {panel?.participants.some((p) => p.is_organizer) ? (
             <Button label="Ver quem eu tirei" variant="ghost" onPress={() => router.push({ pathname: '/g/[codigo]', params: { codigo: code } })} />
           ) : null}
-          {shared ? (
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 24, paddingTop: 4 }}>
             <Link href={{ pathname: '/painel/[codigo]', params: { codigo: code } }} asChild>
-              <Button label="Ver quem já entrou" variant="ghost" />
+              <Pressable accessibilityRole="link" hitSlop={8}>
+                <T size={14} weight="semibold" color={colors.textSecondary} style={{ textDecorationLine: 'underline' }}>
+                  Ver quem já entrou
+                </T>
+              </Pressable>
             </Link>
-          ) : null}
+            <Pressable accessibilityRole="link" hitSlop={8} onPress={() => router.replace('/')}>
+              <T size={14} weight="semibold" color={colors.textSecondary} style={{ textDecorationLine: 'underline' }}>
+                Ir para o início
+              </T>
+            </Pressable>
+          </View>
         </View>
       }
     >
@@ -64,6 +90,16 @@ export default function Pronto() {
         </View>
         <Title size={38}>Pronto, sorteado!</Title>
         <Sub>Seu grupo está pronto. Agora é só convidar a turma: cada um toca no próprio nome e descobre quem tirou.</Sub>
+        {error ? (
+          <View style={{ gap: 8 }}>
+            <ErrorText>{error}</ErrorText>
+            <Pressable accessibilityRole="button" onPress={() => setAttempt((n) => n + 1)} style={{ alignSelf: 'flex-start' }}>
+              <T size={14} weight="bold" color={colors.accentDark} style={{ textDecorationLine: 'underline' }}>
+                Tentar de novo
+              </T>
+            </Pressable>
+          </View>
+        ) : null}
         <View style={{ paddingTop: 8, gap: 2 }}>
           <T size={14} weight="semibold" color={colors.textSecondary}>
             Link do grupo

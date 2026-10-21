@@ -1,6 +1,6 @@
 import * as Clipboard from 'expo-clipboard';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Bell, Check, ChevronRight, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput, useAccent } from '@/components/ui';
@@ -676,7 +676,8 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           <T size={14} color={savedFlash ? colors.successText : colors.textSecondary} style={{ paddingTop: 10 }}>
             Pronto, salvo! Quem te tirou já está vendo.
           </T>
-          {installPrompt ? (
+          {/* no app isso não faz sentido: a pessoa já está nele */}
+          {installPrompt && Platform.OS === 'web' ? (
             <View style={{ marginTop: 16, padding: 16, borderRadius: 16, backgroundColor: colors.surfaceAlt, gap: 8 }}>
               <T size={16} weight="bold">
                 Quer ser avisado quando {friendFirst} escolher?

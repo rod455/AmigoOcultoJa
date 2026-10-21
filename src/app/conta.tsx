@@ -16,7 +16,8 @@ type Mode = 'login' | 'signup' | 'reset';
  */
 export default function Conta() {
   const params = useLocalSearchParams<{ next?: string; mode?: string }>();
-  const next = typeof params.next === 'string' && params.next.startsWith('/') ? params.next : '/criar/valor?auto=1';
+  // depois de trocar a senha pelo link do e-mail, volta ao início (e não para a criação de grupo)
+  const next = typeof params.next === 'string' && params.next.startsWith('/') ? params.next : params.mode === 'reset' ? '/' : '/criar/valor?auto=1';
   // veio do "Sortear" (no meio da criação do grupo) ou do botão "Entrar" da tela inicial
   const forDraw = next.startsWith('/criar');
   const [mode, setMode] = useState<Mode>(params.mode === 'reset' ? 'reset' : params.mode === 'login' ? 'login' : 'signup');
@@ -70,7 +71,8 @@ export default function Conta() {
       const r = await signInWithProvider(p, next);
       if (!r.redirected) goNext();
     } catch (e) {
-      setError(authErrorMessage(e));
+      // fechar a folha da Apple ou o navegador do Google não é erro
+      if (!(e instanceof Error && e.message === 'CANCELLED')) setError(authErrorMessage(e));
       setBusy('');
     }
   };

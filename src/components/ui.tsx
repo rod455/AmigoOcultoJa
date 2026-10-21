@@ -116,12 +116,13 @@ export function Screen({ children, footer, scroll = true, top, padTop = 20, gap 
   const body = (
     <View style={[{ flexGrow: 1, gap }, contentStyle]}>{children}</View>
   );
-  // No iPhone o teclado cobre o rodapé ("Continuar", "Sortear"); a tela sobe
-  // junto com ele. No Android o sistema já redimensiona a janela.
-  const Shell = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
+  // O teclado cobre o rodapé ("Continuar", "Sortear"); a tela sobe junto com
+  // ele. No Android também: com a tela de ponta a ponta (edge-to-edge) o
+  // sistema não redimensiona mais a janela sozinho.
+  const Shell = isWeb ? View : KeyboardAvoidingView;
   return (
     <View style={styles.root} testID={testID}>
-      <Shell style={[styles.phone, isWeb && styles.phoneWeb]} {...(Platform.OS === 'ios' ? { behavior: 'padding' as const } : null)}>
+      <Shell style={[styles.phone, isWeb && styles.phoneWeb]} {...(isWeb ? null : { behavior: 'padding' as const })}>
         <View style={{ height: isWeb ? padTop : insets.top + padTop }} />
         {top ? <View style={{ paddingHorizontal: layout.paddingX }}>{top}</View> : null}
         {scroll ? (

@@ -30,7 +30,9 @@ export default function MinhaConta() {
       setDeleted(true);
       setProfile(null);
     } catch (e) {
-      setError(authErrorMessage(e));
+      const m = authErrorMessage(e);
+      // sessão vencida ou sem rede têm mensagem própria; o resto é falha ao excluir
+      setError(/sessão|servidor/.test(m) ? m : 'Não deu para excluir a conta agora. Tente de novo em instantes ou escreva para amigoocultoja@gmail.com.');
     } finally {
       setBusy(false);
     }

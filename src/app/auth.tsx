@@ -16,9 +16,22 @@ export default function AuthCallback() {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    // o login com Google pelo navegador já troca o código e segue sozinho
-    if (isOAuthInFlight()) return;
     let alive = true;
+    // Login com Google pelo navegador: quem troca o código é a tela de conta.
+    // No Android a volta também abre esta rota por cima; quando o login
+    // termina, ela sai da frente.
+    if (isOAuthInFlight()) {
+      const timer = setInterval(() => {
+        if (!alive || isOAuthInFlight()) return;
+        clearInterval(timer);
+        if (router.canGoBack()) router.back();
+        else router.replace('/');
+      }, 300);
+      return () => {
+        alive = false;
+        clearInterval(timer);
+      };
+    }
     (async () => {
       const ok = typeof code === 'string' && code ? await exchangeCode(code) : false;
       if (!alive) return;

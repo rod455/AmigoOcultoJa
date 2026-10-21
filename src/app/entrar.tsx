@@ -20,7 +20,9 @@ export default function Entrar() {
       setError('Cole o link que você recebeu ou digite o código de 6 letras.');
       return;
     }
-    router.push({ pathname: '/g/[codigo]', params: { codigo: code } });
+    // link de convite individual: .../g/ABC123?c=TOKEN
+    const token = value.match(/[?&]c=([A-Za-z0-9_-]+)/)?.[1];
+    router.push({ pathname: '/g/[codigo]', params: token ? { codigo: code, c: token } : { codigo: code } });
   };
 
   return (

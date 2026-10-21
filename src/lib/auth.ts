@@ -6,7 +6,7 @@ import type { Session, User } from '@supabase/supabase-js';
 import { track } from './analytics';
 import { baseUrl } from './share';
 import { getItem, removeItem, setItem } from './storage';
-import { anonKeyValue, isConfigured, supabase, supabaseUrl } from './supabase';
+import { anonKeyValue, functionsUrl, isConfigured, supabase, supabaseUrl } from './supabase';
 
 /**
  * Conta do organizador. Só guardamos nome e e-mail (vêm do Google/Apple ou do
@@ -154,6 +154,32 @@ export async function appleSignInAvailable(): Promise<boolean> {
   }
 }
 
+/**
+ * Guarda (no login) e revoga (na exclusão da conta) o acesso do "Entrar com a
+ * Apple", pela Edge Function apple_conta (diretriz 5.1.1(v) da App Store).
+ * Nunca trava o login nem a exclusão: falhou, segue.
+ */
+async function appleConta(action: 'guardar' | 'revogar', code?: string): Promise<void> {
+  // AbortSignal.timeout não existe em todo React Native: timer à mão
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const { data } = await supabase().auth.getSession();
+    const token = data.session?.access_token;
+    if (!token || !functionsUrl) return;
+    await fetch(`${functionsUrl}/apple_conta`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: anonKeyValue, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ action, code }),
+      signal: ctrl.signal,
+    });
+  } catch {
+    // sem rede ou função fora do ar: não impede o login nem a exclusão
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function signInWithApple(): Promise<Profile> {
   track('auth_started', { metodo: 'apple' });
   let cred: AppleAuthentication.AppleAuthenticationCredential;
@@ -175,6 +201,7 @@ export async function signInWithApple(): Promise<Profile> {
     const upd = await supabase().auth.updateUser({ data: { full_name: fullName } });
     if (upd.data.user) user = upd.data.user;
   }
+  if (cred.authorizationCode) void appleConta('guardar', cred.authorizationCode);
   track('auth_completed', { metodo: 'apple' });
   return profileFromUser(user);
 }
@@ -233,6 +260,8 @@ export async function signOut(): Promise<void> {
  * você. Ver `rpc_delete_my_account`.
  */
 export async function deleteAccount(): Promise<void> {
+  // quem entrou com a Apple: revoga o acesso antes de apagar a conta
+  await appleConta('revogar');
   const { error } = await supabase().rpc('rpc_delete_my_account');
   if (error) throw error;
   await signOut();
@@ -248,6 +277,13 @@ export function authErrorMessage(e: unknown): string {
   if (/Password should be at least/i.test(msg)) return 'A senha precisa ter pelo menos 6 caracteres.';
   if (/rate limit|too many/i.test(msg)) return 'Muitas tentativas. Espere um minuto e tente de novo.';
   if (/provider is not enabled|Unsupported provider/i.test(msg)) return 'Esse login ainda não está ativado. Use e-mail e senha por enquanto.';
-  if (/fetch|network/i.test(msg)) return 'Não conseguimos falar com o servidor. Confira a internet e tente de novo em instantes.';
-  return msg || 'Não deu para entrar. Tenta de novo?';
+  if (/fetch|network|load failed/i.test(msg)) return 'Não conseguimos falar com o servidor. Confira a internet e tente de novo em instantes.';
+  if (/error sending|sending (confirmation|recovery|magic)/i.test(msg)) return 'Não conseguimos enviar o e-mail agora. Tente de novo em alguns minutos.';
+  if (/signups? not allowed|signup.*disabled/i.test(msg)) return 'Criar conta por e-mail está indisponível agora. Tente de novo mais tarde.';
+  if (/id_token|audience|nonce/i.test(msg)) return 'O login com a Apple não está disponível agora. Use e-mail e senha.';
+  if (/should be different/i.test(msg)) return 'A nova senha precisa ser diferente da atual.';
+  if (/weak|password should contain/i.test(msg)) return 'Escolha uma senha mais forte, com letras e números.';
+  if (/session (missing|not found)|jwt expired|invalid (refresh )?token|not_authenticated/i.test(msg)) return 'Sua sessão expirou. Entre de novo.';
+  if (/user not found/i.test(msg)) return 'Não achamos uma conta com esse e-mail.';
+  return 'Não deu para concluir agora. Tente de novo em instantes.';
 }
