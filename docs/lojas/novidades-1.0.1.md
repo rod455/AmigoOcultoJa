@@ -1,11 +1,11 @@
-# Versão 1.0.1 (iPhone: depois da aprovação da 1.0.0 · Android: próxima envio)
+# Versão 1.0.1 (iPhone e Android)
 
 **Árvore do build:** _(preencher com `git rev-parse --short HEAD` na hora do build)_
 **Enviado à Apple em:** _(data)_ · **à Play em:** _(data)_
 
-Antes do build: subir a versão no `app.json` (`expo.version` para 1.0.1 quando a
-1.0.0 do iPhone for aprovada; no Android, `expo.android.version` para a próxima
-que ainda não está em `docs/lojas/publicadas.json`).
+A 1.0.0 do iPhone foi aprovada em 24/10/2026. A partir daqui, as duas lojas
+andam juntas: `expo.version` = 1.0.1 no `app.json`, sem versão própria por
+loja.
 
 ## O que vai no binário
 

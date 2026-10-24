@@ -1,6 +1,8 @@
 {
   "_comment": "Versões de marketing (app.json > expo.version) já enviadas a cada loja. Acrescente a versão logo depois de enviar; scripts/conferir-app.mjs recusa build de produção com versão que já está aqui (a Apple recusa, e a Play aceita e queima o versionCode).",
-  "ios": [],
+  "ios": [
+    "1.0.0"
+  ],
   "android": [
     "1.0.0"
   ]
