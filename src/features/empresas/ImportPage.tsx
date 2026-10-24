@@ -1,15 +1,16 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import Head from 'expo-router/head';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, Switch, TextInput, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Switch, TextInput, View } from 'react-native';
 import { Calendar } from '@/components/Calendar';
 import { Check } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
 import { Button, ErrorText, T, UnderlineInput } from '@/components/ui';
-import { Footer, MAX_W, Nav } from '@/features/landing/LandingPage';
+import { CompanyShell } from '@/features/empresas/CompanyShell';
+import { openTemplate, pickSheetFile, type SheetFile } from '@/features/empresas/files';
 import { track } from '@/lib/analytics';
 import { attachGroup, createAndDraw, createBatch, friendlyError, setPersonalInvites } from '@/lib/api';
 import { getSession } from '@/lib/auth';
+import { getItem, removeItem, setItem } from '@/lib/storage';
 import { formatBRL } from '@/lib/format';
 import { groupName, MAX_PER_GROUP, type Person, pickSheet, planGroups, readPeople, type SplitMode, parseDelimited } from '@/lib/planilha';
 import { useViewportWidth } from '@/lib/useViewportWidth';
@@ -94,39 +95,25 @@ type Draft = {
   done?: string[];
 };
 
-function loadDraft(): Draft | null {
+async function loadDraft(): Promise<Draft | null> {
   try {
-    const raw = window.localStorage.getItem(DRAFT_KEY);
+    const raw = await getItem(DRAFT_KEY);
     return raw ? (JSON.parse(raw) as Draft) : null;
   } catch {
     return null;
   }
 }
-function saveDraft(d: Draft | null) {
-  try {
-    if (d) window.localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
-    else window.localStorage.removeItem(DRAFT_KEY);
-  } catch {
-    // sem armazenamento: segue sem rascunho
-  }
+async function saveDraft(d: Draft | null): Promise<void> {
+  if (d) await setItem(DRAFT_KEY, JSON.stringify(d));
+  else await removeItem(DRAFT_KEY);
 }
 
-function pickFile(): Promise<File | null> {
-  return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    input.onchange = () => resolve(input.files?.[0] ?? null);
-    input.click();
-  });
-}
-
-async function readFile(file: File): Promise<{ people: Person[]; skipped: number; source: Source }> {
-  if (/\.csv$/i.test(file.name) || file.type === 'text/csv') {
+async function readFile(file: SheetFile): Promise<{ people: Person[]; skipped: number; source: Source }> {
+  if (/\.csv$/i.test(file.name) || /csv|comma-separated/.test(file.type ?? '')) {
     const { people, skipped } = readPeople(parseDelimited(await file.text()));
     return { people, skipped, source: 'csv' };
   }
-  if (!/\.xlsx$/i.test(file.name)) throw new Error('FORMATO');
+  if (!/\.xlsx$/i.test(file.name) && !/spreadsheetml/.test(file.type ?? '')) throw new Error('FORMATO');
   const { default: readXlsxFile } = await import('read-excel-file/universal');
   const sheets = (await readXlsxFile(await file.arrayBuffer())) as unknown as Array<{ sheet: string; data: unknown[][] }>;
   const sheet = pickSheet(sheets);
@@ -382,7 +369,6 @@ function names(people: string[], max = 4): string {
 export function ImportPage() {
   const width = useViewportWidth();
   const wide = width >= 860;
-  const pad = width >= 600 ? 32 : 20;
   const scroll = useRef<ScrollView>(null);
   const finished = useRef(false);
 
@@ -434,18 +420,19 @@ export function ImportPage() {
       setCompany(nome);
       setPrefix(`Amigo secreto ${nome}`);
     }
-    const d = loadDraft();
-    if (!d || !d.people?.length) return;
-    if (d.stage === 4 || d.batchId) {
-      applyDraft(d);
-      setStage(4);
-    } else setSavedDraft(d);
+    loadDraft().then((d) => {
+      if (!d || !d.people?.length) return;
+      if (d.stage === 4 || d.batchId) {
+        applyDraft(d);
+        setStage(4);
+      } else setSavedDraft(d);
+    });
   }, []);
 
   // guarda o preenchimento a cada mudança (recarregar a página não perde nada)
   useEffect(() => {
     if (finished.current || stage === 0 || !people.length) return;
-    saveDraft({ stage, people, source, fileName, mode, dedupe, prefix, personalInvites, budgetCents, exchangeAt, batchId: resume?.batchId, done: resume?.done });
+    void saveDraft({ stage, people, source, fileName, mode, dedupe, prefix, personalInvites, budgetCents, exchangeAt, batchId: resume?.batchId, done: resume?.done });
   }, [stage, people, source, fileName, mode, dedupe, prefix, personalInvites, budgetCents, exchangeAt, resume]);
 
   const plan = useMemo(() => (people.length ? planGroups(people, mode, { dedupe }) : null), [people, mode, dedupe]);
@@ -473,7 +460,7 @@ export function ImportPage() {
       track('import_step', { passo: STEPS[s - 1].event, retomou: true });
       return;
     }
-    if (savedDraft) saveDraft(null);
+    if (savedDraft) void saveDraft(null);
     setSavedDraft(null);
     goTo(1);
   };
@@ -491,7 +478,13 @@ export function ImportPage() {
 
   const chooseFile = async () => {
     setError('');
-    const file = await pickFile();
+    let file: SheetFile | null = null;
+    try {
+      file = await pickSheetFile();
+    } catch {
+      setError('Não conseguimos abrir os arquivos do aparelho. Tente de novo ou digite os nomes.');
+      return;
+    }
     if (!file) return;
     setReading(true);
     try {
@@ -500,6 +493,15 @@ export function ImportPage() {
       setError(e instanceof Error && e.message === 'FORMATO' ? 'Envie o arquivo em .xlsx (Excel) ou .csv. Arquivos .xls antigos: abra no Excel e salve como .xlsx.' : 'Não conseguimos ler esse arquivo. Confira se é o modelo preenchido e tente de novo.');
     } finally {
       setReading(false);
+    }
+  };
+
+  const template = async (formato: 'xlsx' | 'csv', origem?: string) => {
+    track('template_downloaded', { formato, origem });
+    try {
+      await openTemplate(formato === 'xlsx' ? TEMPLATE_XLSX : TEMPLATE_CSV);
+    } catch {
+      setError('Não deu para baixar o modelo agora. Confira a internet e tente de novo.');
     }
   };
 
@@ -513,7 +515,8 @@ export function ImportPage() {
     if (!plan || !planOk) return;
     setError('');
     const draft: Draft = { stage: 4, people, source, fileName, mode, dedupe, prefix, personalInvites, budgetCents, exchangeAt, batchId: resume?.batchId, done: resume?.done };
-    saveDraft(draft);
+    // o rascunho precisa estar gravado antes de ir para o login (no app a gravação é assíncrona)
+    await saveDraft(draft);
     const session = await getSession();
     if (!session) {
       track('auth_required', { origem: 'importar' });
@@ -525,7 +528,7 @@ export function ImportPage() {
     try {
       const batchId = resume?.batchId ?? (await createBatch(prefix));
       setResume({ batchId, done: [...done] });
-      saveDraft({ ...draft, batchId, done: [...done] });
+      await saveDraft({ ...draft, batchId, done: [...done] });
       const todo = plan.groups.filter((g) => !done.has(g.area));
       setProgress({ done: done.size, total: plan.groups.length });
       for (const g of todo) {
@@ -541,13 +544,13 @@ export function ImportPage() {
         if (personalInvites) await setPersonalInvites(r.code, true);
         done.add(g.area);
         setResume({ batchId, done: [...done] });
-        saveDraft({ ...draft, batchId, done: [...done] });
+        await saveDraft({ ...draft, batchId, done: [...done] });
         setProgress({ done: done.size, total: plan.groups.length });
       }
       track('batch_imported', { grupos: plan.groups.length, pessoas: totalPeople, origem: source, por_area: mode === 'area', dinamica: mode, convite_individual: personalInvites });
       if (personalInvites) track('personal_invites_set', { ligado: true, pessoas: totalPeople, lote: true, origem: 'importar' });
       finished.current = true;
-      saveDraft(null);
+      await saveDraft(null);
       router.replace({ pathname: '/empresas/lote/[id]', params: { id: batchId } });
     } catch (e) {
       setError(`${friendlyError(e)} ${done.size ? `${done.size} de ${plan.groups.length} grupos já foram criados; tente de novo para criar o resto.` : ''}`.trim());
@@ -597,8 +600,8 @@ export function ImportPage() {
           <ExampleSheet />
         </Example>
         <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
-          <Button label="Baixar modelo (Excel)" variant="outline" onPress={() => { track('template_downloaded', { formato: 'xlsx', origem: 'abertura' }); window.open(TEMPLATE_XLSX, '_blank'); }} style={{ width: 'auto', paddingHorizontal: 22, height: 46 }} />
-          <Button label="Baixar em CSV" variant="outline" onPress={() => { track('template_downloaded', { formato: 'csv', origem: 'abertura' }); window.open(TEMPLATE_CSV, '_blank'); }} style={{ width: 'auto', paddingHorizontal: 20, height: 46 }} />
+          <Button label="Baixar modelo (Excel)" variant="outline" onPress={() => template('xlsx', 'abertura')} style={{ width: 'auto', paddingHorizontal: 22, height: 46 }} />
+          <Button label="Baixar em CSV" variant="outline" onPress={() => template('csv', 'abertura')} style={{ width: 'auto', paddingHorizontal: 20, height: 46 }} />
         </View>
       </IntroStep>
 
@@ -675,12 +678,12 @@ export function ImportPage() {
         </T>
         <ExampleSheet />
         <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap' }}>
-          <Pressable accessibilityRole="link" onPress={() => { track('template_downloaded', { formato: 'xlsx' }); window.open(TEMPLATE_XLSX, '_blank'); }}>
+          <Pressable accessibilityRole="link" onPress={() => template('xlsx')}>
             <T size={15} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
               Baixar modelo (Excel)
             </T>
           </Pressable>
-          <Pressable accessibilityRole="link" onPress={() => { track('template_downloaded', { formato: 'csv' }); window.open(TEMPLATE_CSV, '_blank'); }}>
+          <Pressable accessibilityRole="link" onPress={() => template('csv')}>
             <T size={15} weight="bold" color={biz.accentDark} style={{ textDecorationLine: 'underline' }}>
               Baixar em CSV
             </T>
@@ -820,7 +823,7 @@ export function ImportPage() {
           trackColor={{ false: colors.lineStrong, true: biz.tint }}
           thumbColor={personalInvites ? biz.accent : '#FFFFFF'}
           // no web, a bolinha ligada usa activeThumbColor (padrão verde-água)
-          {...({ activeThumbColor: biz.accent } as object)}
+          {...(Platform.OS === 'web' ? ({ activeThumbColor: biz.accent } as object) : null)}
         />
       </View>
     </View>
@@ -946,34 +949,24 @@ export function ImportPage() {
     ) : null;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.surface }}>
-      <Head>
-        <title>Cadastro da empresa · Amigo Oculto Já! Empresas</title>
-        <meta name="robots" content="noindex" />
-      </Head>
-      <ScrollView ref={scroll} style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }} keyboardShouldPersistTaps="handled">
-        <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad }}>
-          <Nav empresas cta="Criar um grupo só" ctaOrigin="importar_nav" />
-          {stage === 0 ? (
-            intro
-          ) : (
-            <View style={{ paddingBottom: 16 }}>
-              {stepper}
-              <View style={{ paddingTop: 18 }}>
-                {stage === 1 ? step1 : stage === 2 ? step2 : stage === 3 ? step3 : step4}
-              </View>
-              {footer}
+    <>
+      <CompanyShell title="Cadastro da empresa · Amigo Oculto Já! Empresas" navOrigin="importar_nav" scrollRef={scroll} backTo="/">
+        {stage === 0 ? (
+          intro
+        ) : (
+          <View style={{ paddingBottom: 16 }}>
+            {stepper}
+            <View style={{ paddingTop: 18 }}>
+              {stage === 1 ? step1 : stage === 2 ? step2 : stage === 3 ? step3 : step4}
             </View>
-          )}
-        </View>
-        <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad, paddingTop: 24 }}>
-          <Footer />
-        </View>
-      </ScrollView>
+            {footer}
+          </View>
+        )}
+      </CompanyShell>
 
       <Sheet visible={dateSheet} onClose={() => setDateSheet(false)} title="Dia da troca" footer={<Button label="Pronto" variant="biz" onPress={() => setDateSheet(false)} />}>
         <Calendar key={dateSheet ? 'aberto' : 'fechado'} value={exchangeAt} onChange={setExchangeAt} />
       </Sheet>
-    </View>
+    </>
   );
 }

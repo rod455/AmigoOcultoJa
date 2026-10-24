@@ -1,13 +1,13 @@
 import * as Clipboard from 'expo-clipboard';
 import { Link, router } from 'expo-router';
-import Head from 'expo-router/head';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Platform, Pressable, Share, View } from 'react-native';
 import { Copy, WhatsApp } from '@/components/icons';
 import { Button, Loading, T } from '@/components/ui';
 import { BrandEditor } from '@/features/brand/BrandEditor';
 import { GroupBrandHeader, GroupBrandProvider } from '@/features/brand/GroupBrand';
-import { Footer, MAX_W, Nav } from '@/features/landing/LandingPage';
+import { CompanyShell } from '@/features/empresas/CompanyShell';
+import { saveCsv } from '@/features/empresas/files';
 import { track } from '@/lib/analytics';
 import { type BatchGroup, type BatchPanel, friendlyError, getBatchPanel, setPersonalInvites } from '@/lib/api';
 import { downloadPersonalLinks } from '@/features/invites/PersonalInvitesSheet';
@@ -30,18 +30,15 @@ function Bar({ value }: { value: number }) {
   );
 }
 
-/** Planilha com os links de cada grupo (Área; Grupo; Link; Pessoas; Já viram), separador ";" como o Excel em português. */
-function downloadLinks(panel: BatchPanel) {
+/** Planilha com os links de cada grupo (Grupo; Link; Pessoas; Já viram), separador ";" como o Excel em português. No app, vai pela folha de compartilhar. */
+async function downloadLinks(panel: BatchPanel): Promise<void> {
   const q = (s: string | number) => `"${String(s).replace(/"/g, '""')}"`;
   const rows = [['Grupo', 'Link', 'Pessoas', 'Já viram quem tiraram', 'Listas prontas'], ...panel.groups.map((g) => [g.name, inviteUrl(g.code), g.total, g.viewed, g.list_ready])];
   const csv = '﻿' + rows.map((r) => r.map(q).join(';')).join('\r\n');
-  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `links-${panel.batch.name.replace(/[^\p{L}\p{N}]+/gu, '-').toLowerCase()}.csv`;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  await saveCsv(csv, `links-${slug(panel.batch.name)}.csv`);
 }
+
+const slug = (s: string) => s.replace(/[^\p{L}\p{N}]+/gu, '-').toLowerCase();
 
 function GroupRow({ g, wide, onCopied }: { g: BatchGroup; wide: boolean; onCopied: (name: string) => void }) {
   const copy = async () => {
@@ -49,9 +46,17 @@ function GroupRow({ g, wide, onCopied }: { g: BatchGroup; wide: boolean; onCopie
     track('link_copied', { origem: 'lote' }, { code: g.code });
     onCopied(g.name);
   };
+  const native = Platform.OS !== 'web';
+  // no app: folha de compartilhar do sistema (WhatsApp, Slack, Teams, e-mail); no site: WhatsApp direto
   const share = async () => {
+    const message = inviteMessage({ groupName: g.name, code: g.code, budgetCents: g.budget_cents, exchangeAt: g.exchange_at });
+    if (native) {
+      track('link_copied', { origem: 'lote', via: 'compartilhar' }, { code: g.code });
+      await Share.share({ message }).catch(() => undefined);
+      return;
+    }
     track('share_whatsapp_clicked', { origem: 'lote' }, { code: g.code });
-    await openWhatsApp(inviteMessage({ groupName: g.name, code: g.code, budgetCents: g.budget_cents, exchangeAt: g.exchange_at }));
+    await openWhatsApp(message);
   };
   return (
     <View style={{ flexDirection: wide ? 'row' : 'column', alignItems: wide ? 'center' : 'stretch', gap: wide ? 20 : 10, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: colors.line }}>
@@ -73,10 +78,10 @@ function GroupRow({ g, wide, onCopied }: { g: BatchGroup; wide: boolean; onCopie
             Copiar link
           </T>
         </Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel={`Enviar ${g.name} no WhatsApp`} onPress={share} style={{ height: 40, paddingHorizontal: 14, borderRadius: 20, backgroundColor: colors.whatsapp, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <WhatsApp size={16} />
+        <Pressable accessibilityRole="button" accessibilityLabel={native ? `Enviar o link de ${g.name}` : `Enviar ${g.name} no WhatsApp`} onPress={share} style={{ height: 40, paddingHorizontal: 14, borderRadius: 20, backgroundColor: native ? biz.accent : colors.whatsapp, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          {native ? null : <WhatsApp size={16} />}
           <T size={14} weight="bold" color="#FFFFFF">
-            WhatsApp
+            {native ? 'Enviar' : 'WhatsApp'}
           </T>
         </Pressable>
         <Link href={{ pathname: '/painel/[codigo]', params: { codigo: g.code } }} asChild>
@@ -99,7 +104,6 @@ function GroupRow({ g, wide, onCopied }: { g: BatchGroup; wide: boolean; onCopie
 export function BatchPage({ id }: { id: string }) {
   const width = useViewportWidth();
   const wide = width >= 860;
-  const pad = width >= 600 ? 32 : 20;
   const [panel, setPanel] = useState<BatchPanel | null>(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -157,8 +161,8 @@ export function BatchPage({ id }: { id: string }) {
         r.people.forEach((p) => p.token && rows.push({ name: p.display_name, group: g.name, url: personalInviteUrl(g.code, p.token) }));
       }
       track('personal_invites_set', { ligado: true, pessoas: rows.length, lote: true });
-      downloadPersonalLinks(rows, `links-individuais-${panel.batch.name.replace(/[^\p{L}\p{N}]+/gu, '-').toLowerCase()}.csv`);
-      flash(`Convite individual ligado em todos os grupos. Planilha com ${rows.length} links baixada.`);
+      await downloadPersonalLinks(rows, `links-individuais-${slug(panel.batch.name)}.csv`);
+      flash(`Convite individual ligado em todos os grupos. Planilha com ${rows.length} links ${Platform.OS === 'web' ? 'baixada' : 'pronta'}.`);
     } catch (e) {
       setError(friendlyError(e));
     } finally {
@@ -175,14 +179,7 @@ export function BatchPage({ id }: { id: string }) {
   const first = groups[0];
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.surface }}>
-      <Head>
-        <title>{panel ? `${panel.batch.name} · Amigo Oculto Já! Empresas` : 'Grupos da empresa · Amigo Oculto Já!'}</title>
-        <meta name="robots" content="noindex" />
-      </Head>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center' }}>
-        <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad }}>
-          <Nav empresas cta="Criar um grupo só" ctaOrigin="lote_nav" />
+    <CompanyShell title={panel ? `${panel.batch.name} · Amigo Oculto Já! Empresas` : 'Grupos da empresa · Amigo Oculto Já!'} navOrigin="lote_nav" backTo="/">
           {!panel ? (
             <View style={{ paddingVertical: 60, gap: 12 }}>{error ? <T size={16} color={colors.accentDark}>{error}</T> : <Loading />}</View>
           ) : (
@@ -224,7 +221,7 @@ export function BatchPage({ id }: { id: string }) {
 
                 <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
                   <Button label="Copiar todos os links" variant="biz" onPress={copyAll} style={{ width: 'auto', paddingHorizontal: 22, height: 48 }} />
-                  <Button label="Baixar planilha com os links" variant="outline" onPress={() => { downloadLinks(panel); track('link_copied', { origem: 'lote_planilha', grupos: groups.length }); }} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
+                  <Button label={Platform.OS === 'web' ? 'Baixar planilha com os links' : 'Enviar planilha com os links'} variant="outline" onPress={() => { downloadLinks(panel).catch(() => setError('Não deu para gerar a planilha agora. Tente de novo.')); track('link_copied', { origem: 'lote_planilha', grupos: groups.length }); }} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
                   <Button label="Links individuais (planilha)" variant="outline" onPress={personalLinks} loading={!!personalBusy} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
                   <Button label={brand ? 'Trocar a marca da empresa' : 'Colocar a marca da empresa'} variant="outline" onPress={() => setBranding(true)} disabled={!first} style={{ width: 'auto', paddingHorizontal: 20, height: 48 }} />
                 </View>
@@ -266,11 +263,6 @@ export function BatchPage({ id }: { id: string }) {
               ) : null}
             </GroupBrandProvider>
           )}
-        </View>
-        <View style={{ width: '100%', maxWidth: MAX_W, paddingHorizontal: pad, paddingTop: 24 }}>
-          <Footer />
-        </View>
-      </ScrollView>
-    </View>
+    </CompanyShell>
   );
 }

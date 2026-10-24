@@ -1,6 +1,6 @@
 import { Link, router, useFocusEffect, usePathname } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { ChevronRight } from '@/components/icons';
 import { BrandSymbol, Button, Logo, Row, Screen, Sub, T, Title } from '@/components/ui';
 import { track } from '@/lib/analytics';
@@ -8,7 +8,7 @@ import { myBatches, type MyBatch, myGroups, type MyGroup } from '@/lib/api';
 import { getProfile, type Profile } from '@/lib/auth';
 import { isConfigured } from '@/lib/supabase';
 import { groupMeta } from '@/lib/format';
-import { colors } from '@/theme/tokens';
+import { biz, colors } from '@/theme/tokens';
 
 /** Tela 1 — Início (SInicio) */
 export function StartScreen() {
@@ -29,8 +29,8 @@ export function StartScreen() {
           if (!alive) return;
           setProfile(p);
           setChecked(true);
-          // importações de planilha (painel do RH): só no site, onde o painel do lote existe
-          if (p && Platform.OS === 'web') {
+          // importações de planilha (painel da empresa)
+          if (p) {
             myBatches()
               .then((b) => alive && setBatches(b))
               .catch(() => undefined);
@@ -88,6 +88,24 @@ export function StartScreen() {
         </View>
         <Title size={36}>Bora organizar o amigo oculto?</Title>
         <Sub>A surpresa fica. A complicação sai. Você monta o grupo e cada um descobre quem tirou por um link no WhatsApp.</Sub>
+        <Link href="/empresas/importar" asChild>
+          <Pressable
+            accessibilityRole="link"
+            accessibilityLabel="Amigo secreto da empresa: suba a planilha ou digite os nomes"
+            onPress={() => track('create_started', { origem: 'home_empresas' })}
+            style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, paddingHorizontal: 16, borderRadius: 16, backgroundColor: biz.tintSoft, opacity: pressed ? 0.7 : 1 })}
+          >
+            <View style={{ flex: 1, gap: 2 }}>
+              <T size={15} weight="bold" color={biz.accentDark}>
+                Amigo secreto da empresa
+              </T>
+              <T size={13} color={colors.textSecondary} lineHeight={18}>
+                Suba a planilha ou digite os nomes: um grupo por área ou todos juntos.
+              </T>
+            </View>
+            <ChevronRight color={biz.accentDark} />
+          </Pressable>
+        </Link>
       </View>
       {batches.length > 0 ? (
         <View style={{ paddingBottom: 8 }}>

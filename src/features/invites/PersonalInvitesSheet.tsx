@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Platform, Pressable, Switch, View } from 'react-native';
 import { Copy, WhatsApp } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
+import { saveCsv } from '@/features/empresas/files';
 import { Button, ErrorText, Loading, T } from '@/components/ui';
 import { track } from '@/lib/analytics';
 import { friendlyError, type PersonalInvites, setPersonalInvites } from '@/lib/api';
@@ -10,18 +11,14 @@ import { openWhatsApp, personalInviteMessage, personalInviteUrl } from '@/lib/sh
 import { colors } from '@/theme/tokens';
 
 /** Planilha Nome; Link (separador ";" como o Excel em português). */
-export function downloadPersonalLinks(rows: Array<{ name: string; group?: string; url: string }>, fileName: string) {
+export async function downloadPersonalLinks(rows: Array<{ name: string; group?: string; url: string }>, fileName: string): Promise<void> {
   const q = (s: string) => `"${s.replace(/"/g, '""')}"`;
   const withGroup = rows.some((r) => r.group);
   const header = withGroup ? ['Nome', 'Grupo', 'Link pessoal'] : ['Nome', 'Link pessoal'];
   const lines = [header, ...rows.map((r) => (withGroup ? [r.name, r.group ?? '', r.url] : [r.name, r.url]))];
   const csv = '﻿' + lines.map((l) => l.map(q).join(';')).join('\r\n');
-  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  // no site baixa; no app abre a folha de compartilhar (e-mail, salvar em Arquivos...)
+  await saveCsv(csv, fileName);
 }
 
 /**
@@ -122,15 +119,15 @@ export function PersonalInvitesSheet({
               </T>
               <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
                 <Button label="Copiar todos" variant="outline" onPress={copyAll} disabled={!people.length} style={{ width: 'auto', paddingHorizontal: 18, height: 44 }} />
-                {Platform.OS === 'web' ? (
-                  <Button
-                    label="Baixar planilha"
-                    variant="outline"
-                    onPress={() => downloadPersonalLinks(people.map((p) => ({ name: p.display_name, url: personalInviteUrl(code, p.token!) })), `links-${code}.csv`)}
-                    disabled={!people.length}
-                    style={{ width: 'auto', paddingHorizontal: 18, height: 44 }}
-                  />
-                ) : null}
+                <Button
+                  label={Platform.OS === 'web' ? 'Baixar planilha' : 'Enviar planilha'}
+                  variant="outline"
+                  onPress={() => {
+                    downloadPersonalLinks(people.map((p) => ({ name: p.display_name, url: personalInviteUrl(code, p.token!) })), `links-${code}.csv`).catch(() => undefined);
+                  }}
+                  disabled={!people.length}
+                  style={{ width: 'auto', paddingHorizontal: 18, height: 44 }}
+                />
               </View>
               {notice ? (
                 <T size={14} color={colors.successText}>

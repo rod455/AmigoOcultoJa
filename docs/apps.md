@@ -133,6 +133,12 @@ no yaml (lição 8 do guia: "não mexi em nada" não significa "nada mudou").
   Para ligar: Supabase › Authentication › Providers › Apple › ativar e pôr
   `br.com.amigoocultoja.app` em **Client IDs**. Não precisa de chave secreta
   para o login nativo. No site e no Android o botão da Apple não aparece.
+- **Empresas no app** (desde a 1.0.1): cadastro (`/empresas/importar`) e
+  painel da empresa (`/empresas/lote/[id]`). Arquivos pelo seletor do
+  sistema (`expo-file-system`) e saídas pela folha de compartilhar
+  (`expo-sharing`); ver `src/features/empresas/files.ts` (app) e
+  `files.web.ts` (site). A página de vendas `/empresas` só existe no site; no
+  app, o endereço leva ao cadastro. O logo da empresa só sobe pelo site.
 - **Excluir a conta** em `/minha-conta` (no app: toque no seu nome no
   início). A App Store (5.1.1(v)) e a Play exigem. No formulário de segurança
   de dados da Play, o "link para pedir exclusão" é
