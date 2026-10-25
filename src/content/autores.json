@@ -1,0 +1,8 @@
+{
+  "_comment": "Autores das páginas de conteúdo (src/content/paginas). foto: caminho em public/ (quadrada, 400x400); sem foto, aparecem as iniciais. bio: uma ou duas frases, mostradas no fim da página e no dado estruturado (Article).",
+  "paulo-silva": {
+    "nome": "Paulo Silva",
+    "foto": "",
+    "bio": ""
+  }
+}

@@ -22,6 +22,7 @@
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
     "expo-web-browser": "~57.0.3",
+    "marked": "18.1.1",
     "react": "19.2.3",
     "react-dom": "^19.2.3",
     "react-native": "0.86.3",
@@ -29,7 +30,8 @@
     "react-native-screens": "~4.26.0",
     "react-native-svg": "^15.15.4",
     "react-native-web": "^0.21.3",
-    "read-excel-file": "9.3.10"
+    "read-excel-file": "9.3.10",
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
@@ -46,8 +48,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "export:web": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
-    "build": "node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs && node scripts/indexnow.mjs",
+    "export:web": "node scripts/paginas.mjs && node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs",
+    "build": "node scripts/paginas.mjs && node scripts/llms.mjs && EXPO_PUBLIC_COMMIT=$VERCEL_GIT_COMMIT_SHA expo export -p web && node scripts/postexport.mjs && node scripts/indexnow.mjs",
     "conferir:app": "node scripts/conferir-app.mjs"
   },
   "private": true

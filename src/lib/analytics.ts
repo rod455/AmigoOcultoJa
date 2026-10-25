@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import catalog from '@/content/eventos.json';
 import { getAttribution } from './attribution';
+import { mirror } from './marketing';
 import { randomHex } from './device';
 import { getItem, setItem } from './storage';
 import { isConfigured, supabase } from './supabase';
@@ -50,6 +51,12 @@ export function track(
   props?: Record<string, unknown>,
   ctx?: { code?: string; participantId?: string; origin?: string },
 ): void {
+  // eventos de campanha também vão para o Google (site: GA4/Ads; app: Firebase)
+  try {
+    mirror(name, props);
+  } catch {
+    // medição nunca quebra a UI
+  }
   if (!isConfigured) return;
   const origin = ctx?.origin ?? (typeof props?.origem === 'string' ? props.origem : null);
   Promise.all([getDevice(), getAttribution()])

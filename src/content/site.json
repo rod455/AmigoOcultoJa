@@ -3,6 +3,8 @@
   "name": "Amigo Oculto Já!",
   "url": "https://amigoocultoja.com.br",
   "email": "amigoocultoja@gmail.com",
+  "appStore": "https://apps.apple.com/br/app/id6821636982",
+  "playStore": "https://play.google.com/store/apps/details?id=br.com.amigoocultoja.app",
   "tagline": "A surpresa fica. A complicação sai.",
   "summary": "O Amigo Oculto Já! é um site gratuito para fazer o sorteio do amigo oculto, também chamado de amigo secreto, pela internet. Quem organiza cadastra os nomes e o valor do presente, e o sistema sorteia. Cada participante recebe um link pelo WhatsApp, descobre quem tirou e monta uma lista com até 3 presentes.",
   "facts": [
@@ -24,7 +26,7 @@
     ["É grátis mesmo?", "Sim. Criar o grupo, sortear, mandar o link e montar a lista de presentes é tudo grátis, sem limite de grupos. O Amigo Oculto Já! ganha uma comissão das lojas quando alguém compra pelos links de presente. O preço para quem compra é o mesmo."],
     ["Como fazer o sorteio do amigo oculto online?", "Digite o nome do grupo, o seu nome e o dos participantes, escolha o valor do presente e toque em Sortear. O site gera um link para mandar no grupo do WhatsApp. Cada pessoa abre o link, toca no próprio nome e descobre quem tirou."],
     ["Amigo oculto e amigo secreto são a mesma coisa?", "Sim. É a mesma brincadeira, e o nome muda conforme a região do Brasil. O Amigo Oculto Já! serve para os dois."],
-    ["Precisa baixar alguma coisa ou criar conta?", "Quem participa não: só abre o link, sem senha e sem e-mail. Quem organiza monta tudo no navegador e, na hora de sortear, entra com Google ou e-mail (pedimos só nome e e-mail) para acompanhar o grupo de qualquer aparelho. O app para iPhone e Android está a caminho."],
+    ["Precisa baixar alguma coisa ou criar conta?", "Quem participa não: só abre o link, sem senha e sem e-mail. Quem organiza monta tudo no navegador e, na hora de sortear, entra com Google ou e-mail (pedimos só nome e e-mail) para acompanhar o grupo de qualquer aparelho. Quem preferir pode usar o app, na App Store (iPhone) e na Google Play (Android)."],
     ["Quem organiza consegue ver quem tirou quem?", "Não. O sorteio acontece no servidor e cada resultado só pode ser lido pelo aparelho da própria pessoa. O painel mostra apenas quem já abriu, quem já viu e quem já montou a lista."],
     ["Quantas pessoas podem participar?", "De 3 a 50 pessoas por grupo. Quem organiza também entra no sorteio."],
     ["Dá para fazer amigo oculto à distância?", "Dá. Cada pessoa descobre quem tirou pelo link, de onde estiver, e a lista de presentes tem links para comprar e mandar entregar."],

@@ -1,10 +1,11 @@
 import * as Clipboard from 'expo-clipboard';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Linking, Platform, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Bell, Check, ChevronRight, Close, Eye, EyeOff, Gift, Plus } from '@/components/icons';
 import { Sheet } from '@/components/Sheet';
 import { Button, Divider, ErrorText, IconButton, Loading, Overline, Pill, Screen, Sub, T, Title, UnderlineInput, useAccent } from '@/components/ui';
 import { GroupBrandHeader, PoweredBy, useGroupBrand } from '@/features/brand/GroupBrand';
+import site from '@/content/site.json';
 import { track } from '@/lib/analytics';
 import { friendlyError, GENERIC_ERROR, myResult, nudge, type MyResult, type Product, resolveAmazonLink, resolveLink, setDelivery, setReceived, setWishItems, suggestions, type WishItem, type WishKind, wishKind } from '@/lib/api';
 import { getSeenVersion, setSeenVersion } from '@/lib/device';
@@ -678,13 +679,33 @@ export function RevealScreen({ code, participantId, onSwitch }: { code: string; 
           </T>
           {/* no app isso não faz sentido: a pessoa já está nele */}
           {installPrompt && Platform.OS === 'web' ? (
-            <View style={{ marginTop: 16, padding: 16, borderRadius: 16, backgroundColor: colors.surfaceAlt, gap: 8 }}>
+            <View style={{ marginTop: 16, padding: 16, borderRadius: 16, backgroundColor: colors.surfaceAlt, gap: 10 }}>
               <T size={16} weight="bold">
-                Quer ser avisado quando {friendFirst} escolher?
+                Quer ver a lista de {friendFirst} sem procurar o link?
               </T>
               <T size={14} color={colors.textSecondary} lineHeight={20}>
-                O app do Amigo Oculto Já! para iPhone e Android está a caminho. Até lá, volte por este link: ele é seu.
+                Baixe o app do Amigo Oculto Já!: o link do grupo abre direto nele. Ou volte por este link, que é só seu.
               </T>
+              <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+                {[
+                  ['App Store (iPhone)', site.appStore, 'app_store'],
+                  ['Google Play (Android)', site.playStore, 'play_store'],
+                ].map(([label, url, loja]) => (
+                  <Pressable
+                    key={loja}
+                    accessibilityRole="link"
+                    onPress={() => {
+                      track('app_install_prompt_shown', { loja, clicou: true }, { code, participantId });
+                      void Linking.openURL(url);
+                    }}
+                    style={{ height: 40, paddingHorizontal: 14, borderRadius: 20, backgroundColor: colors.text, justifyContent: 'center' }}
+                  >
+                    <T size={14} weight="bold" color="#FFFFFF">
+                      {label}
+                    </T>
+                  </Pressable>
+                ))}
+              </View>
             </View>
           ) : null}
         </View>

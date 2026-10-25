@@ -16,6 +16,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NoIndex } from '@/components/NoIndex';
 import { Button, Sub, Title } from '@/components/ui';
 import { AuthUrlHandler } from '@/features/auth/AuthUrlHandler';
+import { ConsentBanner } from '@/features/consent/ConsentBanner';
+import { CONTENT_PATHS } from '@/features/conteudo/ContentPage';
 import { getAttribution } from '@/lib/attribution';
 import { installErrorHandlers, reportError, setCurrentScreen } from '@/lib/errors';
 import { startSession } from '@/lib/session';
@@ -31,7 +33,7 @@ if (typeof window !== 'undefined' || Platform.OS !== 'web') {
 }
 
 /** Únicas páginas que os buscadores podem indexar (ver public/sitemap.xml). */
-const PUBLIC_PATHS = new Set(['/', '/empresas', '/privacidade', '/termos', '/suporte']);
+const PUBLIC_PATHS = new Set(['/', '/empresas', '/privacidade', '/termos', '/suporte', ...CONTENT_PATHS]);
 
 export default function RootLayout() {
   const pathname = usePathname();
@@ -75,6 +77,7 @@ export default function RootLayout() {
           animation: 'slide_from_right',
         }}
       />
+      {Platform.OS === 'web' ? <ConsentBanner /> : null}
     </SafeAreaProvider>
   );
 }
