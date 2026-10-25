@@ -20,6 +20,7 @@ import { ConsentBanner } from '@/features/consent/ConsentBanner';
 import { CONTENT_PATHS } from '@/features/conteudo/ContentPage';
 import { getAttribution } from '@/lib/attribution';
 import { installErrorHandlers, reportError, setCurrentScreen } from '@/lib/errors';
+import { screenView } from '@/lib/marketing';
 import { startSession } from '@/lib/session';
 import { colors } from '@/theme/tokens';
 
@@ -52,6 +53,7 @@ export default function RootLayout() {
   useEffect(() => {
     setCurrentScreen(pathname);
     startSession(pathname);
+    screenView(pathname);
   }, [pathname]);
 
   // No web, renderiza mesmo antes da fonte (fallback system-ui) para o export estático.

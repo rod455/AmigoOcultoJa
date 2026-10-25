@@ -39,6 +39,9 @@ async function signUp(g: Gtag, params: Record<string, string | number>) {
   if (ADS_SIGNUP) g('event', 'conversion', { send_to: ADS_SIGNUP });
 }
 
+/** No site, o GA4 conta as páginas sozinho (page_view do gtag). */
+export function screenView(_pathname: string): void {}
+
 export type Consent = 'granted' | 'denied';
 
 export function storedConsent(): Consent | null {
