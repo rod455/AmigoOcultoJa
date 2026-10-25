@@ -12,7 +12,7 @@ const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
 
 // 1. Variáveis que vão embutidas no app: faltando, o app abre sem login nem dados
 const env = Object.fromEntries(
-  read('.env')
+  read(fs.existsSync(path.join(root, '.env')) ? '.env' : '.env.example')
     .split('\n')
     .map((l) => l.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/))
     .filter(Boolean)

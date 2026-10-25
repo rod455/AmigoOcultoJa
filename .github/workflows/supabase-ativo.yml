@@ -5,7 +5,7 @@
 # a Apple viu na revisão de 20/10/2026). A cada 6 horas este job chama
 # rpc_ping (migração 0018), que passa pelo banco. Se a resposta não for 200,
 # o job falha e o GitHub manda e-mail para o dono do repositório.
-# A URL e a chave anon não são segredo: são as mesmas do app, no .env.
+# A URL e a chave anon não são segredo: são as mesmas do app, no .env.example.
 name: Supabase ativo
 
 on:
@@ -20,11 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: .env
+          sparse-checkout: .env.example
           sparse-checkout-cone-mode: false
       - name: Chamar rpc_ping
         run: |
-          set -a; . ./.env; set +a
+          set -a; . ./.env.example; set +a
           for tentativa in 1 2 3; do
             STATUS=$(curl -sS -o resposta.txt -w '%{http_code}' --max-time 30 \
               -X POST "$EXPO_PUBLIC_SUPABASE_URL/rest/v1/rpc/rpc_ping" \

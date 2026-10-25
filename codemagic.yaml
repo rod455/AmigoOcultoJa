@@ -12,7 +12,8 @@
 #       e Associated Domains)
 #       keystore Android com o nome de referência  amigoocultoja-upload
 #   - Grupo de variáveis  google_play  com GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
-# As variáveis EXPO_PUBLIC_* não são segredo e vêm do .env do repositório.
+# As variáveis EXPO_PUBLIC_* não são segredo: o .env não é versionado e o passo
+# "Instalar dependências" monta ele a partir do .env.example (scripts/env.mjs).
 
 definitions:
   env_comum: &env_comum
@@ -26,7 +27,9 @@ definitions:
   scripts:
     - &instalar
       name: Instalar dependências
-      script: npm ci
+      script: |
+        npm ci
+        node scripts/env.mjs
 
     - &conferir
       name: Typecheck, testes e conferência do app

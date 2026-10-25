@@ -66,7 +66,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 - **Participante**: sem conta. Cada aparelho gera uma chave secreta (`device key`, 64 hex) guardada localmente; o banco só conhece o hash SHA-256. Assumir um nome vincula o nome à chave.
 - **Organizador**: conta Supabase Auth (Google, Apple ou e-mail+senha; só nome e e-mail). O login acontece na hora de tocar em "Sortear" (tela `/conta`); todo o preenchimento anterior fica no rascunho local. O grupo guarda `owner_user_id` e `owner_key_hash`; `is_owner()` aceita qualquer um dos dois, então o organizador vê o painel e "Seus grupos" em qualquer aparelho logado. As Edge Functions leem o JWT do usuário no `Authorization`.
 
-**Conta principal:** `amigoocultoja@gmail.com` é dona das contas do Resend (e-mails de login saem de `oi@amigoocultoja.com.br` via `smtp.resend.com`, porta 465, usuário `resend`, senha = API key), do Google Cloud (login com Google) e da Amazon Associados. DNS do Resend no Registro.br: TXT `resend._domainkey`, CNAME `rsend`, CNAME `send`, TXT `_dmarc`.
+**Contas e DNS:** quem é dono de cada conta (Supabase, Vercel, Google Cloud, lojas, e-mail) e os registros de DNS ficam fora do repositório, com o dono do projeto.
 
 **Para ativar os logins no painel do Supabase** (Authentication → Providers / URL Configuration):
 
@@ -106,7 +106,7 @@ Projeto `tirei` (região `sa-east-1`). Tudo que o cliente faz passa por **funç�
 | `rpc_nudge` | ambos | lembrete anônimo **in-app** (quem tirou → quem foi tirado; aparece no link da pessoa; 1 a cada 12 h) e registro do lembrete do organizador |
 | `rpc_track` | ambos | eventos de analytics (`events`) |
 
-Afiliados: a tag e os templates de busca ficam em `app_settings` (`affiliate_tag_amazon`, `search_url_amazon`, `default_store`). ID de associado da Amazon: `amigoocultoja-20` (conta de amigoocultoja@gmail.com; migração `0003_affiliate_tag.sql`). A Amazon encerra a conta se não houver 3 vendas qualificadas em 180 dias. O catálogo (`products`, migração `0005_catalogo_amazon.sql`) tem 28 produtos reais da Amazon em 4 faixas (até R$ 50, 100, 200 e 400), com link `/dp/ASIN?tag=amigoocultoja-20`. O preço guardado é aproximado e serve só para filtrar pelo valor do grupo; a interface mostra a faixa, porque a Amazon não permite exibir preço fixo fora da API oficial. Revise a lista de tempos em tempos: produtos podem sair de estoque.
+Afiliados: a tag e os templates de busca ficam em `app_settings` (`affiliate_tag_amazon`, `search_url_amazon`, `default_store`). ID de associado da Amazon: `amigoocultoja-20` (migração `0003_affiliate_tag.sql`). A Amazon encerra a conta se não houver 3 vendas qualificadas em 180 dias. O catálogo (`products`, migração `0005_catalogo_amazon.sql`) tem 28 produtos reais da Amazon em 4 faixas (até R$ 50, 100, 200 e 400), com link `/dp/ASIN?tag=amigoocultoja-20`. O preço guardado é aproximado e serve só para filtrar pelo valor do grupo; a interface mostra a faixa, porque a Amazon não permite exibir preço fixo fora da API oficial. Revise a lista de tempos em tempos: produtos podem sair de estoque.
 
 ### Testes de segurança (rodar no SQL editor)
 
@@ -118,9 +118,9 @@ O conector do Supabase trata as palavras `delete`/`revoke` como comandos destrut
 
 ## Deploy web (Vercel)
 
-`vercel.json` já define build (`npm run build`), saída (`dist/`) e as rewrites das rotas dinâmicas (`/g/:codigo` etc.). As variáveis `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` e `EXPO_PUBLIC_BASE_URL` estão no `.env` versionado (são públicas por design), então a Vercel não precisa de nenhuma variável configurada no painel. `EXPO_PUBLIC_BASE_URL` fixa o domínio dos links de convite em `https://amigoocultoja.com.br`, mesmo quando o site é aberto em `tirei.vercel.app` ou numa preview.
+`vercel.json` já define build (`npm run build`), saída (`dist/`) e as rewrites das rotas dinâmicas (`/g/:codigo` etc.). O `.env` não é versionado. As variáveis públicas (`EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`, `EXPO_PUBLIC_BASE_URL`) estão em `.env.example`; o build (`scripts/env.mjs`) monta o `.env` a partir dele quando ele não existe, e variáveis definidas no painel da Vercel ou do Codemagic valem sobre ele. Os IDs do Google (`EXPO_PUBLIC_GA4_ID`, `EXPO_PUBLIC_GOOGLE_ADS_ID`, `EXPO_PUBLIC_GOOGLE_ADS_CADASTRO`) vão no painel da Vercel (ver `docs/dados/marketing.md`). `EXPO_PUBLIC_BASE_URL` fixa o domínio dos links de convite em `https://amigoocultoja.com.br`, mesmo quando o site é aberto em `tirei.vercel.app` ou numa preview.
 
-Domínio `amigoocultoja.com.br`: DNS no Registro.br (modo avançado) com `A` na raiz para `216.198.79.1` e `CNAME www` para `cname.vercel-dns.com`. Nos apps, os Universal Links / App Links já estão declarados em `app.json` (falta publicar `apple-app-site-association` e `assetlinks.json`).
+Domínio `amigoocultoja.com.br`: configurado na Vercel (o `www` redireciona para a raiz). Nos apps, os Universal Links / App Links estão em `app.json` e os arquivos `apple-app-site-association` e `assetlinks.json` em `public/.well-known/`.
 
 ## O que ficou para depois (conforme a spec)
 
