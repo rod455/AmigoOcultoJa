@@ -634,6 +634,22 @@ export function Faq({ items, page = 'inicio' }: { items: Array<[string, string]>
   );
 }
 
+/** Guias (páginas de conteúdo de src/content/paginas): links no rodapé para o Google achar as páginas. */
+const GUIAS = [
+  ['/sorteio-amigo-secreto', 'Sorteio de amigo secreto'],
+  ['/amigo-secreto-online', 'Amigo secreto online'],
+  ['/amigo-secreto-pelo-whatsapp', 'Pelo WhatsApp'],
+  ['/amigo-secreto-das-cores', 'Amigo secreto das cores'],
+  ['/amigo-chocolate', 'Amigo chocolate'],
+  ['/amigo-ladrao', 'Amigo ladrão'],
+  ['/amigo-doce', 'Amigo doce'],
+  ['/presentes-amigo-secreto', 'Ideias de presente'],
+  ['/brincadeiras-de-natal', 'Brincadeiras de Natal'],
+  ['/mensagem-para-amigo-secreto', 'Mensagens para o cartão'],
+  ['/melhores-apps-amigo-secreto', 'Sites e apps comparados'],
+  ['/retrato-amigo-oculto-2026', 'Retrato do Amigo Oculto 2026'],
+] as const;
+
 export function Footer() {
   return (
     <View style={{ paddingVertical: 32, gap: 10 }}>
@@ -695,6 +711,20 @@ export function Footer() {
         <T size={13} color={colors.textMuted}>
           © {new Date().getFullYear()} Amigo Oculto Já! · amigoocultoja.com.br
         </T>
+      </View>
+      <View style={{ flexDirection: 'row', gap: 16, flexWrap: 'wrap', paddingTop: 10, alignItems: 'center' }}>
+        <T size={13} weight="bold" color={colors.text}>
+          Guias
+        </T>
+        {GUIAS.map(([href, label]) => (
+          <Link key={href} href={href} asChild>
+            <Pressable accessibilityRole="link">
+              <T size={13} weight="semibold" color={colors.textSecondary}>
+                {label}
+              </T>
+            </Pressable>
+          </Link>
+        ))}
       </View>
     </View>
   );

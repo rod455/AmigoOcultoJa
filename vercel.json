@@ -94,5 +94,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/criar",
+      "destination": "/criar/nome",
+      "permanent": false
+    }
   ]
 }
