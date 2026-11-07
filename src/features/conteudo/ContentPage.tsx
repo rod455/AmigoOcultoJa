@@ -1,7 +1,7 @@
 import { Link } from 'expo-router';
 import Head from 'expo-router/head';
 import React, { useEffect } from 'react';
-import { Image, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 import { T } from '@/components/ui';
 import autores from '@/content/autores.json';
 import pagesJson from '@/content/paginas.gen.json';
@@ -165,7 +165,8 @@ export function ContentPage({ page }: { page: ContentPageData }) {
   });
 
   return (
-    <View style={{ flex: 1, minHeight: '100vh' as unknown as number, backgroundColor: colors.surface, alignItems: 'center' }}>
+    // ScrollView como na home: o body do site não rola (reset do Expo), quem rola é a tela
+    <ScrollView style={{ flex: 1, backgroundColor: colors.surface }} contentContainerStyle={{ alignItems: 'center', minHeight: '100%' as unknown as number }}>
       <Head>
         <title>{`${page.title} | ${site.name}`}</title>
         <meta name="description" content={page.description} />
@@ -272,6 +273,6 @@ export function ContentPage({ page }: { page: ContentPageData }) {
           </T>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

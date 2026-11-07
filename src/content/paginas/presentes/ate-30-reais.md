@@ -19,7 +19,7 @@ faq:
 
 **Até R$ 30 (ou R$ 20), o presente de amigo secreto que funciona é a lembrancinha útil e bem embrulhada: caneca, chocolate, meias divertidas, bloco de notas bonito, vela pequena ou chaveiro criativo.** Embalagem caprichada e um bilhete fazem o presente parecer maior. Vale igual para amigo oculto.
 
-Na escola e no trabalho, o valor baixo é comum; para essas faixas o Planejador de Palavras-chave do Google não mostra volume separado, então as ideias abaixo seguem as buscas por "lembrancinha amigo secreto" (720 em dez/2025).
+Na escola e no trabalho, o valor baixo é comum. Com pouco dinheiro, capriche na embalagem e num bilhete escrito à mão: é isso que a pessoa lembra.
 
 ## As 12 ideias
 
@@ -62,4 +62,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

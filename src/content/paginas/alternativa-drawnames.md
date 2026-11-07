@@ -20,8 +20,6 @@ faq:
 
 **O DrawNames é um site e app gratuito de sorteio de amigo secreto. Ele tem exclusões, lista de desejos e convites por e-mail, SMS ou aplicativos de mensagem, sem anúncios.** Se você procura algo parecido, em português e com o resultado aberto por link no WhatsApp, o Amigo Oculto Já é uma alternativa. Abaixo está o que cada um faz, só com o que cada site diz. Vale para amigo secreto e amigo oculto.
 
-Em dezembro de 2025, "drawnames" teve cerca de 22,2 mil buscas no Google no Brasil, segundo o Planejador de Palavras-chave.
-
 Este guia é do Amigo Oculto Já. Para ser justo, usamos só o que está escrito no site do DrawNames, conferido em 06/11/2026, e dizemos quando a página não fala de um assunto.
 
 ## O que o DrawNames faz
@@ -79,4 +77,4 @@ Comparamos mais 5 serviços em [sites e apps para sortear amigo secreto](/melhor
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o DrawNames. As informações sobre ele vêm só das páginas oficiais citadas, abertas em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o DrawNames. As informações sobre ele vêm só das páginas oficiais citadas, abertas em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app.

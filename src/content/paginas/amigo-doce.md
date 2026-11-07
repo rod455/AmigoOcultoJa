@@ -20,8 +20,6 @@ faq:
 
 **O amigo doce é um amigo secreto em que só vale dar doce. O sorteio é igual: cada pessoa tira um nome, compra ou faz um doce dentro do valor combinado e entrega no dia da troca.** Vale chocolate, bombom, bolo, torta, biscoito, bala, doce caseiro. Alguns grupos chamam de "amigolate" ([Catraca Livre](https://catracalivre.com.br/carreira/14-ideias-para-brincar-o-amigo-secreto/)). Funciona igual para o amigo oculto de doces.
 
-Em dezembro de 2025, "amigo doce" teve cerca de 14,8 mil buscas no Google, e "amigo doce ideias", 4,4 mil, segundo o Planejador de Palavras-chave.
-
 ## Regras do amigo doce
 
 1. **Sorteie os pares.** Cada pessoa tira uma outra do grupo.
@@ -88,4 +86,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O amigo doce não tem regra oficial; a base vem das fontes citadas, consultadas em 06/11/2026, e as ideias de doce são nossas. Os números de busca vêm do Planejador de Palavras-chave do Google. As ideias são categorias de presente, não produtos fixos.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O amigo doce não tem regra oficial; a base vem das fontes citadas, consultadas em 06/11/2026, e as ideias de doce são nossas. As ideias são categorias de presente, não produtos fixos.

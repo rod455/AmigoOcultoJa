@@ -67,4 +67,4 @@ Os dois nomes descrevem a mesma brincadeira. "Amigo oculto" é mais usado no Rio
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página. Os números de busca vêm do Planejador de Palavras-chave e do Google Trends, do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página. O uso de cada nome por estado vem do Google Trends.

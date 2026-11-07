@@ -22,7 +22,7 @@ faq:
 
 **Para fazer amigo secreto online, crie o grupo, faça o sorteio e mande um link para todo mundo. Cada pessoa abre o link, toca no próprio nome e vê só quem tirou.** Ninguém precisa estar no mesmo lugar, e ninguém precisa baixar nada. O mesmo vale para quem chama a brincadeira de amigo oculto.
 
-É o jeito mais procurado de fazer a brincadeira: em dezembro de 2025, "amigo secreto online" teve cerca de 301 mil buscas no Google no Brasil, mais do que o próprio termo "amigo secreto" (201 mil), segundo o Planejador de Palavras-chave do Google.
+Serve para a família espalhada por várias cidades, para o time que trabalha remoto e para quem só quer resolver o sorteio antes da festa, sem papelzinho.
 
 ## Os 5 passos
 
@@ -62,4 +62,4 @@ Para saber se o presente chegou, a pessoa marca "presente recebido" e quem organ
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página. Os números de busca vêm do Planejador de Palavras-chave e do Google Trends, do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página.

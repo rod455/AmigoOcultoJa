@@ -19,8 +19,6 @@ faq:
 
 **Presente unissex de amigo secreto é o que serve para qualquer pessoa, sem depender de gosto pessoal: caneca térmica, garrafa, kit de chocolates, planta, luminária ou jogo de cartas.** É a escolha certa no amigo secreto da empresa, da escola e no amigo ladrão, em que qualquer um pode ficar com o presente. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto unissex" teve cerca de 5,4 mil buscas no Google, e "presente amigo oculto unissex", 2,4 mil, segundo o Planejador de Palavras-chave.
-
 ## As 12 ideias
 
 | Presente | Por que funciona | Buscar |
@@ -62,4 +60,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

@@ -20,8 +20,6 @@ faq:
 
 **As brincadeiras de Natal que mais funcionam em família são simples e cabem na sala: mímica, quiz em times, palavra proibida durante a ceia, caça ao tesouro para as crianças e uma troca de presentes, como o amigo secreto ou a direita e esquerda.** Abaixo estão 12, separadas por momento da noite, com as regras de cada uma e a fonte. Para quem chama de amigo oculto, a troca de presentes é a mesma.
 
-Em dezembro de 2025, "brincadeiras de natal" teve cerca de 135 mil buscas no Google, e "dinâmica de natal", 4,4 mil, segundo o Planejador de Palavras-chave.
-
 ## As 12 brincadeiras por momento da noite
 
 | Momento | Brincadeira | Material | Idade |
@@ -99,7 +97,7 @@ Cada pessoa leva uma barra de chocolate e uma pequena quantia. Os nomes são sor
 
 ## O amigo secreto de Natal começa antes da ceia
 
-A troca de presentes é a brincadeira mais esperada, e é a única que precisa de preparo. No Google Trends de 2025, a busca por "amigo secreto" chegou ao pico em 30/11 e ficou lá até 20/12 ([Retrato do Amigo Oculto 2026](/retrato-amigo-oculto-2026)). Sorteie até o fim de novembro.
+A troca de presentes é a brincadeira mais esperada, e é a única que precisa de preparo. Sorteie até o fim de novembro, para cada um ter tempo de ver a lista de desejos e comprar com calma.
 
 1. [Crie o sorteio](/criar/nome) com os nomes da família.
 2. Marque quem não pode tirar quem (casais, pais e filhos).
@@ -109,4 +107,4 @@ Mais jogos para a troca em [brincadeiras de amigo secreto](/brincadeiras-amigo-s
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras não têm regra oficial; as regras vêm das fontes citadas em cada uma, consultadas em 06/11/2026. A divisão por momento da noite é nossa. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras não têm regra oficial; as regras vêm das fontes citadas em cada uma, consultadas em 06/11/2026. A divisão por momento da noite é nossa.

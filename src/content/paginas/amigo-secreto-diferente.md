@@ -18,7 +18,7 @@ faq:
 
 # Amigo secreto diferente: 7 tipos e as regras de cada um
 
-**Para fazer um amigo secreto diferente, mude o tipo de presente ou o jeito de entregar: só uma cor, só chocolate, presente de zoeira, presentes que podem ser roubados.** O sorteio continua igual, e as regras valem para quem chama de amigo oculto também. Em dezembro de 2025, "amigo secreto diferente" teve cerca de 8,1 mil buscas no Google, segundo o Planejador de Palavras-chave.
+**Para fazer um amigo secreto diferente, mude o tipo de presente ou o jeito de entregar: só uma cor, só chocolate, presente de zoeira, presentes que podem ser roubados.** O sorteio continua igual, e as regras valem para quem chama de amigo oculto também.
 
 ## Os 7 tipos lado a lado
 
@@ -78,4 +78,4 @@ O nome aparece nas buscas, mas cada grupo usa com uma regra diferente, e não en
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras foram reunidas das fontes citadas no texto, porque as variações não têm regra oficial. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras foram reunidas das fontes citadas no texto, porque as variações não têm regra oficial.

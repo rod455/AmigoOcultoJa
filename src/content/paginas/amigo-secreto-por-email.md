@@ -56,4 +56,4 @@ Em empresa, o mais comum é um e-mail por pessoa. O [modo empresa](/empresas) fa
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página. Os números de busca vêm do Planejador de Palavras-chave e do Google Trends, do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página.

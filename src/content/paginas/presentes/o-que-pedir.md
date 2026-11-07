@@ -19,8 +19,6 @@ faq:
 
 **Para pedir bem no amigo secreto, dê 2 ou 3 opções dentro do valor combinado, de lojas fáceis, com um link ou uma descrição clara (cor, tamanho, sabor).** Pedir uma coisa só deixa quem te tirou sem saída se ela acabar. Pedir algo acima do valor constrange. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "o que pedir no amigo secreto" teve cerca de 1,6 mil buscas no Google, e "o que pedir no amigo oculto", 320, segundo o Planejador de Palavras-chave.
-
 ## As 12 ideias
 
 | Presente | Por que funciona | Buscar |
@@ -63,4 +61,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

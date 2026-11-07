@@ -20,8 +20,6 @@ faq:
 
 **Para revelar o amigo secreto, dê 3 ou 4 pistas sobre quem você tirou, da mais vaga para a mais óbvia, sem dizer o nome. O grupo tenta adivinhar a cada pista, e você entrega o presente quando acertarem.** Se quiser variar, use uma das 7 ideias abaixo. Valem igual para revelar o amigo oculto.
 
-Em dezembro de 2025, "como revelar amigo secreto" teve cerca de 1 mil buscas no Google, e "frases para revelar amigo secreto", 2,4 mil, segundo o Planejador de Palavras-chave.
-
 ## Os 7 jeitos lado a lado
 
 | Jeito | Preparo | Melhor para |
@@ -81,4 +79,4 @@ A revelação só tem graça se ninguém soube antes. No sorteio online, cada pe
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias com fonte foram reunidas dos sites citados, consultados em 06/11/2026; as outras foram escritas para esta página. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias com fonte foram reunidas dos sites citados, consultados em 06/11/2026; as outras foram escritas para esta página.

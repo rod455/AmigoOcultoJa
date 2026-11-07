@@ -20,8 +20,6 @@ faq:
 
 **O Papelzinho é um app de sorteio de amigo secreto com chat anônimo e lista de desejos. O participante entra pelo link, sem instalar nada. Há um plano Premium pago por grupo.** Se o seu grupo não precisa de chat e quer tudo grátis, com exclusão de casal e sugestões de presente dentro do valor, o Amigo Oculto Já é uma alternativa. Vale para amigo secreto e amigo oculto.
 
-Em dezembro de 2025, "papelzinho amigo secreto" teve cerca de 1,9 mil buscas no Google, segundo o Planejador de Palavras-chave.
-
 Este guia é do Amigo Oculto Já. Para ser justo, usamos só o que está no [site do Papelzinho](https://papelzinho.com/pt-br), conferido em 25/10 e 06/11/2026.
 
 ## O que o Papelzinho faz
@@ -73,4 +71,4 @@ Mais serviços comparados em [sites e apps para sortear amigo secreto](/melhores
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o Papelzinho. As informações sobre ele vêm só do site oficial; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o Papelzinho. As informações sobre ele vêm só do site oficial; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app.

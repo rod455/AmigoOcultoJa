@@ -63,4 +63,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

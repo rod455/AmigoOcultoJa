@@ -19,7 +19,7 @@ faq:
 
 **Até R$ 150, o presente de amigo secreto pode ser algo que a pessoa adiaria comprar para si: fone sem fio melhor, caixa de som, panela boa, jogo de tabuleiro mais elaborado ou uma experiência.** Nesse valor, a lista de desejos vale ainda mais: o risco de errar custa caro. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto até 150 reais" teve cerca de 210 buscas no Google, segundo o Planejador de Palavras-chave. É o valor de grupos menores e mais próximos.
+É o valor de grupos menores e mais próximos, em que dá para conhecer bem quem você tirou.
 
 ## As 12 ideias
 
@@ -62,4 +62,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

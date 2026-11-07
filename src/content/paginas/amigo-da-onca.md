@@ -20,8 +20,6 @@ faq:
 
 **O amigo da onça é uma variação do amigo secreto em que o presente é de zoeira: engraçado, inusitado ou sem utilidade, de propósito.** O sorteio é igual ao do amigo secreto ou amigo oculto. Muda o objetivo: em vez de acertar o que a pessoa quer, a graça é fazer o grupo rir. Também é chamado de inimigo secreto e é comum entre colegas de trabalho ([NSC Total](https://www.nsctotal.com.br/noticias/amigo-secreto-presentes)).
 
-Em dezembro de 2025, "amigo da onça" teve cerca de 27 mil buscas no Google, segundo o Planejador de Palavras-chave.
-
 ## Como funciona
 
 1. **Sorteie os pares** como num amigo secreto comum. Cada pessoa tira uma.
@@ -55,7 +53,7 @@ Um guia de etiqueta do [Diário do Pará](https://diariodopara.com.br/para/manua
 
 ## Memes e zoeira: até onde ir
 
-Em dezembro de 2025, "amigo secreto meme" teve cerca de 2,9 mil buscas no Google, "amigo secreto zueira", 2,4 mil, e "inimigo secreto", 5,4 mil, segundo o Planejador de Palavras-chave. A zoeira faz parte da brincadeira. Três regras ajudam:
+A zoeira faz parte da brincadeira. Três regras ajudam:
 
 - **Zoe a situação, não a pessoa.** Uma piada com o atraso de sempre funciona; uma piada com o corpo, não.
 - **Meme interno vale mais que meme da internet.** O presente que lembra uma história do grupo rende mais risada.
@@ -74,4 +72,4 @@ Quer outras variações? Veja os [tipos de amigo secreto diferente](/amigo-secre
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras foram reunidas das fontes citadas no texto, porque a brincadeira não tem regra oficial. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras foram reunidas das fontes citadas no texto, porque a brincadeira não tem regra oficial.

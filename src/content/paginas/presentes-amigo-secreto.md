@@ -20,8 +20,6 @@ faq:
 
 **O jeito mais garantido de acertar o presente de amigo secreto é a pessoa dizer o que quer: uma lista de desejos com 2 ou 3 itens dentro do valor combinado.** Quando não há lista, escolha um presente coringa, que serve para quase todo mundo. Abaixo estão as ideias por valor e por perfil, que valem também para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto" teve cerca de 27 mil buscas no Google, e "ideias de presente amigo secreto", 18 mil, segundo o Planejador de Palavras-chave.
-
 ## Antes de comprar: 3 perguntas
 
 1. **Qual é o valor combinado?** Fique nele. Gastar muito a mais também constrange.
@@ -69,4 +67,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente que costumam caber nos valores mais combinados; os preços devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente que costumam caber nos valores mais combinados; os preços devem ser conferidos na compra.

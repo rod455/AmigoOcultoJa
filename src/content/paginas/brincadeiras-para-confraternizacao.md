@@ -20,8 +20,6 @@ faq:
 
 **As brincadeiras que mais funcionam na confraternização da empresa são as que incluem todo mundo: amigo secreto (ou amigo oculto), quiz sobre a empresa, bingo, karaokê e, para quem está remoto, jogos on-line como Gartic e Stopots.** Comece com um quebra-gelo, deixe a competição leve e feche com um momento de agradecimento. Abaixo, 10 ideias com as regras e a fonte de cada uma.
 
-Em dezembro de 2025, "brincadeiras para confraternização" teve cerca de 33,1 mil buscas no Google, e "confraternização de fim de ano", 1,9 mil, segundo o Planejador de Palavras-chave.
-
 [Organizar amigo secreto da empresa](/empresas) · [Criar sorteio grátis](/criar/nome)
 
 ## As 10 brincadeiras lado a lado
@@ -110,4 +108,4 @@ No modo empresa do Amigo Oculto Já, o RH sobe uma planilha com nome e área. D�
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras vêm das fontes citadas, consultadas em 06/11/2026; o roteiro de horários e os cuidados são nossos. A pesquisa de participação é da CNDL e do SPC Brasil, publicada em dezembro de 2025. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras vêm das fontes citadas, consultadas em 06/11/2026; o roteiro de horários e os cuidados são nossos. A pesquisa de participação é da CNDL e do SPC Brasil, publicada em dezembro de 2025.

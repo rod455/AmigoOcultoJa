@@ -20,7 +20,7 @@ faq:
 
 # Amigo secreto das cores
 
-**No amigo secreto das cores, o presente precisa ser de uma cor combinada. Na versão que viralizou, cada pessoa tem uma cor e ganha um kit de vários itens daquela cor; na versão de rodadas, há uma cor por semana até a revelação final.** Também é chamado de amigo oculto das cores ou trend das cores. No TikTok, vídeos de grupos de amigas e de confraternizações abrindo o kit da cor passaram de 1 milhão de visualizações em novembro e dezembro de 2025. Em dezembro de 2025, "amigo secreto das cores" teve cerca de 40 mil buscas no Google, e o interesse cresceu mais de 3.000% em 12 meses, segundo o Google Trends.
+**No amigo secreto das cores, o presente precisa ser de uma cor combinada. Na versão que viralizou, cada pessoa tem uma cor e ganha um kit de vários itens daquela cor; na versão de rodadas, há uma cor por semana até a revelação final.** Também é chamado de amigo oculto das cores ou trend das cores. No TikTok, vídeos de grupos de amigas e de confraternizações abrindo o kit da cor passaram de 1 milhão de visualizações em novembro e dezembro de 2025.
 
 ## As duas versões das regras
 
@@ -81,4 +81,4 @@ Para o presente final, veja as listas de [presentes de amigo secreto](/presentes
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página. Os números de busca vêm do Planejador de Palavras-chave e do Google Trends, do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os passos e os recursos descritos aqui foram conferidos no próprio app na data de atualização desta página.

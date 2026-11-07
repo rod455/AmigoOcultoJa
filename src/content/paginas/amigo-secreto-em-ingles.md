@@ -20,8 +20,6 @@ faq:
 
 **Amigo secreto em inglês é Secret Santa. É o nome usado nos Estados Unidos e no Reino Unido; na Irlanda, no Canadá e na Austrália, também se diz Kris Kringle.** A versão em que dá para roubar presentes se chama White Elephant ou Yankee Swap, o nosso amigo ladrão. O amigo oculto, em inglês, também é Secret Santa: o inglês não faz a diferença entre os dois nomes.
 
-Em dezembro de 2025, "secret santa" teve cerca de 5,4 mil buscas no Google no Brasil, e "amigo secreto em inglês", 4,4 mil, segundo o Planejador de Palavras-chave.
-
 ## Os nomes por país
 
 | Onde | Nome | Observação |
@@ -71,4 +69,4 @@ O Amigo Oculto Já é em português. Se o grupo mistura brasileiros e estrangeir
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os nomes por país vêm da Wikipédia em inglês, consultada em 06/11/2026; as frases foram escritas para esta página. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os nomes por país vêm da Wikipédia em inglês, consultada em 06/11/2026; as frases foram escritas para esta página.

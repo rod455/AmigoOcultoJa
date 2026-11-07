@@ -20,8 +20,6 @@ faq:
 
 **O amigo chocolate é um amigo secreto em que só vale dar chocolate. O sorteio é igual: cada pessoa tira um nome, compra um chocolate dentro do valor combinado e entrega no dia da troca.** O grupo combina antes o valor e o tipo de chocolate (barra, bombom, caixa, trufa). Funciona igual para amigo oculto de chocolate.
 
-Em dezembro de 2025, "amigo chocolate" teve cerca de 27,1 mil buscas no Google, "amigo secreto chocolate e dinheiro", 1,9 mil, e "amigo secreto de chocolate", 1,3 mil, segundo o Planejador de Palavras-chave.
-
 ## Regras do amigo chocolate
 
 1. **Sorteie os pares.** Cada pessoa tira uma outra do grupo.
@@ -82,4 +80,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras vêm das fontes citadas no texto, porque o amigo chocolate não tem regra oficial. O preço do kit vem de uma coleta própria na amazon.com.br em 25/10/2026. O número de buscas vem do Planejador de Palavras-chave do Google. As ideias são categorias de presente, não produtos fixos.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As regras vêm das fontes citadas no texto, porque o amigo chocolate não tem regra oficial. O preço do kit vem de uma coleta própria na amazon.com.br em 25/10/2026. As ideias são categorias de presente, não produtos fixos.

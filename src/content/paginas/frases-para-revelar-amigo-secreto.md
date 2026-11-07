@@ -18,8 +18,6 @@ faq:
 
 **Para revelar o amigo secreto, descreva a pessoa com 3 ou 4 pistas, da mais vaga para a mais óbvia, sem dizer o nome, até o grupo adivinhar.** Abaixo estão 40 frases para usar ou adaptar, separadas por ocasião, e 5 jeitos de deixar a revelação mais divertida. Servem igual para amigo oculto.
 
-Em dezembro de 2025, "frases para amigo secreto" teve cerca de 5,4 mil buscas no Google, e "frases para revelar amigo secreto", 2,4 mil, segundo o Planejador de Palavras-chave.
-
 ## Como montar a sua revelação em 4 pistas
 
 1. **Pista vaga:** algo que vale para metade do grupo. "Meu amigo secreto gosta de café."
@@ -93,4 +91,4 @@ No amigo secreto a distância, faça a revelação em chamada de vídeo. Passo a
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As frases foram escritas para esta página; use, adapte e troque o que não combinar com o seu grupo. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As frases foram escritas para esta página; use, adapte e troque o que não combinar com o seu grupo.

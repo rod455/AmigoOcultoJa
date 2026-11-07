@@ -19,8 +19,6 @@ faq:
 
 **Até R$ 50 dá para dar um presente de amigo secreto que parece caprichado: caneca térmica, caixa de bombons, vela aromática, livro de bolso, planta pequena ou um jogo de cartas.** O segredo é escolher uma coisa boa em vez de várias pequenas, e caprichar na embalagem. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto até 50 reais" e "presente amigo secreto 50 reais" tiveram cerca de 3,6 mil buscas cada no Google, segundo o Planejador de Palavras-chave.
-
 ## As 12 ideias
 
 | Presente | Por que funciona | Buscar |
@@ -62,4 +60,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

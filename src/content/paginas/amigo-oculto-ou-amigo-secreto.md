@@ -51,7 +51,7 @@ Participação de "amigo oculto" nas buscas pelos dois termos, por estado, nos 1
 - **Rio e Minas são o território do amigo oculto.** São os dois únicos estados grandes onde ele passa de 50%.
 - **O Norte está dividido.** Amazonas empata; Acre, Roraima e Piauí ficam perto de metade.
 - **Sul e São Paulo são amigo secreto.** "Amigo oculto" fica em 5%.
-- **No país todo, "amigo secreto" é bem maior.** Em dezembro de 2025, "amigo secreto" teve cerca de 201 mil buscas no Google, segundo o Planejador de Palavras-chave.
+- **No país todo, "amigo secreto" é o nome mais usado.**
 
 ## Então qual nome usar?
 
@@ -68,4 +68,4 @@ Para o sorteio sem papelzinho, veja o [sorteio de amigo secreto online](/sorteio
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O mapa usa a comparação dos termos "amigo secreto" e "amigo oculto" no Google Trends, Brasil, por estado, nos 12 meses até 24/10/2026. Os volumes de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O mapa usa a comparação dos termos "amigo secreto" e "amigo oculto" no Google Trends, Brasil, por estado, nos 12 meses até 24/10/2026.

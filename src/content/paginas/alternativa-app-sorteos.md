@@ -20,8 +20,6 @@ faq:
 
 **O App Sorteos tem uma ferramenta grátis de sorteio de amigo secreto: quem organiza não precisa de conta, os convites vão por WhatsApp, link ou e-mail, e cada participante vê o resultado uma única vez.** Se você quer lista de desejos, painel para acompanhar o grupo ou modo empresa, o Amigo Oculto Já é uma alternativa. Abaixo, o que cada um faz, só com o que cada site diz. Vale para amigo secreto e amigo oculto.
 
-Em dezembro de 2025, "app sorteos" teve cerca de 8,1 mil buscas no Google no Brasil, segundo o Planejador de Palavras-chave.
-
 Este guia é do Amigo Oculto Já. Para ser justo, usamos só o que está na [página de amigo secreto do App Sorteos](https://app-sorteos.com/pt/sorteio-amigo-secreto), conferida em 06/11/2026.
 
 ## O que o App Sorteos faz
@@ -80,4 +78,4 @@ Mais serviços comparados em [sites e apps para sortear amigo secreto](/melhores
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o App Sorteos. As informações sobre ele vêm só da página oficial citada, aberta em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o App Sorteos. As informações sobre ele vêm só da página oficial citada, aberta em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app.

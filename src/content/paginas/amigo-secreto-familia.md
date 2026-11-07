@@ -22,7 +22,7 @@ faq:
 
 **Para organizar o amigo secreto de Natal em família, junte os nomes, combine o valor e a data da troca, marque quem não pode tirar quem e faça o sorteio online. Cada parente recebe um link, toca no próprio nome e vê só quem tirou.** Assim ninguém tira o próprio nome, o casal não se tira e quem mora longe participa igual. Vale também para o amigo oculto da família.
 
-A família é o lugar mais comum do amigo secreto no Brasil. Numa pesquisa da CNDL e do SPC Brasil sobre o Natal de 2025, 36% dos consumidores que iam comprar presentes de Natal disseram que iam participar da brincadeira. Entre eles, 69% iam fazer com familiares, 35% com amigos e 28% com colegas de trabalho (cada pessoa podia citar mais de um grupo). O valor médio do presente foi de R$ 72 ([Diário do Comércio](https://diariodocomercio.com.br/negocios/amigo-secreto-deve-movimentar-r-67-bilhoes-natal/)). No Google, "amigo secreto natal" teve cerca de 1,9 mil buscas em dezembro de 2025, e "amigo secreto familia", 880, segundo o Planejador de Palavras-chave.
+A família é o lugar mais comum do amigo secreto no Brasil. Numa pesquisa da CNDL e do SPC Brasil sobre o Natal de 2025, 36% dos consumidores que iam comprar presentes de Natal disseram que iam participar da brincadeira. Entre eles, 69% iam fazer com familiares, 35% com amigos e 28% com colegas de trabalho (cada pessoa podia citar mais de um grupo). O valor médio do presente foi de R$ 72 ([Diário do Comércio](https://diariodocomercio.com.br/negocios/amigo-secreto-deve-movimentar-r-67-bilhoes-natal/)).
 
 ## Passo a passo em 6 decisões
 
@@ -35,7 +35,7 @@ A família é o lugar mais comum do amigo secreto no Brasil. Numa pesquisa da CN
 | Lista de desejos | até 3 itens por pessoa | evita presente repetido e troca na loja |
 | Quem mora longe | endereço de entrega ou presente na volta | o endereço é opcional e só quem tirou vê |
 
-Por que sortear até o fim de novembro: no Google Trends de 2025, a busca por "amigo secreto" ficou no pico de 30/11 a 20/12. Os números estão no [Retrato do Amigo Oculto 2026](/retrato-amigo-oculto-2026).
+Por que sortear até o fim de novembro: dezembro enche de festas e compras. Sorteando antes, cada um tem tempo de ver a lista de desejos de quem tirou e comprar com calma, e quem mora longe consegue mandar o presente pelo correio.
 
 ## Os 4 problemas mais comuns na família (e como resolver)
 
@@ -69,4 +69,4 @@ Regras completas em [brincadeiras de amigo secreto](/brincadeiras-amigo-secreto)
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os recursos do sorteio foram conferidos no próprio app. A pesquisa de participação é da CNDL e do SPC Brasil, com a OfferWise, nas 27 capitais, publicada em dezembro de 2025. A curva de busca vem do Google Trends, e os volumes, do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os recursos do sorteio foram conferidos no próprio app. A pesquisa de participação é da CNDL e do SPC Brasil, com a OfferWise, nas 27 capitais, publicada em dezembro de 2025.

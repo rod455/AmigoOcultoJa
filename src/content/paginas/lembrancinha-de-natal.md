@@ -18,8 +18,6 @@ faq:
 
 **Para dar lembrancinha de Natal a muita gente, compre em kit: árvore de MDF, caixinha com doce, mini vela aromática ou porta-bombom. Na Amazon, 83% dos resultados vêm em kit de 5 ou mais, e a maior parte sai por até R$ 5 a unidade.** É o presente certo quando você precisa lembrar de muita gente: alunos, funcionários, clientes, vizinhos. Se o grupo quer trocar presentes entre si, o amigo secreto (ou amigo oculto) divide o custo.
 
-Em dezembro de 2025, "lembrancinha de natal" teve cerca de 368 mil buscas no Google, segundo o Planejador de Palavras-chave.
-
 ## O que dizem os preços
 
 Numa coleta própria na amazon.com.br em 06/11/2026 (primeira página de resultados de "lembrancinha de natal"), tiramos 8 itens que eram decoração e ficamos com 42:
@@ -84,4 +82,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os preços vêm de uma coleta própria na amazon.com.br em 06/11/2026; as ideias são categorias, não produtos fixos. O valor médio do presente de amigo secreto é da CNDL e do SPC Brasil. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os preços vêm de uma coleta própria na amazon.com.br em 06/11/2026; as ideias são categorias, não produtos fixos. O valor médio do presente de amigo secreto é da CNDL e do SPC Brasil.

@@ -22,8 +22,6 @@ faq:
 
 **No amigo ladrão, cada pessoa leva um presente embrulhado e o grupo sorteia a ordem. Na sua vez, a pessoa abre um embrulho novo ou rouba um presente já aberto. Quem foi roubado abre outro embrulho.** Não há sorteio de nomes: ninguém sabe para quem vai o próprio presente. Também é chamado de amigo secreto ladrão, amigo oculto ladrão ou amigo secreto roubado.
 
-Em dezembro de 2025, "amigo ladrão" teve cerca de 14,8 mil buscas no Google, "amigo ladrão regras", 5,4 mil, e "amigo secreto ladrão", 2,9 mil, segundo o Planejador de Palavras-chave.
-
 ## Regras do amigo ladrão, passo a passo
 
 1. **Combine o valor.** Todos levam um presente do mesmo valor, embrulhado.
@@ -92,4 +90,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O amigo ladrão não tem regra oficial; as regras vêm das fontes citadas, consultadas em 06/11/2026, e as sugestões da tabela "o que combinar" são nossas. Os preços vêm de coleta própria na Amazon, e os números de busca, do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O amigo ladrão não tem regra oficial; as regras vêm das fontes citadas, consultadas em 06/11/2026, e as sugestões da tabela "o que combinar" são nossas. Os preços vêm de coleta própria na Amazon.

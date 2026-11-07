@@ -23,7 +23,7 @@ faq:
 
 Vai sortear amigo secreto ou amigo oculto? Aqui todo mundo vê o resultado; no sorteio próprio, cada pessoa vê só quem tirou. [Criar sorteio de amigo secreto](/criar/nome)
 
-Em dezembro de 2025, "sorteador de nomes" e "sorteio de nomes" tiveram cerca de 74 mil buscas cada no Google, e "roleta de nomes", 40,5 mil. É uma busca do ano todo: a média é de 60,5 mil por mês, segundo o Planejador de Palavras-chave.
+Rifa com vários prêmios? Sorteie um nome por vez e toque em **Tirar os sorteados da lista** antes do próximo prêmio: assim ninguém ganha duas vezes.
 
 {{ferramenta}}
 
@@ -72,4 +72,4 @@ Mais ferramentas para o fim de ano: [brincadeiras de amigo secreto](/brincadeira
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. A ferramenta roda no seu navegador e não guarda a lista. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. A ferramenta roda no seu navegador e não guarda a lista.

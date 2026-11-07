@@ -20,8 +20,6 @@ faq:
 
 **Para o cartão do amigo secreto, escreva uma ou duas frases: um desejo para o ano novo, uma lembrança boa com a pessoa ou uma piada leve sobre o presente. Assine com o seu nome.** Abaixo estão 40 mensagens prontas, separadas por ocasião, para copiar ou adaptar. Servem igual para o amigo oculto.
 
-Em dezembro de 2025, "mensagem para amigo secreto" teve cerca de 14,8 mil buscas no Google, segundo o Planejador de Palavras-chave.
-
 ## Como escrever a sua em 3 passos
 
 1. **Comece pelo nome da pessoa.** "Ana," já deixa o cartão pessoal.
@@ -99,4 +97,4 @@ Para a hora da revelação, veja [frases para revelar o amigo secreto](/frases-p
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As 40 mensagens foram escritas para esta página; use, adapte e troque o que não combinar com o seu grupo. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As 40 mensagens foram escritas para esta página; use, adapte e troque o que não combinar com o seu grupo.

@@ -20,8 +20,6 @@ faq:
 
 **Para fazer amigo secreto com crianças, combine um valor baixo e igual para todos, sorteie com a ajuda de um adulto e peça uma lista de desejos simples. Na revelação, cada criança dá uma ou duas pistas sobre quem tirou.** Na escola, combine tudo com os pais antes. Vale igual para o amigo oculto infantil.
 
-Em dezembro de 2025, "amigo secreto infantil" teve cerca de 480 buscas no Google, segundo o Planejador de Palavras-chave.
-
 ## Passo a passo
 
 | Passo | Na escola | Na família |
@@ -75,4 +73,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O passo a passo e as dicas foram escritos para esta página, a partir de como o sorteio funciona no app; não há regra oficial para o amigo secreto infantil. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. O passo a passo e as dicas foram escritos para esta página, a partir de como o sorteio funciona no app; não há regra oficial para o amigo secreto infantil.

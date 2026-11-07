@@ -20,8 +20,6 @@ faq:
 
 **As brincadeiras de amigo secreto mudam o jeito de entregar ou de revelar o presente. As mais usadas são a revelação com pistas, o amigo ladrão, o amigo dos dados e a barra premiada.** Nenhuma tem regra oficial. O grupo escolhe uma, combina os detalhes antes e escreve as regras na mensagem do sorteio. Vale igual para quem chama de amigo oculto.
 
-Em dezembro de 2025, "brincadeira amigo secreto" e "brincadeiras de amigo secreto" tiveram cerca de 2,9 mil buscas cada no Google, segundo o Planejador de Palavras-chave.
-
 ## As 8 brincadeiras lado a lado
 
 | Brincadeira | Precisa de sorteio de pares? | Bom para |
@@ -101,4 +99,4 @@ Quer variar o tipo de presente, e não só a brincadeira? Veja [amigo secreto di
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras não têm regra oficial; as regras foram reunidas das fontes citadas em cada uma, consultadas em 06/11/2026. O número de buscas vem do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As brincadeiras não têm regra oficial; as regras foram reunidas das fontes citadas em cada uma, consultadas em 06/11/2026.

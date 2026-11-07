@@ -20,7 +20,7 @@ faq:
 
 **No amigo secreto, fale 3 ou 4 frases sobre quem você tirou, da pista mais vaga para a mais óbvia, sem dizer o nome. Termine com um elogio curto e entregue o presente quando o grupo acertar.** Se você mal conhece a pessoa, use o que todo mundo vê: o setor, o horário, a cor que ela mais usa. Os modelos abaixo valem igual para o amigo oculto.
 
-Em dezembro de 2025, "o que falar no amigo secreto" teve cerca de 6,6 mil buscas no Google, e "o que falar no amigo oculto", 1 mil. As versões "para chefe" e "do trabalho" tiveram 260 cada, segundo o Planejador de Palavras-chave. Família, amigos e trabalho são os três grupos do amigo secreto. Numa pesquisa da CNDL e do SPC Brasil sobre o Natal de 2025, 69% de quem ia participar citou familiares, 35% amigos e 28% colegas de trabalho ([Diário do Comércio](https://diariodocomercio.com.br/negocios/amigo-secreto-deve-movimentar-r-67-bilhoes-natal/)).
+Família, amigos e trabalho são os três grupos do amigo secreto. Numa pesquisa da CNDL e do SPC Brasil sobre o Natal de 2025, 69% de quem ia participar citou familiares, 35% amigos e 28% colegas de trabalho ([Diário do Comércio](https://diariodocomercio.com.br/negocios/amigo-secreto-deve-movimentar-r-67-bilhoes-natal/)).
 
 ## A fala em 4 passos
 
@@ -78,4 +78,4 @@ Pistas faladas são o jeito mais comum, mas não o único. Foto de criança, par
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os modelos de fala foram escritos para esta página; troque os detalhes pelos da pessoa que você tirou. Os números de busca vêm do Planejador de Palavras-chave do Google. A pesquisa de participação é da CNDL e do SPC Brasil, publicada em dezembro de 2025.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Os modelos de fala foram escritos para esta página; troque os detalhes pelos da pessoa que você tirou. A pesquisa de participação é da CNDL e do SPC Brasil, publicada em dezembro de 2025.

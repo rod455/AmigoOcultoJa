@@ -20,8 +20,6 @@ faq:
 
 **O Happy Giftlist é um site de listas de desejos que também faz sorteio de amigo secreto. É grátis, cada participante recebe um link privado e monta a lista com produtos de qualquer loja, sem criar conta.** Se você quer exclusão de casal, painel de acompanhamento ou modo empresa, o Amigo Oculto Já é uma alternativa. Vale para amigo secreto e amigo oculto.
 
-Em dezembro de 2025, "happy giftlist" teve cerca de 1,3 mil buscas no Google no Brasil, com pico de 2,9 mil em outubro, segundo o Planejador de Palavras-chave. No nosso monitor de respostas de IA, o Perplexity citou o Happy Giftlist em 4 de 15 perguntas sobre amigo secreto.
-
 Este guia é do Amigo Oculto Já. Para ser justo, usamos só o que está no [site do Happy Giftlist](https://happygiftlist.com), conferido em 06/11/2026.
 
 ## O que o Happy Giftlist faz
@@ -72,4 +70,4 @@ Mais serviços comparados em [sites e apps para sortear amigo secreto](/melhores
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o Happy Giftlist. As informações sobre ele vêm só do site oficial, aberto em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app. O número de buscas vem do Planejador de Palavras-chave do Google, e a citação no Perplexity, do nosso monitor de respostas de IA de 06/11/2026.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. Não temos relação com o Happy Giftlist. As informações sobre ele vêm só do site oficial, aberto em 06/11/2026; se algo mudou, escreva para amigoocultoja@gmail.com e corrigimos. Os recursos do Amigo Oculto Já foram conferidos no próprio app.

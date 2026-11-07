@@ -19,8 +19,6 @@ faq:
 
 **Para acertar o presente de amigo secreto feminino sem conhecer bem a pessoa, fuja do óbvio (perfume, roupa) e escolha algo de uso diário com cara de cuidado: caneca térmica, kit de skincare, vela aromática, livro ou acessório de cabelo.** Perfume e roupa dependem de gosto e de tamanho; deixe esses para quando houver lista de desejos. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto feminino" teve cerca de 14,8 mil buscas no Google, e "presente amigo secreto mulher", 2,4 mil, segundo o Planejador de Palavras-chave.
-
 ## As 12 ideias
 
 | Presente | Por que funciona | Buscar |
@@ -62,4 +60,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.

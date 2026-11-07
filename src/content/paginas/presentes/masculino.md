@@ -19,8 +19,6 @@ faq:
 
 **Para acertar o presente de amigo secreto masculino, escolha algo útil no dia a dia: garrafa térmica, carteira, kit de barbear, carregador portátil, copo de cerveja ou um jogo para a própria festa.** Itens práticos agradam mais que itens decorativos. Vale igual para amigo oculto.
 
-Em dezembro de 2025, "presente amigo secreto homem" teve cerca de 8,1 mil buscas no Google, e "presente amigo secreto masculino", 1,3 mil, segundo o Planejador de Palavras-chave.
-
 ## As 12 ideias
 
 | Presente | Por que funciona | Buscar |
@@ -62,4 +60,4 @@ Alguns links desta página são de afiliado da Amazon: se você comprar por eles
 
 ## Sobre este guia
 
-Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra. Os números de busca vêm do Planejador de Palavras-chave do Google.
+Escrito por **Paulo Silva**, um dos criadores do Amigo Oculto Já. As ideias são categorias de presente, não produtos fixos: os preços mudam e devem ser conferidos na compra.
