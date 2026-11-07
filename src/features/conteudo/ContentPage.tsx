@@ -1,6 +1,6 @@
 import { Link } from 'expo-router';
 import Head from 'expo-router/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, View } from 'react-native';
 import { T } from '@/components/ui';
 import autores from '@/content/autores.json';
@@ -20,6 +20,8 @@ export type ContentPageData = {
   faq: Array<[string, string]>;
   html: string;
   words: number;
+  /** ferramenta da página (src/content/ferramentas/<nome>.html e public/ferramentas/<nome>.js), ou '' */
+  ferramenta?: string;
 };
 const pages = pagesJson as unknown as ContentPageData[];
 type Author = { nome: string; foto: string; bio: string };
@@ -70,12 +72,38 @@ function Avatar({ author, size }: { author: Author; size: number }) {
   );
 }
 
+/** Descrição das ferramentas para o dado estruturado WebApplication. */
+const FERRAMENTAS: Record<string, string> = {
+  'sorteador-de-nomes': 'Sorteia um ou vários nomes de uma lista, sem repetir, ou gira uma roleta de nomes. Roda no navegador e não guarda a lista.',
+};
+
+/**
+ * Carrega o script da ferramenta quando a página abre dentro do app (navegação
+ * sem recarregar). Na página publicada, o próprio HTML já traz o script.
+ */
+function useFerramenta(nome: string | undefined) {
+  useEffect(() => {
+    if (!nome) return;
+    const w = window as unknown as { AOJFerramentas?: Record<string, () => void> };
+    const iniciar = w.AOJFerramentas?.[nome];
+    if (iniciar) return iniciar();
+    const src = `/ferramentas/${nome}.js`;
+    if (document.querySelector(`script[data-carregada="${nome}"]`)) return;
+    const s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    s.setAttribute('data-carregada', nome);
+    document.body.appendChild(s);
+  }, [nome]);
+}
+
 /**
  * Página de conteúdo (src/content/paginas/*.md): só texto e o botão "Criar
  * sorteio". O HTML sai pronto do export e scripts/postexport.mjs tira o
  * JavaScript do app dessas páginas, para abrirem rápido.
  */
 export function ContentPage({ page }: { page: ContentPageData }) {
+  useFerramenta(page.ferramenta);
   const url = `${site.url}${page.path}`;
   const author = (autores as unknown as Record<string, Author>)[page.author] ?? { nome: page.author, foto: '', bio: '' };
   const authorJson = {
@@ -107,6 +135,23 @@ export function ContentPage({ page }: { page: ContentPageData }) {
           { '@type': 'ListItem', position: 2, name: page.title, item: url },
         ],
       },
+      ...(page.ferramenta
+        ? [
+            {
+              '@type': 'WebApplication',
+              '@id': `${url}#ferramenta`,
+              name: page.title,
+              description: FERRAMENTAS[page.ferramenta] ?? page.description,
+              url,
+              inLanguage: 'pt-BR',
+              applicationCategory: 'UtilitiesApplication',
+              operatingSystem: 'Any',
+              isAccessibleForFree: true,
+              offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+              publisher: { '@id': `${site.url}/#org` },
+            },
+          ]
+        : []),
       ...(page.faq.length
         ? [
             {

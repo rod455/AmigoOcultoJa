@@ -648,6 +648,7 @@ const GUIAS = [
   ['/mensagem-para-amigo-secreto', 'Mensagens para o cartão'],
   ['/melhores-apps-amigo-secreto', 'Sites e apps comparados'],
   ['/retrato-amigo-oculto-2026', 'Retrato do Amigo Oculto 2026'],
+  ['/sorteador-de-nomes', 'Sorteador de nomes'],
 ] as const;
 
 export function Footer() {

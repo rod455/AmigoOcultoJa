@@ -15,3 +15,16 @@ Cada página sai com: título (H1) e data de atualização, autor com foto e bio
 dado estruturado `FAQPage`, `Article` com autor e data, e `title`,
 `description` e `canonical`. A página vai sem o JavaScript do app: só texto e
 links, para abrir rápido.
+
+## Página com ferramenta
+
+Uma página pode ter uma ferramenta que roda no navegador, como o sorteador de
+nomes (`sorteador-de-nomes.md`):
+
+- no cabeçalho, `ferramenta: <nome>`;
+- no texto, a linha `{{ferramenta}}`, sozinha, onde a ferramenta deve aparecer;
+- a marcação fica em `src/content/ferramentas/<nome>.html` e o script em
+  `public/ferramentas/<nome>.js` (sem o JavaScript do app; os estilos ficam em
+  `src/app/+html.tsx`).
+
+A página ganha também o dado estruturado `WebApplication`.

@@ -7,7 +7,8 @@
 // Arquivos que começam com "_" (como _modelo.md) não são publicados.
 // Cabeçalho (frontmatter) obrigatório: title, description, slug, updated
 // (AAAA-MM-DD), author (id em src/content/autores.json). Opcional: faq (lista
-// de { q, a }).
+// de { q, a }) e ferramenta (nome de src/content/ferramentas/<nome>.html, que
+// entra no lugar da linha {{ferramenta}} do texto).
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -60,6 +61,14 @@ function read(file, kind) {
     if (!q || !a) errors.push(`${rel}: faq[${i}] precisa de q e a`);
     return [String(q ?? ''), String(a ?? '')];
   });
+  // ferramenta: marcação de src/content/ferramentas/<nome>.html no lugar da linha {{ferramenta}}
+  const ferramenta = fm.ferramenta ? String(fm.ferramenta) : '';
+  let ferramentaHtml = '';
+  if (ferramenta) {
+    const f = path.join(root, 'src/content/ferramentas', `${ferramenta}.html`);
+    if (!/^[a-z0-9-]+$/.test(ferramenta) || !fs.existsSync(f)) errors.push(`${rel}: ferramenta "${ferramenta}" não existe em src/content/ferramentas/`);
+    else ferramentaHtml = fs.readFileSync(f, 'utf8').trim();
+  }
   const body = m[2].trim();
   // o H1 é o title do cabeçalho: um "# Título" no começo do texto sairia repetido
   const md = body.replace(/^#\s+.*\n+/, '');
@@ -73,9 +82,18 @@ function read(file, kind) {
     updated,
     author: authorId,
     faq,
-    html: marked.parse(md, { gfm: true, async: false }),
+    html: comFerramenta(rel, marked.parse(md, { gfm: true, async: false }), ferramenta, ferramentaHtml),
+    ferramenta,
     words: md.split(/\s+/).filter(Boolean).length,
   });
+}
+
+function comFerramenta(rel, html, ferramenta, ferramentaHtml) {
+  const marca = '<p>{{ferramenta}}</p>';
+  const vezes = html.split(marca).length - 1;
+  if (!ferramenta && vezes) errors.push(`${rel}: tem {{ferramenta}} no texto, mas falta "ferramenta" no cabeçalho`);
+  if (ferramenta && vezes !== 1) errors.push(`${rel}: a linha {{ferramenta}} deve aparecer uma vez no texto, sozinha`);
+  return ferramentaHtml ? html.replace(marca, ferramentaHtml) : html;
 }
 
 for (const [sub, kind] of [['', 'raiz'], ['presentes', 'presentes']]) {

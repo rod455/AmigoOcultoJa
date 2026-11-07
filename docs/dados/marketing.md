@@ -17,6 +17,7 @@ Os eventos continuam sendo gravados no nosso banco (`events`, ver
 | `share_whatsapp_clicked`, `link_copied` | `share` (`method`) | |
 | `wish_list_saved` | `wish_list_saved` | |
 | `batch_imported` | `batch_imported` (`grupos`, `pessoas`) | |
+| (só no site) | `sorteador_usado` (`modo`: lista, embaralhar ou roleta; `nomes`: quantos) | Sai direto do sorteador de nomes (`public/ferramentas/sorteador-de-nomes.js`), que não carrega o app. Não vai para o nosso banco. |
 
 O mapa está em `src/lib/marketing-events.ts` (testes em `tests/marketing.test.ts`).
 Nenhum parâmetro leva nome, e-mail ou código de grupo.

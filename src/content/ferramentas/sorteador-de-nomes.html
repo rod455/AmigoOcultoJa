@@ -1,0 +1,36 @@
+<section class="sorteador" data-ferramenta="sorteador-de-nomes" aria-label="Sorteador de nomes">
+  <div class="sorteador-linha">
+    <label for="sorteador-lista">Nomes, um por linha</label>
+    <span class="sorteador-contador" data-contador>0 nomes</span>
+  </div>
+  <textarea id="sorteador-lista" data-lista rows="8" spellcheck="false" autocomplete="off" placeholder="Ana&#10;Bruno&#10;Carla&#10;Diego"></textarea>
+  <div class="sorteador-qtd">
+    <label for="sorteador-qtd">Quantos nomes sortear</label>
+    <input id="sorteador-qtd" data-qtd type="number" min="1" value="1" inputmode="numeric">
+    <label class="sorteador-tudo"><input type="checkbox" data-tudo> Lista inteira (embaralhar)</label>
+  </div>
+  <div class="sorteador-botoes">
+    <button type="button" class="sorteador-principal" data-sortear>Sortear</button>
+    <button type="button" class="sorteador-secundario" data-roleta>Roleta</button>
+  </div>
+  <p class="sorteador-aviso" data-aviso role="status"></p>
+  <div class="sorteador-roda" data-roda hidden>
+    <span class="sorteador-ponteiro" aria-hidden="true"></span>
+    <canvas data-canvas width="320" height="320" aria-hidden="true"></canvas>
+  </div>
+  <div class="sorteador-resultado" data-resultado hidden>
+    <p class="sorteador-titulo">Resultado</p>
+    <ol data-nomes aria-live="polite"></ol>
+    <div class="sorteador-botoes">
+      <button type="button" class="sorteador-secundario" data-copiar>Copiar resultado</button>
+      <button type="button" class="sorteador-secundario" data-denovo>Sortear de novo</button>
+      <button type="button" class="sorteador-secundario" data-tirar>Tirar os sorteados da lista</button>
+    </div>
+  </div>
+  <noscript><p class="sorteador-aviso">O sorteador precisa do JavaScript ligado no navegador.</p></noscript>
+</section>
+<div class="sorteador-amigo">
+  <p><strong>Vai sortear amigo secreto?</strong> Aqui todo mundo vê o resultado. No sorteio de amigo secreto, cada pessoa vê só quem tirou.</p>
+  <a class="sorteador-cta" href="/criar/nome">Criar sorteio</a>
+</div>
+<script src="/ferramentas/sorteador-de-nomes.js" defer></script>

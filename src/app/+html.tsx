@@ -78,6 +78,36 @@ input, textarea, button { font-family: inherit; }
 .conteudo table { border-collapse: collapse; width: 100%; font-size: 15px; display: block; overflow-x: auto; }
 .conteudo th, .conteudo td { border: 1px solid #E3E5E8; padding: 8px 10px; text-align: left; }
 .conteudo th { background: #F4F5F6; font-weight: 700; }
+/* sorteador de nomes (src/content/ferramentas, public/ferramentas) */
+.sorteador { margin: 8px 0 20px; padding: 18px; border: 1px solid #DADDE1; border-radius: 20px; background: #FFFFFF; display: flex; flex-direction: column; gap: 12px; }
+.sorteador [hidden] { display: none !important; }
+.sorteador label { font-weight: 700; font-size: 15px; }
+.sorteador-linha { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.sorteador-contador { font-size: 14px; color: #5F6670; }
+.sorteador textarea { width: 100%; box-sizing: border-box; min-height: 180px; padding: 12px 14px; border: 1px solid #DADDE1; border-radius: 12px; font-size: 16px; line-height: 1.5; color: #111418; resize: vertical; }
+.sorteador-qtd { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.sorteador-qtd input[type=number] { width: 84px; height: 44px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DADDE1; border-radius: 12px; font-size: 16px; }
+.sorteador-qtd input[type=number]:disabled { background: #F4F5F6; color: #8A9099; }
+.sorteador .sorteador-tudo { font-weight: 500; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.sorteador-tudo input { width: 20px; height: 20px; accent-color: #C63D24; }
+.sorteador-botoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.sorteador button { min-height: 48px; padding: 0 22px; border-radius: 999px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.sorteador-principal { background: #C63D24; color: #FFFFFF; border: 0; }
+.sorteador-principal:hover { background: #A8321C; }
+.sorteador-secundario { background: #FFFFFF; color: #111418; border: 1px solid #DADDE1; }
+.sorteador-secundario:hover { border-color: #111418; }
+.conteudo .sorteador-aviso { margin: 0; font-size: 14px; color: #8A4B0F; min-height: 0; }
+.conteudo .sorteador-aviso:empty { display: none; }
+.sorteador-roda { position: relative; display: flex; justify-content: center; padding-top: 14px; }
+.sorteador-ponteiro { position: absolute; top: 0; left: 50%; margin-left: -12px; width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 22px solid #111418; z-index: 1; }
+.sorteador-roda canvas { max-width: 100%; }
+.sorteador-resultado { background: #F6E3DC; border-radius: 16px; padding: 16px; }
+.conteudo .sorteador-titulo { margin: 0 0 8px; font-weight: 800; font-size: 18px; }
+.conteudo .sorteador-resultado ol { list-style: none; padding: 0; margin: 0 0 14px; font-size: 18px; font-weight: 600; }
+.sorteador-pos { display: inline-block; min-width: 34px; color: #A8321C; font-weight: 800; }
+.sorteador-amigo { margin: 0 0 24px; padding: 16px 18px; border-radius: 16px; background: #F4F5F6; }
+.conteudo .sorteador-amigo p { margin: 0 0 12px; }
+.conteudo a.sorteador-cta { display: inline-block; background: #C63D24; color: #FFFFFF; font-weight: 700; padding: 12px 22px; border-radius: 999px; text-decoration: none; }
 /* Figtree carregada via Google Fonts: mapeia os nomes do expo-font para a família local */
 @font-face { font-family: 'Figtree_400Regular'; src: local('Figtree Regular'), url('/fonts/Figtree_400Regular.ttf') format('truetype'); font-display: swap; }
 @font-face { font-family: 'Figtree_500Medium'; src: local('Figtree Medium'), url('/fonts/Figtree_500Medium.ttf') format('truetype'); font-display: swap; }
